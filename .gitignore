@@ -1,1 +1,3 @@
 settings.py
+*pyc
+Main/__pycache__/
