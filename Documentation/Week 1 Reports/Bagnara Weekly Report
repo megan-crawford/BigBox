@@ -1,0 +1,17 @@
+=== Weekly Team Report (Team 1: sturgeons++) ===
+Name: Jason Bagnara
+
+Week 1 (summary)
+2/4	1 hr	N/A	Research branch of MySQL for linux machine
+2/4	1 hr	N/A	Install Django and compatible Python version
+2/4	1 hr	N/A	Install MariaDB (Mysql)
+2/4	3 hr	N/A	Configure directory ownership and MySQL settings
+2/4	1 hr	N/A	Start configuring Django settings to point to MySQL server
+2/8	2 hr	N/A	Finish Configuring Django
+2/8	2 hr	N/A	Begin writing class table for backend
+
+Week 2 (plan)
+2/12	2 hr	N/A	Finish writing class table
+2/12	3 hr	N/A	Learn how distance matrix API works
+2/16	5 hr	N/A	Implement distance matrix API
+2/16	1 hr	N/A	Configure distance matrix API for usage with website
