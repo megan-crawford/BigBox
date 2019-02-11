@@ -16,4 +16,3 @@ Week # 2 (Plan)
 2/15/2019 2 hours  Figure out how data is passed between views and models in Django
 2/16/2019 5 hours  Implement functionality of job creation and job deletion button 
 
-Individual Goal: Implement job creation page
