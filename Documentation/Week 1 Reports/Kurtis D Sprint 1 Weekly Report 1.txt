@@ -1,0 +1,16 @@
+=== Weekly Individual reports (Team 1: BigBox) ===
+Name: Kurtis Dressel
+
+Week 1 (Summary)
+2/4/19 	4 hours		Set up MySQL database with Django API
+2/6/19	1 hour	14c1154	Added Django project template
+2/8/19	1 hour	375befd	Added register form
+2/9/19	4 hours	4c98bcc Added register view and form validation checking
+
+Week 2 (Plan)
+2/12/19	2 hours		Add validation checking for password confirmation, password, and location
+2/12/19	2 hours		Add logout backend function
+2/16/19	1 hour		Test registering account functionality
+2/16/19	1 hour		Test logout functionality
+2/16/19	1 hour		Test update account functionality
+2/16/19 3 hours		Get started on looking into the Matrix Distance API
