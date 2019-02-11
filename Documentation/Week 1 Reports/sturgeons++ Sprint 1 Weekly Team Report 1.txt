@@ -1,0 +1,23 @@
+=== Weekly Team Report (Team 1: sturgeons++) ===
+
+Week 1 (Scrum master: Thomas Bower)
+2/4	1 hr	N/A	Create git repository
+2/7	52 hrs	N/A	Set up Django/mySQL/Development environments on respective machines
+2/8	3 hrs	N/A	Created HTML site "taskbar" for all pages
+2/8	3 hrs	N/A	Created & started work on database table
+2/8	1 hr	375befd	Added register form
+2/9	4 hrs	4c98bcc	Added register view and form validation checking
+
+
+Week 2 (Plan)
+[Meetings]
+2/12	Continue progress on databases & frontend site
+2/16	Discuss linking of frontend and backend
+
+[Individual Goals]
+Thomas: Continue learning & working with bootstrap to make website pages.
+Megan: Implement frontend job creation page functionality.
+Mark: Finish backend for job creation and start work on distance matrix API.
+Kurtis: Complete register/login functionality and begin work on testing.
+Kyle: Create a create account page.
+Jason: Learn Python and use it for job creation and start work on distance matrix API.

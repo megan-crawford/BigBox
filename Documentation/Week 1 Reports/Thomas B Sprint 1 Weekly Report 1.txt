@@ -1,0 +1,15 @@
+=== Weekly Individual Report (Team 1: sturgeons++) ===
+Name: Thomas Bower
+
+Week 1 (Summary)
+2/4	3 hrs	N/A	Install Python & Django
+2/7	5 hrs	N/A	Install Visual Studio/mySQL and troubleshoot issues
+2/8	4 hrs	N/A	Link mySQL to Django server
+2/8	3 hrs	N/A	Download Bootstrap and familliarize myself with it
+2/8	2 hrs	N/A	Create an HTML profile page for site
+2/8	3 hrs	N/A	Begin work on an HTML profile page for site
+
+
+Week 2 (Plan)
+2/12	6 hrs	N/A	Finish work on HTML profile page for site
+2/16	5 hrs	N/A	Connect HTML files to Django site, link pages
