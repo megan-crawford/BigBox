@@ -1,0 +1,18 @@
+=== Weekly Individual Report (Team 01: sturgeons++) ===
+Name: Kyle Kovacik
+
+Week 1 (Summary)
+2/4/19 4 NA Installed and configured Django			(Researched, installed, and configured django with much trial and error)
+2/4/19 3 NA Installed and attempted to configure mySQL		(Researched, installed, and attempted to link mysql with django)
+2/7/19 3 NA Finished configuring mySQL			(Finished configuring and created a Database. Linked with django after much trial and error)
+2/8/19 2 NA Researched and Built Navigation Bar for Webpages		(After learning how to use bootstrap, created a navigation bar prototype)
+2/8/19 2 NA Started Creation of Create Account Page		(Started development on some of the html)
+...
+
+Week 2 (Plan)
+2/12/19 4 NA Finish Creating Account Page			(Continue to build the html with bootstrap)
+2/16/19 3 NA Build the Update Account Information Page		(Build the html with bootstrap)
+2/16/19 3 NA Connect the HTML pages to Django			(Connect the pages and test that they show up)
+
+
+
