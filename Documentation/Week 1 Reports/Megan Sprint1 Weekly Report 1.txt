@@ -1,0 +1,19 @@
+=== Weekly Individual Report (Team 1: sturgeons++) ===
+Name: Megan Crawford
+
+Week # 1 (Summary)
+2/4/2019  3 hours  N/A Install Django 
+2/4/2019  1 hours  N/A Set up BigBox app
+2/7/2019  30 min   N/A Install MySQL
+2/7/2019  2 hours  N/A Connect MySQL database with Django
+2/8/2019  1 hours  N/A Create Logos for website
+2/8/2019  1 hours  N/A Figured out how to use view functions to display html page
+
+
+Week # 2 (Plan)
+2/12/2019 4 hours  Begin to make job listing creation page
+2/13/2019 2 hours  Add features to job listings page
+2/15/2019 2 hours  Figure out how data is passed between views and models in Django
+2/16/2019 5 hours  Implement functionality of job creation and job deletion button 
+
+Individual Goal: Implement job creation page
