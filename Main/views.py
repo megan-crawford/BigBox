@@ -2,8 +2,9 @@ from django.shortcuts import render, redirect
 from django.views.generic.edit import FormView
 from .forms import RegisterForm
 from django.contrib.auth import login, logout
-from . models import Users
+#from . models import Users
 
+"""
 def register(request):
     if request.method == "POST": #user clicks register button
         form = RegisterForm(request.POST)
@@ -28,3 +29,8 @@ def register(request):
     else: #user is viewing the register page
         form = RegisterForm()
         render(request, 'Main/register.html', {'form':form})
+"""
+
+def logout_request(request):
+    logout(request)
+    redirect('home/')

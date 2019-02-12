@@ -1,7 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError 
 from django.core.validators import EmailValidator, RegexValidator
-from . models import Users
+#from . models import Users
 from re import search #regex
 
 class RegisterForm(forms.Form):
@@ -12,6 +12,7 @@ class RegisterForm(forms.Form):
     last_name = forms.CharField(label='Last Name', max_length=35)
     location = forms.CharField(label='Location', max_length=200) #form type may need to be updated
 
+    """
     def clean_email(self):
         email = self.cleaned_data['email']
         
@@ -19,6 +20,7 @@ class RegisterForm(forms.Form):
             raise ValidationError(message='Email already exists', code='preexisting_email')
 
         return email
+    """
 
     def clean_first_name(self):
         first_name = self.cleaned_data['first_name']
