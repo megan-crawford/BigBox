@@ -23,7 +23,7 @@ class RegisterForm(forms.Form):
     def clean_first_name(self):
         first_name = self.cleaned_data['first_name']
         
-        if search('^[A-Za-z]+$', first_name) is None:
+        if search('^[A-Za-z]*$', first_name) is None:
             raise ValidationError(message='First name can only contain letters', code='invalid_name')
 
         return first_name
@@ -35,3 +35,12 @@ class RegisterForm(forms.Form):
             raise ValidationError(message='Last name can only contain letters', code='invalid_name')
 
         return last_name
+
+    def clean_password_confirmation(self):
+        password = self.cleaned_data['password']
+        password_confirmation = self.cleaned_data['password_confirmation']
+
+        if password != password_confirmation:
+            raise ValidationError(message='The passwords do not match', code='invalid_password_confirmation')
+
+        return password_confirmation

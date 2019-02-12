@@ -1,4 +1,5 @@
-=== Weekly Individual Report (Team 1: <sturgeon++>) ===
+=== Weekly Individual Report (Team 1: <sturgeon++>) ===
+
 Name: Mark Mikhail
 
 Week 1 Setting up the development enviornment
@@ -14,8 +15,4 @@ Week 2 I plan to work on backend for job creaters and creation
 2/12	30min	Generate job table
 2/12	1	Generate job creater
 2/14	3	Setup and Reasearch Distance Matrix
-2/16	2	Test job creation	
-
-
-
-Individual: finish backend for job creation and start work on distance matrix api
+2/16	2	Test job creation
