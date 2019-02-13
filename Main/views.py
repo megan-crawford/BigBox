@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.views.generic.edit import FormView
 from .forms import RegisterForm
 from django.contrib.auth import login, logout
+from django.http import HttpResponse
 #from . models import Users
 
 """
@@ -30,7 +31,17 @@ def register(request):
         form = RegisterForm()
         render(request, 'Main/register.html', {'form':form})
 """
+#home page
+def home(request):
+    #return render(request, 'bigBoxHome.html')
+    return HttpResponse("home.")
 
+#redirect to home    
 def logout_request(request):
     logout(request)
     redirect('home/')
+
+#create_job page
+def create_job(request):
+    return render(request, 'bigBoxJob.html')
+    #return HttpResponse("job.")
