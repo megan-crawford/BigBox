@@ -33,8 +33,8 @@ def register(request):
 """
 #home page
 def home(request):
-    #return render(request, 'bigBoxHome.html')
-    return HttpResponse("home.")
+    return render(request, 'login.html')
+    #return HttpResponse("home.")
 
 #redirect to home    
 def logout_request(request):
