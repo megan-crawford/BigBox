@@ -1,0 +1,19 @@
+=== Weekly Individual Report (Team 01: sturgeons++) ===
+Name: Kyle Kovacik
+
+Week 2 (Summary)
+2/12/19 4 NA 		Finish Creating Create Account Page and Implement Basic Javascript	(Finished the Create Account Page)
+2/16/19 3 e4dcb0b 	Built the Update Account Information Page				(Built the Update Account Page)
+2/16/19 1 NA 	 	Connect the HTML pages to Django					(Connect the pages and test that they show up)
+2/16/19 1 8d57473	Cleaned up Worthless Files			   
+2/16/19 2 NA 		Attempt to Connect CSS to Django					(Attempted to Connect CSS as static files)
+...
+
+Week 3 (Plan)
+2/18/19 2 NA 	Finish Connecting CSS to Django
+2/18/19 3 NA 	Link HTML to Databases
+2/19/19 3 NA 	Test HTML Interactions with Databases	
+
+
+
+
