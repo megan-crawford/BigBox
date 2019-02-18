@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.views.generic.edit import FormView
 from .forms import RegisterForm
 from django.contrib.auth import login, logout
+from django.contrib.gis.geos import GEOSGeometry
 #from . models import Users
 
 """
