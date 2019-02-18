@@ -1,0 +1,13 @@
+=== Weekly Individual Report (Team 1: <sturgeon++>) ===
+Name: Mark Mikhail
+
+Week 2 Setting up the GeoDjango and creating django models
+
+2/12	2	N/A	Setting up GeoDjango
+2/12	2	N/A	Debugging models
+2/16	6	N/A	Setting up GeoDjango
+
+Week 2 Test Models and continue setting up GeoDjango
+
+2/18	3	Test Models
+2/19	3	Setup GeoDjango	

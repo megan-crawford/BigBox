@@ -1,0 +1,12 @@
+=== Weekly Individual reports (Team 1: BigBox) ===
+Name: Kurtis Dressel
+
+Week 1 (Summary)
+2/12	1 hour	09af231	added more form checks
+2/12	1 hour	2fd31fc	added logout function			
+2/12	3 hours		stated installing geodjango
+2/16	5 hours		installed geodjango and worked to get GeoIP to work without errors
+Week 2 (Plan)
+2/19	make sure register functionality works for both front and backend and test it
+2/19	test logout functionality
+2/19	test user account update information functionality
