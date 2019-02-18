@@ -45,8 +45,8 @@ def logout_request(request):
 
 #create_job page
 def create_job(request):
-    return render(request, 'bigBoxJob.html')
+    return render(request, 'Jobs/bigBoxJob.html')
     #return HttpResponse("job.")
 
 def list_job(request):
-    return render(request, 'listJobs.html')
+    return render(request, 'Jobs/listJobs.html')
