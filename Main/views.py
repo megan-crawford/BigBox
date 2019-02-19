@@ -7,6 +7,8 @@ from django.http import HttpResponse
 
 def create_account(request):
     if request.method == "POST": #user clicks register button
+        print('create account post')
+
         form = CreateAccountForm(request.POST)
 
         if form.is_valid():
@@ -16,6 +18,8 @@ def create_account(request):
             return render(request, 'Create Account/createAccount.html', {'form':form})
 
     else: #user is viewing the create account page
+        print('create account not post')
+
         form = CreateAccountForm()
         return render(request, 'Create Account/createAccount.html', {'form':form})
 
