@@ -1,0 +1,66 @@
+#main {
+    height: 100%;
+    width: 100%;
+}
+
+.center_div {
+    margin: 0 auto;
+    width: 80%;
+}
+
+#inputs {
+    width: 50%;
+    padding-top: 5%;
+
+}
+
+.blank_space {
+    padding-top: 3%;
+}
+
+.black_space {
+    background-color: black;
+    height: 5px;
+}
+
+#logo {
+    width: 30%;
+    height: auto;
+
+    border-style: solid;
+    border-width: 5px;
+}
+
+#logo img {
+    width: 100%;
+    height: auto;
+}
+
+.buttons {
+    width: 50%;
+}
+
+.errorMessage {
+    color: red;
+    text-align: center;
+}
+
+
+
+#createAccountButton {
+    width: 40%;
+    float: left;
+}
+
+.btn1 {
+    padding-left: 5%;
+}
+
+#createCancelButton {
+    width: 40%;
+    float: right;
+}
+
+.btn2 {
+    padding-right: 5%;
+}

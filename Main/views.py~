@@ -33,7 +33,7 @@ def register(request):
 """
 #home page
 def home(request):
-    return render(request, 'login.html')
+    return render(request, 'createAccount.html')
     #return HttpResponse("home.")
 
 #redirect to home    
