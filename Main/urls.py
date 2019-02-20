@@ -16,11 +16,13 @@ Including another URLconf
 from django.urls import path
 from . import views
 
+app_name='Main'
+
 urlpatterns = [
 	path('', views.home, name='home'),
-	path('home', views.home, name='home'),
+	path('home/', views.home, name='home'),
 	
-	path('create_account', views.create_account, name='create_account'),
-    path('create_job', views.create_job, name='create_job'),
-    path('list_job', views.list_job, name='list_job'),
+	path('create_account/', views.create_account, name='create_account'),
+    path('create_job/', views.create_job, name='create_job'),
+    path('list_job/', views.list_job, name='list_job'),
 ]

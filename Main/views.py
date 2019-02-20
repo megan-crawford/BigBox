@@ -13,11 +13,12 @@ def create_account(request):
             form.save()
             return redirect('home/')
         else:
-            return render(request, 'Create Account/createAccount.html', {'form':form})
+            return render(request, 'createAccount.html', {'form':form})
 
     else: #user is viewing the create account page
         form = CreateAccountForm()
-        return render(request, 'Create Account/createAccount.html', {'form':form})
+        return render(request, 'createAccount.html', {'form':form})
+        #redirect('create_account/')
 
 #home page
 def home(request):
