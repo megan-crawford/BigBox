@@ -40,7 +40,7 @@
             <div class="placeholderr" style="background-color:#71A6FF; height:1000px;width:500px; align-content: center">Please Enter Job Information
               <form method="post" action = "add_job">
                 <br>Select Job Type<br>
-                <select name="Job Type">
+                <select name="Job Type" required>
                   <option value="lawncare">Lawn Care</option>
                   <option value="dog">Dog Walking</option>
                   <option value="babysitting">BabySitting</option>
@@ -51,13 +51,13 @@
                 <br><br>
                 Job Description
                 <br>
-                <textarea name="Job Description" form="usrform">Enter description here...</textarea>
+                <textarea name="Job Description" form="usrform" required>Enter description here...</textarea>
                 <br><br>
-                <p>Select Date: <br><input type="text" id="datepicker"></p>
+                <p>Select Date: <br><input type="text" id="datepicker" required></p>
                 Pay Amount in USD <br> 
-                <input type="number" name="quantity" min="10" max="1000">
+                <input type="number" name="quantity" min="10" max="1000" required>
                 <br><br>Select State<br>
-                <select name="State">
+                <select name="State" required>
                   <option value="AL">Alabama</option>
                   <option value="AK">Alaska</option>
                   <option value="AZ">Arizona</option>
@@ -111,7 +111,7 @@
                   <option value="WY">Wyoming</option>
                 </select>
                 <br><br>Enter Zipcode<br>
-                <input type="text" name="zipcode">   
+                <input type="text" name="zipcode" required>   
                 <br><br>    
                 <input type="submit" name="submit">
               </form>
