@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 
 # Create your models here.
 
@@ -55,14 +56,15 @@ class Report(models.Model):
     Details = models.TextField()
 
 class User(models.Model):
+    User = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
     Email = models.TextField()
     Password = models.TextField()
     FirstName = models.TextField()
     Description = models.TextField()
     Age = models.SmallIntegerField()
     #image
-    Contacts = models.ManyToManyField("self")
-    Reports = models.ForeignKey(Report, on_delete=models.CASCADE)
+    Contacts = models.ManyToManyField("self", blank=True)
+    Reports = models.ForeignKey(Report, on_delete=models.CASCADE, blank=True, null=True)
 
 class JobChoices(models.Model):
     Types = models.CharField(
