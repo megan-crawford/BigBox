@@ -85,4 +85,5 @@ function badOverall() {
     } else {
         errorOverallMessage.style.display = "none";
     }
+    window.location.href="http://stackoverflow.com";
 }
