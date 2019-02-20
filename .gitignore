@@ -1,3 +1,8 @@
 settings.py
+
+*.log
+*.pot
 *.pyc
-Main/__pycache__/
+*/*/*/__pycache__/
+*/*/__pycache__/
+*/__pycache__/
