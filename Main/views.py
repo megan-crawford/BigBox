@@ -4,6 +4,7 @@ from .forms import CreateAccountForm
 from django.contrib.auth import login, logout
 from django.http import HttpResponse
 from . models import User
+from django.views.decorators.csrf import csrf_exempt
 
 def create_account(request):
     if request.method == "POST": #user clicks register button
@@ -40,3 +41,7 @@ def create_job(request):
 
 def list_job(request):
     return render(request, 'Jobs/listJobs.html')
+
+@csrf_exempt
+def new_job(request):
+    return render(request, 'Jobs/viewNewJob.html')
