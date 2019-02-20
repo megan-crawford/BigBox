@@ -4,7 +4,7 @@ from django.core.validators import EmailValidator, RegexValidator
 from . models import User
 from re import search #regex
 
-class RegisterForm(forms.Form):
+class CreateAccountForm(forms.Form):
     email = forms.EmailField(label='Email Address')
     password = forms.CharField(label='Password', max_length=128, widget=forms.PasswordInput)
     password_confirmation = forms.CharField(label='Password Confirmation', max_length=128, widget=forms.PasswordInput)

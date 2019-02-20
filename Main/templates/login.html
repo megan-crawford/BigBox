@@ -1,3 +1,4 @@
+{% load staticfiles %}
 <!doctype html>
 <html lang="en">
   <head>
@@ -7,14 +8,14 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-	<link rel="stylesheet" href="signin.css">
+	  <link rel="stylesheet" href="{% static 'css/signin.css' %}">
 	
   </head>
   <body>
     
 <form class="form-signin">
 	<div class="text-center">
-		<img src="logo.png" alt="sturgeon" class="img-responsive center-block" />
+		<img src="{% static 'images/logo.PNG' %}" alt="sturgeon" class="img-responsive center-block" />
 	</div>
 	
   <img class="mb-4" src="{{ site.baseurl }}/docs/{{ site.docs_version }}/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
