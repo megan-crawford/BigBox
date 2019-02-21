@@ -80,14 +80,15 @@ class Seeker(models.Model):     #Job Seeker, subclass to User
     PrefType = models.ForeignKey(
             JobChoices,
             on_delete=models.CASCADE,
+            blank=True
     )
-    IntJob = models.ManyToManyField(Post, blank=True, null=True)
-    Reviews = models.ManyToManyField(Review, blank=True, null=True)
-    Location = models.TextField()
+    IntJob = models.ManyToManyField(Post, blank=True)
+    Reviews = models.ManyToManyField(Review, blank=True)
+    Location = models.TextField(blank=True)
 
 class Creator(models.Model):    #Job Creator
     User = models.OneToOneField(User, on_delete=models.CASCADE)
-    Posts = models.ManyToManyField(Post, blank=True, null=True)
-    Reviews = models.ManyToManyField(Review, blank=True, null=True)
+    Posts = models.ManyToManyField(Post, blank=True)
+    Reviews = models.ManyToManyField(Review, blank=True)
 
 
