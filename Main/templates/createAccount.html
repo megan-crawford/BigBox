@@ -19,6 +19,7 @@
       </div>
 
       <form class="center_div" name="inputs" id="inputs" method="POST">
+	    {% csrf_token %}
         <div class="form-group">
           <label for="firstNameInput" id="firstNameText">First Name</label>
           <input type="firstName" class="form-control" id="firstNameInput" placeholder="Ex: John">
