@@ -56,7 +56,7 @@ class Report(models.Model):
     Details = models.TextField()
 
 class User(models.Model):
-    User = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null = True)
+    User = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     Email = models.CharField(max_length = 60)
     FirstName = models.CharField(max_length = 50)
     LastName = models.CharField(max_length = 50)
@@ -75,8 +75,8 @@ class JobChoices(models.Model):
 class Review(models.Model):
     Rating = models.SmallIntegerField() #Precision undecided
 
-class Seeker(User):     #Job Seeker, subclass to User
-    
+class Seeker(models.Model):     #Job Seeker, subclass to User
+    User = models.OneToOneField(User, on_delete=models.CASCADE)
     PrefType = models.ForeignKey(
             JobChoices,
             on_delete=models.CASCADE,
@@ -85,7 +85,8 @@ class Seeker(User):     #Job Seeker, subclass to User
     Reviews = models.ManyToManyField(Review)
     Location = models.TextField()
 
-class Creator(User):    #Job Creator
+class Creator(models.Model):    #Job Creator
+    User = models.OneToOneField(User, on_delete=models.CASCADE)
     Posts = models.ManyToManyField(Post)
     Reviews = models.ManyToManyField(Review)
 
