@@ -81,13 +81,13 @@ class Seeker(models.Model):     #Job Seeker, subclass to User
             JobChoices,
             on_delete=models.CASCADE,
     )
-    IntJob = models.ManyToManyField(Post)
-    Reviews = models.ManyToManyField(Review)
+    IntJob = models.ManyToManyField(Post, blank=True, null=True)
+    Reviews = models.ManyToManyField(Review, blank=True, null=True)
     Location = models.TextField()
 
 class Creator(models.Model):    #Job Creator
     User = models.OneToOneField(User, on_delete=models.CASCADE)
-    Posts = models.ManyToManyField(Post)
-    Reviews = models.ManyToManyField(Review)
+    Posts = models.ManyToManyField(Post, blank=True, null=True)
+    Reviews = models.ManyToManyField(Review, blank=True, null=True)
 
 
