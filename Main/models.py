@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 
 # Create your models here.
 
@@ -55,9 +56,39 @@ class Report(models.Model):
     )
     Details = models.TextField()
 
-class User(models.Model):
+class UserManager(BaseUserManager):
+    def create_user(self, email, password=None):
+        """
+        Creates and saves a User with the given email, date of
+        birth and password.
+        """
+        if not email:
+            raise ValueError('Users must have an email address')
+
+        user = self.model(
+            email=self.normalize_email(email),
+        )
+
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, email, password):
+        """
+        Creates and saves a superuser with the given email, date of
+        birth and password.
+        """
+        user = self.create_user(
+            email,
+            password=password,
+        )
+        user.is_admin = True
+        user.save(using=self._db)
+        return user
+
+class User(AbstractBaseUser):
     User = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null = True)
-    Email = models.CharField(max_length = 60)
+    Email = models.CharField(max_length = 60, unique=True)
     FirstName = models.CharField(max_length = 50)
     LastName = models.CharField(max_length = 50)
     Description = models.TextField()
@@ -65,6 +96,13 @@ class User(models.Model):
     #image
     Contacts = models.ManyToManyField("self", blank=True)
     Reports = models.ForeignKey(Report, on_delete=models.CASCADE, blank=True, null=True)
+
+    is_anonymous = False
+    is_authenticated = True
+    USERNAME_FIELD = 'Email'
+    REQUIRED_FIELDS = []
+
+    objects = UserManager()
 
 class JobChoices(models.Model):
     Types = models.CharField(

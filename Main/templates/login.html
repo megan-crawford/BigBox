@@ -12,7 +12,14 @@
 
   </head>
   <body>
-    
+
+  <form method="POST">
+      {% csrf_token %}
+      {{form.as_p}}
+      <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+  </form>
+
+<!--
 <form class="form-signin">
 	<div class="text-center">
 		<img src="{% static 'images/logo.PNG' %}" alt="sturgeon" class="img-responsive center-block" />
@@ -33,6 +40,7 @@
 
   
 </form>
+-->
 
   <a href="/create_account">
       <button class="btn btn-sm btn-secondary btn-block" type="submit">Create Account</button>

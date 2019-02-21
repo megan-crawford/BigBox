@@ -56,22 +56,34 @@ def home(request):
 
 def login_request(request):
     if request.method == 'POST': #user clicks submit -> check form info
+        print('login post')
         form = LoginForm(request.POST)
 
         if form.is_valid():
+            print('login valid')
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
+            print('email: ', email)
+            print('password: ', password)
 
-            user = authenticate(username=email, password=password)
+            user = authenticate(Email=email, password=password)
             if user is not None:
+                print('login user found')
                 login(request, user)
-                return redirect('home/')
+
+                if request.user.is_authenticated():
+                    print("Logged in")
+                else:
+                    print("Not logged in")
+
+                return redirect('/')
             else:
                 form.add_error(None, LoginForm.error_messages['invalid_login'])
 
         #else not valid -> send form with error details
 
     else: #user opens page -> send blank form
+        print('login non post')
         form = LoginForm()
 
     return render(request, 'login.html', {'form':form})
