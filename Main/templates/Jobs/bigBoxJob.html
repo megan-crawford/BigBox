@@ -21,7 +21,7 @@
                 <div class="collapse navbar-collapse" id="navbarsExampleDefault">
                   <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                      <a class="nav-link" style="font-size: 200%; padding-left: 20%" href="#">Home<span class="sr-only">(current)</span></a>
+                      <a class="nav-link" style="font-size: 200%; padding-left: 20%" href="/#">Home<span class="sr-only">(current)</span></a>
                     </li>
                   </ul>
                   <div class="dropdown">
@@ -39,7 +39,7 @@
           
           <div class="d-flex justify-content-center">
             <div class="placeholderr" style="background-color:#71A6FF; height:1000px;width:500px; align-content: center">Please Enter Job Information
-              <form method="post" action = "add_job">
+              <form method="post" action = "/add_job">
                 <br>Select Job Type<br>
                 <select name="Job Type" required>
                   <option value="lawncare">Lawn Care</option>
@@ -114,7 +114,7 @@
                 <br><br>Enter Zipcode<br>
                 <input type="text" name="zipcode" required>   
                 <br><br>    
-                <input type="submit" name="submit">
+                <input type="submit" name="submit" value = "Add Job">
               </form>
             </div> 
           </div> 

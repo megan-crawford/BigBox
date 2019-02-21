@@ -26,7 +26,7 @@ urlpatterns = [
 	path('create_account/', views.create_account, name='create_account'),
     path('create_job/', views.create_job, name='create_job'),
     path('list_job/', views.list_job, name='list_job'),
-    path('create_job/add_job', views.new_job, name='add_job'),
+    path('add_job', views.new_job, name='add_job'),
     path('profile/', views.profile, name='profile'),
     path('update_account/', views.update_account, name='update_account'),
 ]
