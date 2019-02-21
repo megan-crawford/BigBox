@@ -1,3 +1,4 @@
+{% load staticfiles %}
 <!doctype html>
 <html lang="en">
   <head>
@@ -7,15 +8,15 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="updateAccount.css">
-
+    <link rel="stylesheet" href="{% static 'css/updateAccount.css' %}">
+    
     <title>Big Box - Create Account</title>
   </head>
   <body>
       <div class="blank_space"></div>
     
-      <img src="logo.PNG" style="width:20%">
-      
+      <img src="{% static 'images/logo2.PNG' %}" style="width:20%">
+
       <br>
       <br>
 

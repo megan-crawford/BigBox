@@ -84,5 +84,6 @@ function badOverall() {
         errorOverallMessage.style.display = "block";
     } else {
         errorOverallMessage.style.display = "none";
+        window.location.href="/home";
     }
 }

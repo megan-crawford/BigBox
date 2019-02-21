@@ -41,6 +41,14 @@ def create_account(request):
         return render(request, 'createAccount.html', {'form':form})
         #redirect('create_account/')
 
+def profile(request):
+    return render(request, 'profile.html')
+    #return HttpResponse("profile.")
+
+def update_account(request):
+    return render(request, 'updateAccount.html')
+    #return HttpResponse("update_account")
+
 #home page
 def home(request):
     return render(request, 'home.html')

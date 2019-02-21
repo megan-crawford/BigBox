@@ -1,3 +1,4 @@
+{% load staticfiles %}
 <!doctype html>
 <html lang="en">
 <style>
@@ -37,7 +38,7 @@
 </head>
 <body>
         <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" content="width=device-width" style="height:8vw;">
-                <img src="logo.PNG" style="max-height:100%;max-width:100%;">
+                <img src="{% static 'images/logo2.PNG' %}" style="max-height:100%;max-width:100%;">
               
                 <div class="collapse navbar-collapse" id="navbarsExampleDefault">
                   <ul class="navbar-nav mr-auto">
