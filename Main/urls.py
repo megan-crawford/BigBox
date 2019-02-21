@@ -29,5 +29,4 @@ urlpatterns = [
     path('add_job/', views.new_job, name='add_job'),
     path('profile/', views.profile, name='profile'),
     path('update_account/', views.update_account, name='update_account'),
-    path('true_home/', views.true_home, name='true_home'),
 ]

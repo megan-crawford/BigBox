@@ -45,9 +45,6 @@ def profile(request):
     return render(request, 'profile.html')
     #return HttpResponse("profile.")
 
-def true_home(request):
-    return render(request, 'trueHome.html')
-    #return HttpResponse("true_home")
 
 def update_account(request):
     return render(request, 'updateAccount.html')
