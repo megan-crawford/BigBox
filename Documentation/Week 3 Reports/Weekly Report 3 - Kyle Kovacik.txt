@@ -1,0 +1,19 @@
+=== Weekly Individual Report (Team 01: sturgeons++) ===
+Name: Kyle Kovacik
+
+Week 3 (Summary)
+2/18/19 4	e2a4997		Successfully linked the css and javascript files	(made them work while running the server)
+2/20/19 4	15f3430 	Linked buttons on UI to other UI pages 			(also minor visual fixes)
+2/22/19 1	NA 		Performed manual tests on UI				(both performed and documented)
+
+...
+
+Week 4 (Plan)
+2/26/19	2 	NA 		Plan for Sprint 2				
+3/1/19 	4 	NA 		Link the Html with the database
+3/1/19	3	NA		Begin work on a new UI page
+
+
+
+
+
