@@ -1,0 +1,14 @@
+=== Weekly Individual reports (Team 1: BigBox) ===
+Name: Kurtis Dressel
+
+Week 3 (Summary)
+2/18/19, 9efe0f8, 4 hours, added create account backend function and fixed errors
+2/19/19, 4c32c7c, 3 hours, worked with front end to refix code
+2/21/19, 652dbdd, 6 hours, added email authtication code in seperate branch
+2/21/19, be5ac47, 2 hours, added login backend function
+
+Week 4 (Plan)
+2/26/19, 2 hours, create automated test cases for login
+2/26/19, 4 hours, use automated test cases to debug authenticating with email
+3/1/19, 2 hours, create automated test cases for createing accounts
+3/1/19, 3 hours, check if test cases work and debug if nessesary
