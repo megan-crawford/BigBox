@@ -1,1 +1,14 @@
+=== Weekly Individual Report (Team 1: sturgeons++) ===
+Name: Megan Crawford
+
+Week # 3 (Summary)
+2/18/2019 4 hours 214fb42 Job posting page
+2/19/2019 1 hour 1799485 page navigation
+2/21/2019 2 hours N/A test website navigation buttons
+
+ 
+Week # 4 (Plan)
+
+2/26/2019 3 hours plan sprint 2
+3/1/2019 6 hours linking html pages to database
 
