@@ -45,6 +45,7 @@ def profile(request):
     return render(request, 'profile.html')
     #return HttpResponse("profile.")
 
+
 def update_account(request):
     return render(request, 'updateAccount.html')
     #return HttpResponse("update_account")
