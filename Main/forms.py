@@ -1,5 +1,5 @@
 from django import forms
-from django.core.exceptions import ValidationError 
+from django.core.exceptions import ValidationError
 from django.core.validators import EmailValidator, RegexValidator
 from . models import User
 from re import search #regex
@@ -64,3 +64,13 @@ class LoginForm(forms.Form):
 
     def clean(self):
         super().clean()
+
+class UpdateAccountForm(forms.Form):
+    profile_picture = forms.ImageField(label='Update Profile Picture');
+    first_name = forms.CharField(label='Update First Name', max_length=50)
+    last_name = forms.CharField(label='Update Last Name', max_length=50)
+    age = forms.IntegerField(label='Update Age', min_value=0, max_value=150)
+    email = forms.EmailField(label='Update Email', max_length=60)
+    description = forms.CharField(label='Update Description')
+    password = forms.CharField(label='Update Password', max_length=128, widget=forms.PasswordInput)
+    confirm_password = forms.CharField(label='Confirm New Password', max_length=128, widget=forms.PasswordInput)
