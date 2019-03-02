@@ -1,0 +1,11 @@
+=== Weekly Individual reports (Team 1: BigBox) ===
+Name: Kurtis Dressel
+
+Week 4 (Summary)
+2/26/19	3 hours		    Worked on the sprint planing document
+2/28/19	2 hours		    Looked into testing in Django
+3/1/19	4 hours	d8df8af	Added the update account backend view function and backend form
+
+Week 5 (Plan)
+3/6/19	4 hours	Develop update account backend form test cases and debug if needed
+3/8/19	4 hours	Create the post job form and view backend function
