@@ -51,27 +51,27 @@ def update_account(request):
         form = UpdateAccountForm(request.POST)
 
         if form.is_valid():
-            update_all = 'createAccountButton' in request.POST
+            update_all = 'update_all_button' in request.POST
 
-            if 'updateProfilePicButton' in request.POST or update_all:
+            if 'profile_picture_button' in request.POST or update_all:
                 request.user.ProfilePicture = form.cleaned_data['profile_picture'] 
 
-            if 'updateFirstNameButton' in request.POST or update_all:
+            if 'first_name_button' in request.POST or update_all:
                 request.user.FirstName = form.cleaned_data['first_name']
 
-            if 'updateLastNameButton' in request.POST or update_all:
+            if 'last_name_button' in request.POST or update_all:
                 request.user.LastName = form.cleaned_data['last_name']
 
-            if 'updateAgeButton' in request.POST or update_all:
+            if 'age_button' in request.POST or update_all:
                 request.user.Age = form.cleaned_data['age']
 
-            if 'updateEmailButton' in request.POST or update_all:
+            if 'email_button' in request.POST or update_all:
                 request.user.Email = form.cleaned_data['email']
 
-            if 'updateDescriptionButton' in request.POST or update_all:
+            if 'description_button' in request.POST or update_all:
                 request.user.Description = form.cleaned_data['description']
 
-            if 'updatePasswordButton' in request.POST or update_all:
+            if 'password_button' in request.POST or update_all:
                 request.user.set_password(form.cleaned_data['password'])
 
             request.user.save()
