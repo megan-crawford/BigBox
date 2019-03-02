@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views.generic.edit import FormView
-from .forms import CreateAccountForm, LoginForm
+from .forms import CreateAccountForm, LoginForm, UpdateAccountForm
 from django.contrib.auth import login, logout
 from django.http import HttpResponse
 from . models import User
@@ -47,8 +47,40 @@ def profile(request):
 
 
 def update_account(request):
-    return render(request, 'updateAccount.html')
-    #return HttpResponse("update_account")
+    if request.method == 'POST':
+        form = UpdateAccountForm(request.POST)
+
+        if form.is_valid():
+            update_all = 'createAccountButton' in request.POST
+
+            if 'updateProfilePicButton' in request.POST or update_all:
+                request.user.ProfilePicture = form.cleaned_data['profile_picture'] 
+
+            if 'updateFirstNameButton' in request.POST or update_all:
+                request.user.FirstName = form.cleaned_data['first_name']
+
+            if 'updateLastNameButton' in request.POST or update_all:
+                request.user.LastName = form.cleaned_data['last_name']
+
+            if 'updateAgeButton' in request.POST or update_all:
+                request.user.Age = form.cleaned_data['age']
+
+            if 'updateEmailButton' in request.POST or update_all:
+                request.user.Email = form.cleaned_data['email']
+
+            if 'updateDescriptionButton' in request.POST or update_all:
+                request.user.Description = form.cleaned_data['description']
+
+            if 'updatePasswordButton' in request.POST or update_all:
+                request.user.set_password(form.cleaned_data['password'])
+
+            request.user.save()
+
+            return render(request, 'updateAccount.html')
+    else:
+        form = UpdateAccountForm()
+
+    return render(request, 'updateAccount.html', {'form': form})
 
 #home page
 def home(request):
