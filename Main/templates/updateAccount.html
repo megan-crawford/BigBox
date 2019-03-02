@@ -20,36 +20,34 @@
       <br>
       <br>
 
+      <form name="inputs">  
        <label for="profiePicInput" id="profilePicText">Update Profile Picture</label>
        <div id="inputs">
-           <input value="Update Profile Picture" type="file" name="profilepic">
+           <input name="profile_picture" type="file" name="profilepic">
        </div>
 
         <br>
 
         <label for="firstNameInput" id="firstNameText">Update First Name</label>
         <div class="row">
-          <form class="" name="inputs" id="inputs">
-           <div class="form-group col-xs-6">
-            <input value="Update First Name" type="firstName" class="form-control" id="firstNameInput" placeholder="Ex: John">
+           <div id="inputs" class="form-group col-xs-6">
+            <input name="first_name" type="firstName" class="form-control" id="firstNameInput" placeholder="Ex: John">
          </div>
-          </form>
+          
 
          <div class="btn1 col-xs-6">
-            <button name="First Name Button" onclick="" type="button" class="btn btn-secondary" id="updateFirstNameButton">Update First Name</button>
+            <button name="first_name_button" onclick="" type="button" class="btn btn-secondary" id="updateFirstNameButton">Update First Name</button>
          </div>
         </div>
 
         <label for="lastNameInput" id="lastNameText">Update Last Name</label>
         <div class="row">
-          <form class="" name="inputs" id="inputs"> 
-            <div class="form-group col-xs-6">
-            <input value="Update Last Name" type="lastName" class="form-control" id="lastNameInput" placeholder="Ex: Doe">
+            <div id="inputs" class="form-group col-xs-6">
+            <input name="last_name" type="lastName" class="form-control" id="lastNameInput" placeholder="Ex: Doe">
             </div>
-          </form>
 
           <div class="btn1 col-xs-6">
-           <button name="Last Name Button" onclick="" type="button" class="btn btn-secondary" id="updateLastNameButton">Update Last Name</button>
+           <button name="last_name_button" onclick="" type="button" class="btn btn-secondary" id="updateLastNameButton">Update Last Name</button>
           </div>
         </div>
 
@@ -57,14 +55,12 @@
 
         <label for="ageInput" id="ageText">Update Age</label>
         <div class="row">
-          <form class="" name="inputs" id="inputs">
-           <div class="form-group col-xs-6">
-            <input value="Update Age" type="age" class="form-control" id="ageInput" placeholder="Ex: 21">
+           <div id="inputs" class="form-group col-xs-6">
+            <input name="age" type="age" class="form-control" id="ageInput" placeholder="Ex: 21">
            </div>
-           </form>
 
            <div class="btn1 col-xs-6">
-            <button name="Age Button" onclick="" type="button" class="btn btn-secondary" id="updateAgeButton">Update Age</button>
+            <button name="age_button" onclick="" type="button" class="btn btn-secondary" id="updateAgeButton">Update Age</button>
            </div>
         </div>
 
@@ -72,28 +68,24 @@
 
         <label for="emailInput" id="emailText">Update Email</label>
         <div class="row">
-          <form class="" name="inputs" id="inputs">
-           <div class="form-group col-xs-6">
-            <input value="Update Email" type="email" class="form-control" name="emailInput" id="emailInput" placeholder="Ex: John_Doe@mail.com">
+           <div id="inputs" class="form-group col-xs-6">
+            <input name="email" type="email" class="form-control" name="emailInput" id="emailInput" placeholder="Ex: John_Doe@mail.com">
            </div>
-           </form>
 
            <div class="btn1 col-xs-6">
-             <button name="Email Button" onclick="" type="button" class="btn btn-secondary" id="updateEmailButton">Update Email</button>
+             <button name="email_button" onclick="" type="button" class="btn btn-secondary" id="updateEmailButton">Update Email</button>
            </div>
         </div>
         <br>
 
         <label for="descriptionInput" id="descriptionText">Update Description</label>
         <div class="row">
-          <form class="" name="inputs" id="inputs">
-           <div class="form-group col-xs-6">
-            <textarea value="Update Description" class="form-control" id="descriptionInput" placeholder="Ex: I am a cool dude"></textarea>
+           <div id="inputs" class="form-group col-xs-6">
+            <textarea name="description" class="form-control" id="descriptionInput" placeholder="Ex: I am a cool dude"></textarea>
          </div>
-          </form>
 
          <div class="btn1 col-xs-6">
-            <button name="Description Button" onclick="" type="button" class="btn btn-secondary" id="updateFirstNameButton">Update Description</button>
+            <button name="description_button" onclick="" type="button" class="btn btn-secondary" id="updateFirstNameButton">Update Description</button>
          </div>
         </div>
         <br>
@@ -103,20 +95,16 @@
         </div>
 
         <label for="passwordInput" id="passwordText">Update Password</label>
-        <form name="inputs" id="inputs">
-        <div class="form-group">
-          <input value="Update Password" type="password" class="form-control" id="passwordInput" aria-describedby="password" placeholder="Ex: Password1234">
+        <div id="inputs" class="form-group">
+          <input name="password" type="password" class="form-control" id="passwordInput" aria-describedby="password" placeholder="Ex: Password1234">
         </div>
-        </form>
         
         <label for="passwordCheckInput" id="passwordCheckText">Confirm New Password</label>
-        <form name="inputs" id="inputs">
-        <div class="form-group">
-            <input value="Confirm New Password" type="password" class="form-control" id="passwordCheckInput" aria-describedby="password" placeholder="Ex: Password1234">
+        <div id="inputs" class="form-group">
+            <input name="password_check" type="password" class="form-control" id="passwordCheckInput" aria-describedby="password" placeholder="Ex: Password1234">
         </div>
-        </form>
           <div class="btn1">
-            <button name="Password Button" onclick="" type="button" class="btn btn-secondary" id="updatePasswordButton">Update Password</button>
+            <button name="password_button" onclick="" type="button" class="btn btn-secondary" id="updatePasswordButton">Update Password</button>
           </div>
 
       <br>
@@ -126,6 +114,8 @@
           <p>You messed up somewhere. What an idiot.</p>
       </div>
       
+    </form>
+
       <br>
 
       <div class="buttons center_div">
