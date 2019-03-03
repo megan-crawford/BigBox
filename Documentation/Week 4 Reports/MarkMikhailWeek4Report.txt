@@ -1,0 +1,15 @@
+=== Weekly Individual Report (Team 1: <sturgeon++>) ===
+Name: Mark Mikhail
+
+Week 4 Made plan for sprint 2 doc and started working on manual testing
+
+2/26	3	N/A	Made plans for sprint 2 doc
+3/1	4	N/A 	Started developing manual testing
+
+Week 4 Write automated tests for database
+
+3/5	2	Write automated tests
+3/7	2	Write automated tests
+3/8 	3	Write automated tests
+3/9	3	Write automated tests
+	
