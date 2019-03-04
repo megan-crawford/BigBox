@@ -1,0 +1,11 @@
+=== Weekly Individual reports (Team 1: BigBox) ===
+Name: Megan Crawford
+
+Week 4 (Summary)
+2/26/19 3 N/A  sprint 2 planning document
+3/1/19  1  N/A linked database to frontend
+3/1/19  3  N/A learned how to write tests in django
+
+Week 5 (Plan)
+3/4/19 1 work on testing
+3/6/19 4 Update job listings page
