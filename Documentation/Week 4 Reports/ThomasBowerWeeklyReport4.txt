@@ -1,0 +1,16 @@
+=== Weekly Individual Report (Team 1: sturgeons++) ===
+Name: Thomas Bower
+
+Week 4 (Summary)
+2/26	3 hr	N/A	Planned out Sprint 2, worked on planning doc
+3/1	2 hr	N/A	Helped begin work on django test cases
+3/1	2 hr	632c602 Edited login page and fixed button location
+
+Week 5 (Plan)
+[Meetings]
+3/5	1 hr	N/A	Begin work on creator/seeker homepages
+3/5	3 hr	N/A	Continue helping with test case development on backend side
+3/8	1 hr	N/A	Write more test cases
+3/8	3 hr	N/A	Finalize creation of creator/seeker homepage HTMLS
+
+Weekly Goal: Develop understanding of how to make & use django test cases, while also making progress on frontend
