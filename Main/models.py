@@ -1,7 +1,11 @@
 from django.conf import settings
 from django.db import models
+import os
 
 # Create your models here.
+
+def get_image_path(instance, filename):
+    return os.path.join('images', str(instance.id), filename)
 
 class Post(models.Model):
     LAWNMOWING='LM'
@@ -62,7 +66,7 @@ class User(models.Model):
     LastName = models.CharField(max_length = 50)
     Description = models.TextField()
     Age = models.SmallIntegerField()
-    #image
+    Portrait = models.ImageField(upload_to=get_image_path, blank=True, null=True)
     Contacts = models.ManyToManyField("self", blank=True)
     Reports = models.ForeignKey(Report, on_delete=models.CASCADE, blank=True, null=True)
 
