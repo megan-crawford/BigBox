@@ -20,7 +20,9 @@
       <br>
       <br>
 
-      <form name="inputs">  
+      <form action="/update_account/" method="POST" name="inputs">
+        {% csrf_token %}
+
        <label for="profiePicInput" id="profilePicText">Update Profile Picture</label>
        <div id="inputs">
            <input name="profile_picture" type="file" name="profilepic">
@@ -36,7 +38,7 @@
           
 
          <div class="btn1 col-xs-6">
-            <button name="first_name_button" onclick="" type="button" class="btn btn-secondary" id="updateFirstNameButton">Update First Name</button>
+            <button name="first_name_button" type="submit" class="btn btn-secondary" id="updateFirstNameButton">Update First Name</button>
          </div>
         </div>
 
@@ -47,7 +49,7 @@
             </div>
 
           <div class="btn1 col-xs-6">
-           <button name="last_name_button" onclick="" type="button" class="btn btn-secondary" id="updateLastNameButton">Update Last Name</button>
+           <button name="last_name_button" type="submit" class="btn btn-secondary" id="updateLastNameButton">Update Last Name</button>
           </div>
         </div>
 
@@ -60,7 +62,7 @@
            </div>
 
            <div class="btn1 col-xs-6">
-            <button name="age_button" onclick="" type="button" class="btn btn-secondary" id="updateAgeButton">Update Age</button>
+            <button name="age_button" type="submit" class="btn btn-secondary" id="updateAgeButton">Update Age</button>
            </div>
         </div>
 
@@ -73,7 +75,7 @@
            </div>
 
            <div class="btn1 col-xs-6">
-             <button name="email_button" onclick="" type="button" class="btn btn-secondary" id="updateEmailButton">Update Email</button>
+             <button name="email_button" type="submit" class="btn btn-secondary" id="updateEmailButton">Update Email</button>
            </div>
         </div>
         <br>
@@ -85,7 +87,7 @@
          </div>
 
          <div class="btn1 col-xs-6">
-            <button name="description_button" onclick="" type="button" class="btn btn-secondary" id="updateFirstNameButton">Update Description</button>
+            <button name="description_button" type="submit" class="btn btn-secondary" id="updateFirstNameButton">Update Description</button>
          </div>
         </div>
         <br>
@@ -104,7 +106,7 @@
             <input name="password_check" type="password" class="form-control" id="passwordCheckInput" aria-describedby="password" placeholder="Ex: Password1234">
         </div>
           <div class="btn1">
-            <button name="password_button" onclick="" type="button" class="btn btn-secondary" id="updatePasswordButton">Update Password</button>
+            <button name="password_button" type="submit" class="btn btn-secondary" id="updatePasswordButton">Update Password</button>
           </div>
 
       <br>
@@ -114,14 +116,15 @@
           <p>You messed up somewhere. What an idiot.</p>
       </div>
       
-    </form>
+    
 
       <br>
 
       <div class="buttons center_div">
         <div class="btn1">
-          <button onclick="badOverall()" type="button" class="btn btn-secondary" id="createAccountButton">Update All</button>
+          <button onclick="badOverall()" type="submit" class="btn btn-secondary" id="createAccountButton">Update All</button>
         </div>
+  </form>
         <div class="btn2">
           <a href="/profile">
             <button type="button" class="btn btn-secondary" id="createCancelButton">Cancel</button>
@@ -138,6 +141,6 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
-    <script src="updateAccount.js"></script>
+    
   </body>
 </html>
