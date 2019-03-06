@@ -1,0 +1,14 @@
+=== Weekly Team Report (Team 1: sturgeons++) ===
+Name: Jason Bagnara
+
+Week 4 (summary)
+2/26	3 hr	N/A	Worked on sprint 2 planning doc
+3/1	4 hr	N/A	Figured out how django test cases work
+
+Week 5 (plan)
+3/5	2 hr	N/A	Figure out how to get test cases to interact with database
+3/5	2 hr	N/A	Start writing test cases
+3/8	4 hr	N/A	Write more test cases
+3/9	3 hr	N/A	Finish writing test cases
+
+Weekly Goal: Figure out how to write effective test cases in django

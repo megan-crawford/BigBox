@@ -1,0 +1,20 @@
+=== Weekly Individual Report (Team 01: sturgeons++) ===
+Name: Kyle Kovacik
+
+Week 4 (Summary)
+2/26/19 4	NA	Organized and Created Planning Document for Sprint Two
+3/1/19  2	NA	Researched and Built A Test for Backend
+3/1/19	2	dfdf8af	Updated Forms and Account Views
+3/2/19 	2	NA	Began Work on Current Jobs Html
+
+...
+
+Week 5 (Plan)
+3/6/19	3	NA	Finish Work on Current Jobs Html
+3/8/19	2	NA	Create forms and views for Current Jobs Html
+3/8/19	4	NA	Attempt o Link Backend and Frontend to get Current Job Information
+3/9/19  1	NA	Create More Tests for Backend
+
+
+Goal: Create the Current Jobs Html Page and attempt to connect it with the database
+
