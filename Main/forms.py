@@ -1,8 +1,10 @@
 from django import forms
 from django.core.exceptions import ValidationError 
 from django.core.validators import EmailValidator, RegexValidator
-from . models import User
+from . models import Profile
 from re import search #regex
+
+
 
 class CreateAccountForm(forms.Form):
     email = forms.EmailField(label='Email Address')
@@ -19,7 +21,7 @@ class CreateAccountForm(forms.Form):
     def clean_email(self):
         email = self.cleaned_data['email']
         
-        if not User.objects.filter(Email=email).exists:
+        if not Profile.objects.filter(Email=email).exists:
             print('email err')
             raise ValidationError(message='Email already exists', code='preexisting_email')
 

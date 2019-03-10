@@ -1,9 +1,10 @@
+
 from django.shortcuts import render, redirect
 from django.views.generic.edit import FormView
 from .forms import CreateAccountForm, LoginForm
 from django.contrib.auth import login, logout
 from django.http import HttpResponse
-from . models import User
+from . models import Profile
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate
 
@@ -16,7 +17,6 @@ def create_account(request):
 
         if form.is_valid():
             print('create account valid')
-
             #get form data
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
@@ -25,7 +25,7 @@ def create_account(request):
             age = form.cleaned_data['age']
 
             #create and add user to database
-            user = User.objects.create(Email=email, Password=password, FirstName=first_name, LastName=last_name, Age=age)
+            user = Profile.objects.create(Email=email, Password=password, FirstName=first_name, LastName=last_name, Age=age)
             user.save()
             login(request, user)
             
