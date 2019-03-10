@@ -1,0 +1,146 @@
+{% load staticfiles %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/updateAccount.css' %}">
+    
+    <title>Big Box - Create Account</title>
+  </head>
+  <body>
+      <div class="blank_space"></div>
+    
+      <img src="{% static 'images/logo2.PNG' %}" style="width:20%">
+
+      <br>
+      <br>
+
+      <form action="/update_account/" method="POST" name="inputs">
+        {% csrf_token %}
+
+       <label for="profiePicInput" id="profilePicText">Update Profile Picture</label>
+       <div id="inputs">
+           <input name="profile_picture" type="file" name="profilepic">
+       </div>
+
+        <br>
+
+        <label for="firstNameInput" id="firstNameText">Update First Name</label>
+        <div class="row">
+           <div id="inputs" class="form-group col-xs-6">
+            <input name="first_name" type="firstName" class="form-control" id="firstNameInput" placeholder="Ex: John">
+         </div>
+          
+
+         <div class="btn1 col-xs-6">
+            <button name="first_name_button" type="submit" class="btn btn-secondary" id="updateFirstNameButton">Update First Name</button>
+         </div>
+        </div>
+
+        <label for="lastNameInput" id="lastNameText">Update Last Name</label>
+        <div class="row">
+            <div id="inputs" class="form-group col-xs-6">
+            <input name="last_name" type="lastName" class="form-control" id="lastNameInput" placeholder="Ex: Doe">
+            </div>
+
+          <div class="btn1 col-xs-6">
+           <button name="last_name_button" type="submit" class="btn btn-secondary" id="updateLastNameButton">Update Last Name</button>
+          </div>
+        </div>
+
+        <br>
+
+        <label for="ageInput" id="ageText">Update Age</label>
+        <div class="row">
+           <div id="inputs" class="form-group col-xs-6">
+            <input name="age" type="age" class="form-control" id="ageInput" placeholder="Ex: 21">
+           </div>
+
+           <div class="btn1 col-xs-6">
+            <button name="age_button" type="submit" class="btn btn-secondary" id="updateAgeButton">Update Age</button>
+           </div>
+        </div>
+
+        <br>
+
+        <label for="emailInput" id="emailText">Update Email</label>
+        <div class="row">
+           <div id="inputs" class="form-group col-xs-6">
+            <input name="email" type="email" class="form-control" name="emailInput" id="emailInput" placeholder="Ex: John_Doe@mail.com">
+           </div>
+
+           <div class="btn1 col-xs-6">
+             <button name="email_button" type="submit" class="btn btn-secondary" id="updateEmailButton">Update Email</button>
+           </div>
+        </div>
+        <br>
+
+        <label for="descriptionInput" id="descriptionText">Update Description</label>
+        <div class="row">
+           <div id="inputs" class="form-group col-xs-6">
+            <textarea name="description" class="form-control" id="descriptionInput" placeholder="Ex: I am a cool dude"></textarea>
+         </div>
+
+         <div class="btn1 col-xs-6">
+            <button name="description_button" type="submit" class="btn btn-secondary" id="updateFirstNameButton">Update Description</button>
+         </div>
+        </div>
+        <br>
+
+        <div class="errorMessage" id="errorPassword" style="display:none">
+            <p>Passwords Do Not Match - You Suck</p>
+        </div>
+
+        <label for="passwordInput" id="passwordText">Update Password</label>
+        <div id="inputs" class="form-group">
+          <input name="password" type="password" class="form-control" id="passwordInput" aria-describedby="password" placeholder="Ex: Password1234">
+        </div>
+        
+        <label for="passwordCheckInput" id="passwordCheckText">Confirm New Password</label>
+        <div id="inputs" class="form-group">
+            <input name="password_check" type="password" class="form-control" id="passwordCheckInput" aria-describedby="password" placeholder="Ex: Password1234">
+        </div>
+          <div class="btn1">
+            <button name="password_button" type="submit" class="btn btn-secondary" id="updatePasswordButton">Update Password</button>
+          </div>
+
+      <br>
+
+      <div class="errorMessage" id="errorOverall" style="display:none">
+          <br>    
+          <p>You messed up somewhere. What an idiot.</p>
+      </div>
+      
+    
+
+      <br>
+
+      <div class="buttons center_div">
+        <div class="btn1">
+          <button onclick="badOverall()" type="submit" class="btn btn-secondary" id="createAccountButton">Update All</button>
+        </div>
+  </form>
+        <div class="btn2">
+          <a href="/profile">
+            <button type="button" class="btn btn-secondary" id="createCancelButton">Cancel</button>
+          </a>
+        </div>
+      </div>
+
+      <br>
+      <br>
+      <br>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+    
+  </body>
+</html>
