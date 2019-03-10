@@ -46,6 +46,7 @@ def profile(request):
     #return HttpResponse("profile.")
 
 
+#TDODO: change to update profile
 def update_account(request):
     if request.method == 'POST':
         form = UpdateAccountForm(request.POST)
@@ -54,27 +55,28 @@ def update_account(request):
             update_all = 'update_all_button' in request.POST
 
             if 'profile_picture_button' in request.POST or update_all:
-                request.user.ProfilePicture = form.cleaned_data['profile_picture'] 
+                request.user.profile.ProfilePicture = form.cleaned_data['profile_picture'] 
 
             if 'first_name_button' in request.POST or update_all:
-                request.user.FirstName = form.cleaned_data['first_name']
+                request.user.first_name = form.cleaned_data['first_name']
 
             if 'last_name_button' in request.POST or update_all:
-                request.user.LastName = form.cleaned_data['last_name']
+                request.user.last_name = form.cleaned_data['last_name']
 
             if 'age_button' in request.POST or update_all:
-                request.user.Age = form.cleaned_data['age']
+                request.user.profile.ProfilePicture = form.cleaned_data['age']
 
             if 'email_button' in request.POST or update_all:
-                request.user.Email = form.cleaned_data['email']
+                request.user.email = form.cleaned_data['email']
 
             if 'description_button' in request.POST or update_all:
-                request.user.Description = form.cleaned_data['description']
+                request.user.profile.ProfilePicture = form.cleaned_data['description']
 
             if 'password_button' in request.POST or update_all:
                 request.user.set_password(form.cleaned_data['password'])
 
             request.user.save()
+            request.user.profile.save()
 
             return render(request, 'updateAccount.html')
     else:

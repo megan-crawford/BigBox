@@ -1,4 +1,4 @@
-from django.conf import settings
+from django.contrib.auth.models import User
 from django.db import models
 
 # Create your models here.
@@ -55,8 +55,8 @@ class Report(models.Model):
     )
     Details = models.TextField()
 
-class User(models.Model):
-    User = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+class Profile(models.Model):
+    User = models.OneToOneField(User, on_delete=models.CASCADE)
     Email = models.CharField(max_length = 60)
     FirstName = models.CharField(max_length = 50)
     LastName = models.CharField(max_length = 50)
