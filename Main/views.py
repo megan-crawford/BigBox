@@ -50,32 +50,32 @@ def update_account(request):
     #TODO: check if user is logged in
 
     if request.method == 'POST':
-        #print('update account post')
+        print('update account post')
         form = UpdateAccountForm(request.POST)
 
         if form.is_valid():
-            #print('update account valid')
+            print('update account valid')
             update_all = 'update_all_button' in request.POST
 
-            if 'profile_picture_button' in request.POST or update_all:
+            if form.cleaned_data['profile_picture'] and ('profile_picture_button' in request.POST or update_all):
                 request.user.profile.ProfilePicture = form.cleaned_data['profile_picture'] 
 
-            if 'first_name_button' in request.POST or update_all:
+            if form.cleaned_data['first_name'] and ('first_name_button' in request.POST or update_all):
                 request.user.first_name = form.cleaned_data['first_name']
 
-            if 'last_name_button' in request.POST or update_all:
+            if  form.cleaned_data['last_name'] and ('last_name_button' in request.POST or update_all):
                 request.user.last_name = form.cleaned_data['last_name']
 
-            if 'age_button' in request.POST or update_all:
+            if form.cleaned_data['age'] and ('age_button' in request.POST or update_all):
                 request.user.profile.Age = form.cleaned_data['age']
 
-            if 'email_button' in request.POST or update_all:
+            if form.cleaned_data['email'] and ('email_button' in request.POST or update_all):
                 request.user.email = form.cleaned_data['email']
 
-            if 'description_button' in request.POST or update_all:
+            if form.cleaned_data['description'] and ('description_button' in request.POST or update_all):
                 request.user.profile.Description = form.cleaned_data['description']
 
-            if 'password_button' in request.POST or update_all:
+            if (form.cleaned_data['password'] and form.cleaned_data['password_confirmation']) and ('password_button' in request.POST or update_all):
                 request.user.set_password(form.cleaned_data['password'])
 
             request.user.save()

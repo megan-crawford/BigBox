@@ -4,11 +4,13 @@ from django.contrib.auth.models import User
 from re import search #regex
 
 class CreateAccountForm(forms.Form):
-    email = forms.EmailField(label='Email Address', max_length=60, required=True)
     password = forms.CharField(label='Password', max_length=128, required=True, widget=forms.PasswordInput)
     password_confirmation = forms.CharField(label='Password Confirmation', max_length=128, required=True, widget=forms.PasswordInput,)
+
+    email = forms.EmailField(label='Email Address', max_length=60, required=True)
     first_name = forms.CharField(label='First Name', max_length=50, required=True)
     last_name = forms.CharField(label='Last Name', max_length=50, required=True)
+
     age = forms.IntegerField(label='Age', min_value=0, max_value=150, required=True)
     #location = forms.CharField(label='Location', max_length=200) #form type may need to be updated
 
@@ -59,5 +61,7 @@ class UpdateAccountForm(CreateAccountForm):
     age = forms.IntegerField(label='Update Age', min_value=0, max_value=150, required=False)
     email = forms.EmailField(label='Update Email', max_length=60, required=False)
     description = forms.CharField(label='Update Description', required=False)
+
+    #TODO: add password checks
     password = forms.CharField(label='Update Password', max_length=128, required=False, widget=forms.PasswordInput)
     password_confirmation = forms.CharField(label='Confirm new Password', max_length=128, required=False, widget=forms.PasswordInput)
