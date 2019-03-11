@@ -1,7 +1,6 @@
 from django import forms
 from django.core.exceptions import ValidationError
-from django.core.validators import EmailValidator, RegexValidator
-from . models import User
+from django.contrib.auth.models import User
 from re import search #regex
 
 class CreateAccountForm(forms.Form):
@@ -22,7 +21,7 @@ class CreateAccountForm(forms.Form):
     def clean_email(self):
         email = self.cleaned_data['email']
         if email: #skip validation if user didn't put anything (for UpdateAccountForm)
-            if not User.objects.filter(Email=email).exists:
+            if not User.objects.filter(email=email).exists:
                 raise ValidationError(message=self.error_messages['preexisting_email'], code='preexisting_email')
 
         return email
@@ -52,15 +51,6 @@ class CreateAccountForm(forms.Form):
                 raise ValidationError(message=self.error_messages['passwords_not_match'], code='passwords_not_match')
 
         return password_confirmation
-
-class LoginForm(forms.Form):
-    email = forms.CharField(label='Email', max_length=60)
-    password = forms.CharField(label='Password', widget=forms.PasswordInput)
-
-    error_messages = {
-        'invalid_login' : 'Email or password information is incorrect',
-        #by default each field is required and has error message 'This field is required.'
-    }
 
 class UpdateAccountForm(CreateAccountForm):
     profile_picture = forms.ImageField(label='Update Profile Picture', required=False)

@@ -1,11 +1,10 @@
 from django.shortcuts import render, redirect
-from django.views.generic.edit import FormView
-from .forms import CreateAccountForm, LoginForm, UpdateAccountForm
 from django.contrib.auth import login, logout
-from django.http import HttpResponse
-from . models import User
-from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate
+from django.http import HttpResponse
+from . forms import CreateAccountForm, UpdateAccountForm
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.models import User
 
 def create_account(request):
     if request.method == "POST": #user clicks register button
@@ -46,12 +45,16 @@ def profile(request):
     #return HttpResponse("profile.")
 
 
-#TDODO: change to update profile
+#TODO: change to update profile
 def update_account(request):
+    #TODO: check if user is logged in
+
     if request.method == 'POST':
+        #print('update account post')
         form = UpdateAccountForm(request.POST)
 
         if form.is_valid():
+            #print('update account valid')
             update_all = 'update_all_button' in request.POST
 
             if 'profile_picture_button' in request.POST or update_all:
@@ -64,13 +67,13 @@ def update_account(request):
                 request.user.last_name = form.cleaned_data['last_name']
 
             if 'age_button' in request.POST or update_all:
-                request.user.profile.ProfilePicture = form.cleaned_data['age']
+                request.user.profile.Age = form.cleaned_data['age']
 
             if 'email_button' in request.POST or update_all:
                 request.user.email = form.cleaned_data['email']
 
             if 'description_button' in request.POST or update_all:
-                request.user.profile.ProfilePicture = form.cleaned_data['description']
+                request.user.profile.Description = form.cleaned_data['description']
 
             if 'password_button' in request.POST or update_all:
                 request.user.set_password(form.cleaned_data['password'])
@@ -90,31 +93,33 @@ def home(request):
     #return HttpResponse("home.")
 
 def login_request(request):
-    if request.method == 'POST': #user clicks submit -> check form info
-        form = LoginForm(request.POST)
+    if request.method == 'POST':
+        #print('login post')
+        form = AuthenticationForm(request=request, data=request.POST)
 
         if form.is_valid():
-            email = form.cleaned_data['email']
+            #print('login valid')
+            username = form.cleaned_data['username']
             password = form.cleaned_data['password']
 
-            user = authenticate(username=email, password=password)
+            user = authenticate(username=username, password=password)
+
             if user is not None:
+                #print('login success')
                 login(request, user)
-                return redirect('home/')
-            else:
-                form.add_error(None, LoginForm.error_messages['invalid_login'])
+                return redirect('/home/')
+            else: #invalid login info
+                pass
 
-        #else not valid -> send form with error details
-
-    else: #user opens page -> send blank form
-        form = LoginForm()
+    else:
+        form = AuthenticationForm()
 
     return render(request, 'login.html', {'form':form})
 
 #redirect to home    
 def logout_request(request):
     logout(request)
-    return redirect('home/')
+    return redirect('/home/')
 
 #create_job page
 def create_job(request):
@@ -124,6 +129,5 @@ def create_job(request):
 def list_job(request):
     return render(request, 'Jobs/listJobs.html')
 
-@csrf_exempt
 def new_job(request):
     return render(request, 'Jobs/viewNewJob.html')
