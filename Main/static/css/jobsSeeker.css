@@ -1,0 +1,27 @@
+#sidebar {
+    width: 100%;
+}
+
+#li {
+    width: 90%;
+}
+
+#job {
+    width: 95%;
+    height: 40%;
+}
+
+#search {
+    width: 99%;
+    padding-right: 1%;
+}
+
+#searchInput {
+    height: 50px;
+    width: 100%;
+    font-size: 30px;
+}
+
+.textInput {
+  width: 100%;
+}
