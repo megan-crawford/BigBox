@@ -5,18 +5,18 @@ from django.http import HttpResponse
 from . forms import CreateAccountForm, UpdateAccountForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
+from . models import Profile
 
 def create_account(request):
     if request.method == "POST": #user clicks register button
-        form = CreateAccountForm(request.POST)
-
         print('create account post')
-        #print(form.cleaned_data.get('first_name'))
+        form = CreateAccountForm(request.POST)
 
         if form.is_valid():
             print('create account valid')
 
             #get form data
+            username = form.cleaned_data['username']
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
             first_name = form.cleaned_data['first_name']
@@ -24,21 +24,21 @@ def create_account(request):
             age = form.cleaned_data['age']
 
             #create and add user to database
-            user = User.objects.create(Email=email, Password=password, FirstName=first_name, LastName=last_name, Age=age)
+            user = User.objects.create(username=username, email=email, first_name=first_name, last_name=last_name)
+            user.set_password(password)
+            profile = Profile.objects.create(User=user, Age=age)
+
             user.save()
+            profile.save()
             login(request, user)
             
-            return redirect('home/')
-        else:
-            print('create account not valid')
-            return render(request, 'createAccount.html', {'form':form})
+            return redirect('/home/')
 
     else: #user is viewing the create account page
-        print('create account non post')
-
         form = CreateAccountForm()
-        return render(request, 'createAccount.html', {'form':form})
-        #redirect('create_account/')
+
+    return render(request, 'createAccount.html', {'form':form})
+
 
 def profile(request):
     return render(request, 'profile.html')

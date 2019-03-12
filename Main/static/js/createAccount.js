@@ -46,6 +46,17 @@ function badOverall() {
         emailText.style.color = "black";
     }
 
+    //Check Username Field
+    var usernameText = document.getElementById("usernameText");
+    var usernameInput = document.forms["inputs"]["usernameInput"].value;
+
+    if (usernameInput == "") {
+        errorBool = true;
+        usernameText.style.color = "red";
+    } else {
+        usernameText.style.color = "black";
+    }
+
     //Check Password Field
     var passwordText = document.getElementById("passwordText");
     var passwordInput = document.forms["inputs"]["passwordInput"].value;
