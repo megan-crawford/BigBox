@@ -131,3 +131,23 @@ def list_job(request):
 
 def new_job(request):
     return render(request, 'Jobs/viewNewJob.html')
+
+#Job Creator Pages
+def all_jobs_creator(request):
+    return render(request, 'Creator/allJobsCreator.html')
+
+def accepted_jobs_creator(request):
+    return render(request, 'Creator/acceptedJobsCreator.html')
+
+def pending_jobs_creator(request):
+    return render(request, 'Creator/pendingJobsCreator.html')
+
+#Jobs Seeker Pages
+def all_jobs_seeker(request):
+    return render(request, 'Seeker/allJobsSeeker.html')
+
+def accepted_jobs_seeker(request):
+    return render(request, 'Seeker/acceptedJobsSeeker.html')
+
+def interested_jobs_seeker(request):
+    return render(request, 'Seeker/interestedJobsSeeker.html')

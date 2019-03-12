@@ -29,4 +29,10 @@ urlpatterns = [
     path('add_job/', views.new_job, name='add_job'),
     path('profile/', views.profile, name='profile'),
     path('update_account/', views.update_account, name='update_account'),
+    path('all_jobs_creator/', views.all_jobs_creator, name='all_jobs_creator'),
+    path('accepted_jobs_creator/', views.accepted_jobs_creator, name='accepted_jobs_creator'),
+    path('pending_jobs_creator/', views.pending_jobs_creator, name='pending_jobs_creator'),
+    path('all_jobs_seeker/', views.all_jobs_seeker, name='all_jobs_seeker'),
+    path('accepted_jobs_seeker/', views.accepted_jobs_seeker, name="accepted_jobs_seeker"),
+    path('interested_jobs_seeker/', views.interested_jobs_seeker, name='interested_jobs_seeker'),
 ]
