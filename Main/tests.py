@@ -26,3 +26,22 @@ class UpdateProfile(TestCase):
         user1 = User.objects.get(username='user1')
         self.assertEqual(user1.profile.Age, 30)
 
+class CreateProfile(TestCase):
+    def setUp(self):
+        self.client = Client()
+
+    def test_view(self):
+        response = self.client.post('/create_account/', {
+                                    'username': 'user1',
+                                    'password': 'vf83g9f7fg',
+                                    'password_confirmation': 'vf83g9f7fg',
+                                    'email': 'email@email.com',
+                                    'first_name': 'John',
+                                    'last_name': 'Smith',
+                                    'age': 20
+                                
+        })
+        self.assertEqual(response.status_code, 200)
+
+        user1 = User.objects.get(username='user1')
+        self.assertNotEqual(user1, None)
