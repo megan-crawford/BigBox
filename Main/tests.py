@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
-from . models import Profile
+from . models import Profile, Post
 from django.test import Client
 
 # Create your tests here.
@@ -45,3 +45,42 @@ class CreateProfile(TestCase):
 
         user1 = User.objects.get(username='user1')
         self.assertNotEqual(user1, None)
+
+class CreateJob(TestCase):
+    def setUp(self):
+        self.client = Client()
+
+    def test_view_valid(self):
+        response = self.client.post('/create_job/', {
+                                    'pay': 20.00,
+                                    'date_time': '2019-10-25',
+                                    'description': 'work involves ...',
+                                    'job_type': Post.BABYSITTING,
+        })
+        self.assertEqual(response.status_code, 302) #302 for redirect to add job
+
+        post = Post.objects.all().first() #get only object in table
+        self.assertNotEqual(post, None)
+        self.assertEqual(post.Pay, 20.00)
+
+    def test_view_empty_fields(self):
+        response = self.client.post('/create_job/', {
+                                    #no pay
+                                    #no date time
+                                    'description': 'work involves ...',
+                                    'job_type': Post.BABYSITTING,
+        })
+        self.assertEqual(response.status_code, 200) #200 for redirect to create job
+
+        self.assertEqual(Post.objects.all().count(), 0)
+
+    def test_view_invalid_date(self):
+        response = self.client.post('/create_job/', {
+                                    'pay': 20.00,
+                                    'date_time': '2000-10-25', #date was a long time ago
+                                    'description': 'work involves ...',
+                                    'job_type': Post.BABYSITTING,
+        })
+        self.assertEqual(response.status_code, 200) #200 for redirect to create job
+
+        self.assertEqual(Post.objects.all().count(), 0)
