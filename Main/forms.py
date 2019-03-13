@@ -1,7 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
-from . models import Post
+from . models import Post, Report
 from re import search #regex
 import datetime, pytz
 
@@ -113,3 +113,8 @@ class CreateJobForm(forms.Form):
             raise ValidationError(message=self.error_messages['invalid_date'], code='invalid_date')
 
         return date_time
+
+class CreateReportForm(forms.Form):
+    class Meta:
+        model = Report
+        fields = ['Classification', 'Details']

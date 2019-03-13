@@ -2,10 +2,10 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout
 from django.contrib.auth import authenticate
 from django.http import HttpResponse
-from . forms import CreateAccountForm, UpdateAccountForm, CreateJobForm
+from . forms import CreateAccountForm, UpdateAccountForm, CreateJobForm, CreateReportForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
-from . models import Profile, Post
+from . models import Profile, Post, Report
 
 def create_account(request):
     if request.method == "POST": #user clicks register button
@@ -94,23 +94,19 @@ def home(request):
 
 def login_request(request):
     if request.method == 'POST':
-        #print('login post')
+        print('login post')
         form = AuthenticationForm(request=request, data=request.POST)
 
         if form.is_valid():
-            #print('login valid')
+            print('login valid')
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
 
             user = authenticate(username=username, password=password)
 
             if user is not None:
-                #print('login success')
                 login(request, user)
                 return redirect('/home/')
-            else: #invalid login info
-                pass
-
     else:
         form = AuthenticationForm()
 
@@ -143,6 +139,31 @@ def create_job(request):
         form = CreateJobForm()
 
     return render(request, 'Jobs/bigBoxJob.html', {'form':form})
+
+def create_report(request):
+    if request.method == "POST": #?
+        print('create report post')
+        form = CreateReportForm(request.POST)
+
+        if form.is_valid():
+            print('create report valid')
+
+            classification = form.cleaned_data['Classification']
+            details = form.cleaned_data['Details']
+
+            username = request.GET['username']
+            user = User.objects.filter(username=username)
+            if user is None:
+                pass #TODO: add proper error checking
+            else:
+                Report.objects.create(Classification=classification, Details=details, User_ID=user.id)
+
+            return redirect('/profile/') #TODO: redirect user to the profile that they previously looked at
+    else:
+        form = CreateReportForm()
+
+    return render(request, 'report.html', {'form':form}) #TODO: add actual html name later
+
 
 def list_job(request):
     return render(request, 'Jobs/listJobs.html')

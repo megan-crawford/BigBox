@@ -58,6 +58,7 @@ class Report(models.Model):
         choices=REPORT_CHOICES
     )
     Details = models.TextField()
+    User_ID = models.ForeignKey(User, on_delete=models.CASCADE)
 
 class Profile(models.Model):
     User = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -68,7 +69,6 @@ class Profile(models.Model):
     Age = models.SmallIntegerField()
     Portrait = models.ImageField(upload_to=get_image_path, blank=True, null=True)
     Contacts = models.ManyToManyField("self", blank=True)
-    Reports = models.ForeignKey(Report, on_delete=models.CASCADE, blank=True, null=True)
 
 class JobChoices(models.Model):
     Types = models.CharField(
