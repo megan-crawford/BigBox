@@ -2,10 +2,10 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout
 from django.contrib.auth import authenticate
 from django.http import HttpResponse
-from . forms import CreateAccountForm, UpdateAccountForm
+from . forms import CreateAccountForm, UpdateAccountForm, CreateJobForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
-from . models import Profile
+from . models import Profile, Post
 
 def create_account(request):
     if request.method == "POST": #user clicks register button
@@ -123,8 +123,26 @@ def logout_request(request):
 
 #create_job page
 def create_job(request):
-    return render(request, 'Jobs/bigBoxJob.html')
-    #return HttpResponse("job.")
+    if request.method == 'POST':
+        print('create job post')
+        form = CreateJobForm(request.POST)
+
+        if form.is_valid():
+            print('create job valid')
+            #get form fields
+            pay = form.cleaned_data['pay']
+            date = form.cleaned_data['date_time']
+            description = form.cleaned_data['description']
+            job_type = form.cleaned_data['job_type']
+
+            #create new job
+            Post.objects.create(Pay=pay, DateTime=date, Description=description, JobType=job_type)
+
+            return redirect('/add_job/')
+    else:
+        form = CreateJobForm()
+
+    return render(request, 'Jobs/bigBoxJob.html', {'form':form})
 
 def list_job(request):
     return render(request, 'Jobs/listJobs.html')

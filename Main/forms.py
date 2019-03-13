@@ -1,7 +1,9 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
+from . models import Post
 from re import search #regex
+import datetime, pytz
 
 class CreateAccountForm(forms.Form):
     username = forms.CharField(label='Username', max_length=50, required=True)
@@ -91,3 +93,23 @@ class UpdateAccountForm(forms.Form):
             if password != password_confirmation:
                 raise ValidationError(message=self.error_messages['passwords_not_match'], code='passwords_not_match')
         return password_confirmation
+        
+class CreateJobForm(forms.Form):
+    pay = forms.DecimalField(min_value=0, max_value=1000, decimal_places=2, required=True)
+    date_time = forms.DateTimeField(required=True)
+    description = forms.CharField(required=True)
+    job_type = forms.ChoiceField(choices=Post.TYPE_CHOICES, required=True)
+    #TODO: create location field after geodjango is implemented
+
+    error_messages = {
+        'invalid_date' : 'You cannot go back in time to get a job done'
+    }
+
+    def clean_date_time(self):
+        date_time = self.cleaned_data['date_time']
+
+        now = pytz.utc.localize(datetime.datetime.now())
+        if date_time < now:
+            raise ValidationError(message=self.error_messages['invalid_date'], code='invalid_date')
+
+        return date_time
