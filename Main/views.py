@@ -148,15 +148,15 @@ def create_report(request):
         if form.is_valid():
             print('create report valid')
 
-            classification = form.cleaned_data['Classification']
-            details = form.cleaned_data['Details']
+            classification = form.cleaned_data['classification']
+            details = form.cleaned_data['details']
 
             username = request.GET['username']
-            user = User.objects.filter(username=username)
+            user = User.objects.get(username=username) #look out for does not exist exception
             if user is None:
-                pass #TODO: add proper error checking
+                pass #TODO: add proper error redirecting
             else:
-                Report.objects.create(Classification=classification, Details=details, User_ID=user.id)
+                Report.objects.create(Classification=classification, Details=details, User=user)
 
             return redirect('/profile/') #TODO: redirect user to the profile that they previously looked at
     else:

@@ -58,7 +58,7 @@ class Report(models.Model):
         choices=REPORT_CHOICES
     )
     Details = models.TextField()
-    User_ID = models.ForeignKey(User, on_delete=models.CASCADE)
+    User = models.ForeignKey(User, on_delete=models.CASCADE)
 
 class Profile(models.Model):
     User = models.OneToOneField(User, on_delete=models.CASCADE)

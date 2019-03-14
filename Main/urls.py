@@ -19,19 +19,29 @@ from . import views
 app_name='Main'
 
 urlpatterns = [
+    #home
 	path('', views.home, name='home'),
 	path('home/', views.home, name='home'),
-    path('login/', views.login_request, name='login'),
-	
-	path('create_account/', views.create_account, name='create_account'),
-    path('create_job/', views.create_job, name='create_job'),
-    path('list_job/', views.list_job, name='list_job'),
+
+    #jobs
     path('add_job/', views.new_job, name='add_job'),
+	
+    #account
+    path('login/', views.login_request, name='login'),
+    path('logout/', views.logout_request, name='logout'),
+	path('create_account/', views.create_account, name='create_account'),
     path('profile/', views.profile, name='profile'),
     path('update_account/', views.update_account, name='update_account'),
+    path('create_report/', views.create_report, name='create_report'),
+
+    #creator
+    path('create_job/', views.create_job, name='create_job'),
     path('all_jobs_creator/', views.all_jobs_creator, name='all_jobs_creator'),
     path('accepted_jobs_creator/', views.accepted_jobs_creator, name='accepted_jobs_creator'),
     path('pending_jobs_creator/', views.pending_jobs_creator, name='pending_jobs_creator'),
+
+    #seeker
+    path('list_job/', views.list_job, name='list_job'),
     path('all_jobs_seeker/', views.all_jobs_seeker, name='all_jobs_seeker'),
     path('accepted_jobs_seeker/', views.accepted_jobs_seeker, name="accepted_jobs_seeker"),
     path('interested_jobs_seeker/', views.interested_jobs_seeker, name='interested_jobs_seeker'),

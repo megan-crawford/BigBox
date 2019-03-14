@@ -115,6 +115,5 @@ class CreateJobForm(forms.Form):
         return date_time
 
 class CreateReportForm(forms.Form):
-    class Meta:
-        model = Report
-        fields = ['Classification', 'Details']
+    classification = forms.ChoiceField(choices=Report.REPORT_CHOICES, required=True)
+    details = forms.CharField(required=True)
