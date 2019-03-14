@@ -80,17 +80,18 @@ class Review(models.Model):
     Rating = models.SmallIntegerField() #Precision undecided
 
 class Seeker(models.Model):     #Job Seeker, subclass to User
-    User = models.OneToOneField(Profile, on_delete=models.CASCADE)
+    User = models.OneToOneField(User, on_delete=models.CASCADE)
     PrefType = models.ForeignKey(
             JobChoices,
             on_delete=models.CASCADE,
-            blank=True
+            blank=True,
+            null=True,
     )
     IntJob = models.ManyToManyField(Post, blank=True)
     Reviews = models.ManyToManyField(Review, blank=True)
-    Location = models.TextField(blank=True)
+    Location = models.TextField(blank=True, null=True)
 
 class Creator(models.Model):    #Job Creator
-    User = models.OneToOneField(Profile, on_delete=models.CASCADE)
+    User = models.OneToOneField(User, on_delete=models.CASCADE)
     Posts = models.ManyToManyField(Post, blank=True)
     Reviews = models.ManyToManyField(Review, blank=True)
