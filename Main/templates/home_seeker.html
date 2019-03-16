@@ -1,0 +1,125 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Seeker Home</title>
+
+  <!-- Bootstrap core CSS -->
+  
+  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+			
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+	<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
+
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+  <link rel="stylesheet" href="{% static 'css/home_seeker.css' %}">
+
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" content="width=device-width" style="height:8vw;">
+                <img src="{% static 'images/logo2.PNG' %}" style="max-height:100%;max-width:100%;">
+          
+                <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+                  <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active" style="font-size:16px">
+                      <a class="nav-link" style="font-size: 200%; padding-left: 20%" href="/home">Home<span class="sr-only">(current)</span></a>
+                    </li>
+                  </ul>
+                  <div class="dropdown">
+                      <button class="btn btn-secondary dropdown-toggle" style="max-height:200%;max-width:200; font-size:16px" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Username
+                      </button> 
+                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="font-size:16px">
+                        <a class="dropdown-item" href="/profile">Account</a>
+                        <a class="dropdown-item" href="/login">Sign Out</a>
+                      </div>
+                    </div>
+                </div>
+          </nav>
+          <div class="padding" style="padding-top: 5%"></div>
+
+  <!-- Page Content -->
+  <div class="container">
+
+    <!-- Heading Row -->
+	<div class="text-center">
+			<img src="{% static 'images/logo2.PNG' %}" style="max-height:40%;max-width:40%;" alt="logo" class="img-responsive center-block" />
+		</div>
+	
+	<blockquote class="blockquote text-center">
+			<h1 class="display-4">Seeker</h1>
+</blockquote>
+
+
+    <!-- Call to Action Well -->
+	
+
+<div class="container">
+  <div class="row">
+    <div class="col text-center">
+	<a href="/home_seeker">
+      <a class="btn btn-lg px-5 btn-primary" href="/home_creator" role="button"><img src="{% static 'images/switchseek.PNG' %}" height="50" alt="USA flag" ></a>
+    </a>
+	</div>
+  </div>
+</div>
+
+          <div class="padding" style="padding-top: 3.5%"></div>
+
+
+<p class="mb-0"></p>
+
+    <!-- Content Row -->
+    <div class="row">
+      <div class="col-md-4 mb-5">
+		<a href="/create_job">
+        <button type="button" class="btn btn-primary btn-lg btn-block">Search Jobs</button>
+		</a>
+      </div>
+      <!-- /.col-md-4 -->
+      <div class="col-md-4 mb-5">
+	  	<a>
+        <button type="button" class="btn btn-primary btn-lg btn-block">Interested Jobs</button>
+		</a>
+      </div>
+      <!-- /.col-md-4 -->
+	  	<a>
+		<div class="col-md-4 mb-5">
+        <button type="button" class="btn btn-primary btn-lg btn-block">Past Jobs</button>
+		</a>
+
+      </div>
+      <!-- /.col-md-4 -->
+
+    </div>
+    <!-- /.row -->
+
+  </div>
+  <!-- /.container -->
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

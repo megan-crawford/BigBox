@@ -91,10 +91,16 @@ def update_account(request):
 
     return render(request, 'updateAccount.html', {'form': form})
 
-#home page
+#home pages
 def home(request):
     return render(request, 'home.html')
     #return HttpResponse("home.")
+	
+def home_creator(request):
+    return render(request, 'Creator/home_creator.html')
+	
+def home_seeker(request):
+    return render(request, 'Creator/home_seeker.html')
 
 def login_request(request):
     if request.method == 'POST':
@@ -195,3 +201,7 @@ def accepted_jobs_seeker(request):
 
 def interested_jobs_seeker(request):
     return render(request, 'Seeker/interestedJobsSeeker.html')
+	
+#User Report Page
+def generate_report(request):
+    return render(request, 'Creator/generate_report.html')
