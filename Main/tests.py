@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 from django.test import TestCase
 from django.contrib.auth.models import User
 from . models import Profile, Post
@@ -138,4 +136,4 @@ class ListJob(TestCase):
                                     'max_wage': 10.00,
         })
         self.assertFalse(response.context['form'].is_valid())
->>>>>>> b4d7b0a8faad5f83ab6e38f4643932da8f1870d9
+
