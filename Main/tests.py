@@ -136,3 +136,4 @@ class ListJob(TestCase):
                                     'max_wage': 10.00,
         })
         self.assertFalse(response.context['form'].is_valid())
+
