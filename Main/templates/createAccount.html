@@ -18,27 +18,34 @@
         <img src="{% static 'images/logo2.PNG' %}">
       </div>
 
-      <form class="center_div" name="inputs" id="inputs" method="POST">
+      <form action="/create_account/" class="center_div" name="inputs" id="inputs" method="POST">
 	    {% csrf_token %}
         <div class="form-group">
           <label for="firstNameInput" id="firstNameText">First Name</label>
-          <input type="firstName" class="form-control" id="firstNameInput" placeholder="Ex: John">
+          <input name="first_name" type="firstName" class="form-control" id="firstNameInput" placeholder="Ex: John">
         </div>
         <div class="form-group">
           <label for="lastNameInput" id="lastNameText">Last Name</label>
-          <input type="lastName" class="form-control" id="lastNameInput" placeholder="Ex: Doe">
+          <input name="last_name" type="lastName" class="form-control" id="lastNameInput" placeholder="Ex: Doe">
         </div>
         <br>
         <div class="form-group">
           <label for="ageInput" id="ageText">Age</label>
-          <input type="age" class="form-control" id="ageInput" placeholder="Ex: 21">
+          <input name="age" type="age" class="form-control" id="ageInput" placeholder="Ex: 21">
         </div>
 
         <br>
 
         <div class="form-group">
           <label for="emailInput" id="emailText">Email</label>
-          <input type="email" class="form-control" name="emailInput" id="emailInput" placeholder="Ex: John_Doe@mail.com">
+          <input name="email" type="email" class="form-control" name="emailInput" placeholder="Ex: John_Doe@mail.com">
+        </div>
+
+        <br>
+
+        <div class="form-group">
+          <label for="usernameInput" id="usernameText">Username</label>
+          <input name="username" type="username" class="form-control" name="usernameInput" placeholder="Ex: johnDoe">
         </div>
 
         <br>
@@ -49,11 +56,11 @@
 
         <div class="form-group">
           <label for="passwordInput" id="passwordText">Password</label>
-          <input type="password" class="form-control" id="passwordInput" aria-describedby="password" placeholder="Ex: Password1234">
+          <input name="password" type="password" class="form-control" id="passwordInput" aria-describedby="password" placeholder="Ex: Password1234">
         </div>
         <div class="form-group">
             <label for="passwordCheckInput" id="passwordCheckText">Confirm Your Password</label>
-            <input type="password" class="form-control" id="passwordCheckInput" aria-describedby="password" placeholder="Ex: Password1234">
+            <input name="password_confirmation" type="password" class="form-control" id="passwordCheckInput" aria-describedby="password" placeholder="Ex: Password1234">
             <small id="passwordCheck" class="form-text text-muted">If we steal your password, you're legally allowed to leave.</small>
           </div>
       
@@ -90,6 +97,6 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="{% static 'js/createAccount.js' %}"></script>
+    <!---<script type="text/javascript" src="{% static 'js/createAccount.js' %}"></script>-->
   </body>
 </html>

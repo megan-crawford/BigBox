@@ -21,11 +21,8 @@
                 <div class="collapse navbar-collapse" id="navbarsExampleDefault">
                   <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-<<<<<<< HEAD
-                      <a class="nav-link" style="font-size: 200%; padding-left: 20%" href="/#">Home<span class="sr-only">(current)</span></a>
-=======
+
                       <a class="nav-link" style="font-size: 200%; padding-left: 20%" href="../home/">Home<span class="sr-only">(current)</span></a>
->>>>>>> 3ec5c0a576f82a07c485b1d20bccd44d23c92cd1
                     </li>
                   </ul>
                   <div class="dropdown">
@@ -43,9 +40,15 @@
           
           <div class="d-flex justify-content-center">
             <div class="placeholderr" style="background-color:#71A6FF; height:1000px;width:500px; align-content: center">Please Enter Job Information
-              <form method="post" action = "/add_job">
+
+              
+              <form method="post" action="/create_job/">
+                {% csrf_token %}
+
                 <br>Select Job Type<br>
-                <select name="Job Type" required>
+                {{ form.job_type }}
+                <!--
+                <select name="job_type" required>
                   <option value="lawncare">Lawn Care</option>
                   <option value="dog">Dog Walking</option>
                   <option value="babysitting">BabySitting</option>
@@ -53,16 +56,17 @@
                   <option value="manual labor">Manual Labor</option>
                   <option value="other">Other</option>
                 </select>
+                -->
                 <br><br>
                 Job Description
                 <br>
-                <textarea name="Job Description" form="usrform" required>Enter description here...</textarea>
+                <textarea name="description" required>Enter description here...</textarea>
                 <br><br>
-                <p>Select Date: <br><input type="text" id="datepicker" required></p>
+                <p>Select Date: <br><input name="date_time" type="text" id="datepicker" required></p>
                 Pay Amount in USD <br> 
-                <input type="number" name="quantity" min="10" max="1000" required>
+                <input type="number" name="pay" min="10" max="1000" required>
                 <br><br>Select State<br>
-                <select name="State" required>
+                <select name="state" required>
                   <option value="AL">Alabama</option>
                   <option value="AK">Alaska</option>
                   <option value="AZ">Arizona</option>

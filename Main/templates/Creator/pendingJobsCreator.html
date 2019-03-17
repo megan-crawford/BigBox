@@ -1,0 +1,156 @@
+{% load staticfiles %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'css/jobsCreator.css' %}">
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+	
+  </head>
+  <body>
+
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" content="width=device-width" style="height:8vw;">
+                <img src="{% static 'images/logo2.PNG' %}" style="max-height:100%;max-width:100%;">
+                      
+                <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+                  <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active" style="font-size:16px">
+                      <a class="nav-link" style="font-size: 200%; padding-left: 20%" href="/home">Home<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item active">
+                            <a class="nav-link" style="font-size: 300%; padding-left: 280%" href="#">Creator<span class="sr-only">(current)</span></a> 
+                    </li>
+                  </ul>
+                  <div class="dropdown">
+                      <button class="btn btn-secondary dropdown-toggle" style="max-height:200%;max-width:200; font-size:16px" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        Username
+                      </button> 
+                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="font-size:16px">
+                        <a class="dropdown-item" href="/profile">Account</a>
+                        <a class="dropdown-item" href="/login">Sign Out</a>
+                      </div>
+                    </div>
+                </div>
+              </nav>
+
+  <div class="padding" style="padding-top: 9%"></div>
+
+  <div id="main">
+  
+    <div class="col-sm-2">
+          <div class="row-offcanvas row-offcanvas-left" id="sidebar">
+            <div id="sidebar" class="sidebar-offcanvas">
+                <div class="col-md-12">
+                    <form name="filter" id="filter" method="POST">
+                        <ul class="nav nav-pills nav-stacked">
+                            <li id="li"><a href="/all_jobs_creator">All Jobs</a></li>
+                            <li id="li"><a href="/accepted_jobs_creator">Accepted Jobs</a></li>
+                            <li id="li" class="active" style="padding-bottom: 10%"><a href="/pending_jobs_creator" style="font-size: 15px">Pending Jobs</a></li>
+                            <li id="li">
+                                <div class="form-group">    
+                                      <label for="distance" id="distanceText">Distance</label>
+                                      <input class="textInput" type="number" id="distance" min="0" data-bind="value:replyNumber"/>
+                                </div>
+                            </li>
+                            <li id="li">
+                              <div class="form-group">    
+                                <label for="jobType" id="jobTypeText">Job Type</label>
+                                <div class="input-group">
+                                  <select class="custom-select" id="inputGroupSelect04">
+                                    <option selected>Choose...</option>
+                                    <option value="Lawn Care">Lawn Care</option>
+                                    <option value="Dog Walking">Dog Walking</option>
+                                    <option value="Babysitting">Babysitting</option>
+                                    <option value="Pet Care">Pet Care</option>
+                                    <option value="Manual Labor">Manual Labor</option>
+                                    <option value="Other">Other</option>
+                                  </select>
+                                </div>
+                              </div>
+                            </li>
+                            <li id="li">
+                              <div class="form-group">    
+                                    <label for="minimumWage" id="minimumWageText">Minimum Wage</label>
+                                    <input class="textInput" type="number" id="minimumWage" min="0" data-bind="value:replyNumber"/>
+                              </div>
+                          </li>
+                          <li id="li">
+                            <div class="form-group">    
+                                  <label for="maximumWage" id="maximumWageText">Maximum Wage</label>
+                                  <input class="textInput" type="number" id="maximumWage" min="0" data-bind="value:replyNumber"/>
+                            </div>
+                          </li>
+                          <li id="li">
+                            <div style="float: left; padding-top: 5%; padding-left: 5%">
+                              <a>
+                                <button style="height: 200%">
+                                  Apply
+                                </button>
+                              </a>
+                            </div>
+                            <div style="float: right; padding-top: 5%; padding-right: 5%">
+                              <a>
+                                <button style="height: 200%">
+                                  Reset
+                                </button>
+                              </a>
+                            </div>
+                          </li>
+
+
+                        </ul>
+                    </form>
+                </div>
+              </div>
+        
+              
+          </div><!--/row-offcanvas -->
+      </div>
+    <div class="col-sm-10">
+      <div class="row d-flex justify-content-center">
+        <form name="search" id="search" method="POST">
+          {% csrf_token %}
+          <div class="form-group">
+            <input type="search" class="form-control" id="searchInput" placeholder="Search Job">
+          </div>
+
+        </form>
+      </div>  
+
+        <div class="row d-flex justify-content-center">
+            <div class="well" id="job">
+                <p>Test Job4</p>
+            </div>
+        </div>
+        <div class="row d-flex justify-content-center">
+            <div class="well" id="job">
+                <p>Test Job5</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+  
+
+
+
+           <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+  </body>
+</html>
+  
+ 

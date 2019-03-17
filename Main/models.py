@@ -1,4 +1,4 @@
-from django.conf import settings
+from django.contrib.auth.models import User
 from django.db import models
 import os
 
@@ -59,8 +59,8 @@ class Report(models.Model):
     )
     Details = models.TextField()
 
-class User(models.Model):
-    User = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+class Profile(models.Model):
+    User = models.OneToOneField(User, on_delete=models.CASCADE)
     Email = models.CharField(max_length = 60)
     FirstName = models.CharField(max_length = 50)
     LastName = models.CharField(max_length = 50)
@@ -84,15 +84,14 @@ class Seeker(models.Model):     #Job Seeker, subclass to User
     PrefType = models.ForeignKey(
             JobChoices,
             on_delete=models.CASCADE,
-            blank=True
+            blank=True,
+            null=True,
     )
     IntJob = models.ManyToManyField(Post, blank=True)
     Reviews = models.ManyToManyField(Review, blank=True)
-    Location = models.TextField(blank=True)
+    Location = models.TextField(blank=True, null=True)
 
 class Creator(models.Model):    #Job Creator
     User = models.OneToOneField(User, on_delete=models.CASCADE)
     Posts = models.ManyToManyField(Post, blank=True)
     Reviews = models.ManyToManyField(Review, blank=True)
-
-
