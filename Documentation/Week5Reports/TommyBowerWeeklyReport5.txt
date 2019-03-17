@@ -6,7 +6,7 @@ Week 5 (Summary)
 3/16	2 hr	b4d7b0a Created "file report" page
 3/16	3 hr	b4d7b0a Finalized Creator/Seeker homepages
 
-Week 5 (Plan)
+Week 6 (Plan)
 [Meetings]
 3/20	2 hr	N/A	Begin work on understanding liking frontend/backend
 3/20	2 hr	N/A	Begin assisting with backend testing & help with other misc backend things
