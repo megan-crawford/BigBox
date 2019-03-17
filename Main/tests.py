@@ -99,7 +99,7 @@ class CreateJob(TestCase):
         self.assertEqual(response.status_code, 200) #200 for redirect to create job
         self.assertEqual(Post.objects.all().count(), 0)
 
-class CreateReport(TestCase):
+class GenerateReport(TestCase):
     def setUp(self):
         self.client = Client()
 
@@ -107,7 +107,7 @@ class CreateReport(TestCase):
         self.user.set_password('password')
 
     def test_view_valid(self):
-        response = self.client.post('/create_report/?username=user', {
+        response = self.client.post('/generate_report/?username=user', {
                                     'classification': Report.PAYMENT,
                                     'details': 'User did not pay payment'
         })

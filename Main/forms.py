@@ -114,7 +114,7 @@ class CreateJobForm(forms.Form):
 
         return date_time
 
-class CreateReportForm(forms.Form):
+class GenerateReportForm(forms.Form):
     classification = forms.ChoiceField(choices=Report.REPORT_CHOICES, required=True)
     details = forms.CharField(required=True)
     

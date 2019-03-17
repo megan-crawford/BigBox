@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout
 from django.contrib.auth import authenticate
 from django.http import HttpResponse
-from . forms import CreateAccountForm, UpdateAccountForm, CreateJobForm, ListJobsForm, CreateReportForm
+from . forms import CreateAccountForm, UpdateAccountForm, CreateJobForm, ListJobsForm, GenerateReportForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from . models import Profile, Post, Seeker, Creator, Report
@@ -154,13 +154,14 @@ def create_job(request):
 
     return render(request, 'Jobs/bigBoxJob.html', {'form':form})
 
-def create_report(request):
+#User Report Page
+def generate_report(request):
     if request.method == "POST": #?
-        print('create report post')
-        form = CreateReportForm(request.POST)
+        #print('create report post')
+        form = GenerateReportForm(request.POST)
 
         if form.is_valid():
-            print('create report valid')
+            #print('create report valid')
 
             classification = form.cleaned_data['classification']
             details = form.cleaned_data['details']
@@ -168,16 +169,16 @@ def create_report(request):
             username = request.GET['username']
             user = User.objects.get(username=username) #look out for does not exist exception
             if user is None:
-                pass #TODO: add proper error redirecting
+                form.add_error(None, 'User does not exist')
+                return render(request, 'generate_report.html', {'form':form}) #TODO: add proper error redirecting
             else:
                 Report.objects.create(Classification=classification, Details=details, User=user)
 
             return redirect('/profile/') #TODO: redirect user to the profile that they previously looked at
     else:
-        form = CreateReportForm()
+        form = GenerateReportForm()
 
-    return render(request, 'report.html', {'form':form}) #TODO: add actual html name later
-
+    return render(request, 'generate_report.html', {'form':form})
 
 def list_job(request):
     #TODO: check if user is logged in
@@ -225,7 +226,3 @@ def accepted_jobs_seeker(request):
 
 def interested_jobs_seeker(request):
     return render(request, 'Seeker/interestedJobsSeeker.html')
-	
-#User Report Page
-def generate_report(request):
-    return render(request, 'Creator/generate_report.html')

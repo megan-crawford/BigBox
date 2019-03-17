@@ -35,7 +35,7 @@ urlpatterns = [
     path('add_job', views.new_job, name='add_job'),
     path('profile/', views.profile, name='profile'),
     path('update_account/', views.update_account, name='update_account'),
-    path('create_report/', views.create_report, name='create_report'),
+    path('generate_report/', views.generate_report, name='generate_report'),
 
     #creator
     path('create_job/', views.create_job, name='create_job'),
@@ -50,5 +50,4 @@ urlpatterns = [
     path('interested_jobs_seeker/', views.interested_jobs_seeker, name='interested_jobs_seeker'),
 	path('home_creator/', views.home_creator, name='home_creator'),
 	path('home_seeker/', views.home_seeker, name='home_seeker'),
-	path('generate_report/', views.generate_report, name='generate_report'),
 ]
