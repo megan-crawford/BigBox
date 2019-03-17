@@ -8,19 +8,22 @@ class UpdateProfile(TestCase):
     def setUp(self):
         self.client = Client()
     
-        self.user1 = User.objects.create(username='user1', email='email@email.com', first_name='John', last_name='Smith')
-        self.user1.set_password('password')
-        self.user1.save()
-        self.profile1 = Profile.objects.create(User=self.user1, Age=20)
-
-        isLoggedIn = self.client.login(username='user1', password='password')
-        self.assertTrue(isLoggedIn)
+        self.client.post('/create_account/', {
+                                    'username': 'user1',
+                                    'password': 'vf83g9f7fg',
+                                    'password_confirmation': 'vf83g9f7fg',
+                                    'email': 'email@email.com',
+                                    'first_name': 'John',
+                                    'last_name': 'Smith',
+                                    'age': 20              
+        })
 
     def test_view_valid_age(self):
         user1 = User.objects.get(username='user1')
         self.assertEqual(user1.profile.Age, 20)
 
-        response = self.client.post('/update_account/', {'age': 20})
+        #age_button to show that the update age button was pressed
+        response = self.client.post('/update_account/', {'age': 30, 'age_button': ''}) 
         self.assertEqual(response.status_code, 200)
 
         user1 = User.objects.get(username='user1')
@@ -41,7 +44,8 @@ class CreateProfile(TestCase):
                                     'age': 20
                                 
         })
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302) #redirect to home
+
 
         user1 = User.objects.get(username='user1')
         self.assertNotEqual(user1, None)
@@ -49,6 +53,15 @@ class CreateProfile(TestCase):
 class CreateJob(TestCase):
     def setUp(self):
         self.client = Client()
+        self.client.post('/create_account/', {
+                        'username': 'user1',
+                        'password': 'vf83g9f7fg',
+                        'password_confirmation': 'vf83g9f7fg',
+                        'email': 'email@email.com',
+                        'first_name': 'John',
+                        'last_name': 'Smith',
+                        'age': 20                    
+        })
 
     def test_view_valid(self):
         response = self.client.post('/create_job/', {
@@ -63,6 +76,9 @@ class CreateJob(TestCase):
         self.assertNotEqual(post, None)
         self.assertEqual(post.Pay, 20.00)
 
+        user = User.objects.first() #get the only user
+        self.assertEqual(user.creator.Posts.all().count(), 1)
+
     def test_view_empty_fields(self):
         response = self.client.post('/create_job/', {
                                     #no pay
@@ -71,7 +87,6 @@ class CreateJob(TestCase):
                                     'job_type': Post.BABYSITTING,
         })
         self.assertEqual(response.status_code, 200) #200 for redirect to create job
-
         self.assertEqual(Post.objects.all().count(), 0)
 
     def test_view_invalid_date(self):
@@ -82,7 +97,6 @@ class CreateJob(TestCase):
                                     'job_type': Post.BABYSITTING,
         })
         self.assertEqual(response.status_code, 200) #200 for redirect to create job
-
         self.assertEqual(Post.objects.all().count(), 0)
 
 class CreateReport(TestCase):
@@ -103,3 +117,42 @@ class CreateReport(TestCase):
         self.assertNotEqual(report, None)
         self.assertEqual(report.Classification, Report.PAYMENT)
         self.assertEqual(report.Details, 'User did not pay payment')
+
+class ListJob(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.client.post('/create_account/', {
+                        'username': 'user1',
+                        'password': 'vf83g9f7fg',
+                        'password_confirmation': 'vf83g9f7fg',
+                        'email': 'email@email.com',
+                        'first_name': 'John',
+                        'last_name': 'Smith',
+                        'age': 20                    
+        })
+        self.client.post('/create_job/', {
+                        'pay': 15.00,
+                        'date_time': '2020-10-25',
+                        'description': 'work involves ...',
+                        'job_type': Post.DOGWALKING,
+        })
+
+    def test_view_valid(self):
+        response = self.client.get('/list_job/', {
+                                    'max_distance': 100,
+                                    'job_type': Post.DOGWALKING,
+                                    'min_wage': 10.00,
+                                    'max_wage': 20.00,
+        })
+        self.assertEqual(response.context['jobs'].all().count(), 1)
+        self.assertEqual(response.context['jobs'].first().Pay, 15.00)
+
+    def test_view_invalid_wage(self):
+        response = self.client.get('/list_job/', {
+                                    'max_distance': 100,
+                                    'job_type': Post.DOGWALKING,
+                                    'min_wage': 20.00,
+                                    'max_wage': 10.00,
+        })
+        self.assertFalse(response.context['form'].is_valid())
+

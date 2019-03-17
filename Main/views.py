@@ -2,18 +2,18 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout
 from django.contrib.auth import authenticate
 from django.http import HttpResponse
-from . forms import CreateAccountForm, UpdateAccountForm, CreateJobForm, CreateReportForm
+from . forms import CreateAccountForm, UpdateAccountForm, CreateJobForm, ListJobsForm, CreateReportForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
-from . models import Profile, Post, Report
+from . models import Profile, Post, Seeker, Creator, Report
 
 def create_account(request):
     if request.method == "POST": #user clicks register button
-        print('create account post')
+        #print('create account post')
         form = CreateAccountForm(request.POST)
 
         if form.is_valid():
-            print('create account valid')
+            #print('create account valid')
 
             #get form data
             username = form.cleaned_data['username']
@@ -27,11 +27,15 @@ def create_account(request):
             user = User.objects.create(username=username, email=email, first_name=first_name, last_name=last_name)
             user.set_password(password)
             profile = Profile.objects.create(User=user, Age=age)
+            seeker = Seeker.objects.create(User=user)
+            creator = Creator.objects.create(User=user)
 
             user.save()
             profile.save()
+            seeker.save()
+            creator.save()
+
             login(request, user)
-            
             return redirect('/home/')
 
     else: #user is viewing the create account page
@@ -50,11 +54,11 @@ def update_account(request):
     #TODO: check if user is logged in
 
     if request.method == 'POST':
-        print('update account post')
+        #print('update account post')
         form = UpdateAccountForm(request.POST)
 
         if form.is_valid():
-            print('update account valid')
+            #print('update account valid')
             update_all = 'update_all_button' in request.POST
 
             if form.cleaned_data['profile_picture'] and ('profile_picture_button' in request.POST or update_all):
@@ -87,10 +91,16 @@ def update_account(request):
 
     return render(request, 'updateAccount.html', {'form': form})
 
-#home page
+#home pages
 def home(request):
     return render(request, 'home.html')
     #return HttpResponse("home.")
+	
+def home_creator(request):
+    return render(request, 'Creator/home_creator.html')
+	
+def home_seeker(request):
+    return render(request, 'Creator/home_seeker.html')
 
 def login_request(request):
     if request.method == 'POST':
@@ -119,12 +129,15 @@ def logout_request(request):
 
 #create_job page
 def create_job(request):
+    #TODO: check if user is logged in
+
     if request.method == 'POST':
-        print('create job post')
+        #print('create job post')
         form = CreateJobForm(request.POST)
 
         if form.is_valid():
-            print('create job valid')
+            #print('create job valid')
+
             #get form fields
             pay = form.cleaned_data['pay']
             date = form.cleaned_data['date_time']
@@ -132,7 +145,8 @@ def create_job(request):
             job_type = form.cleaned_data['job_type']
 
             #create new job
-            Post.objects.create(Pay=pay, DateTime=date, Description=description, JobType=job_type)
+            post = Post.objects.create(Pay=pay, DateTime=date, Description=description, JobType=job_type)
+            request.user.creator.Posts.add(post)
 
             return redirect('/add_job/')
     else:
@@ -166,7 +180,28 @@ def create_report(request):
 
 
 def list_job(request):
-    return render(request, 'Jobs/listJobs.html')
+    #TODO: check if user is logged in
+
+    if request.method == "GET":
+        #print('list job get')
+        form = ListJobsForm(request.GET)
+
+        if form.is_valid():
+            #print('list job valid')
+
+            #max_distance = form.cleaned_data['max_distance']
+            job_type = form.cleaned_data['job_type']
+            min_wage = form.cleaned_data['min_wage']
+            max_wage = form.cleaned_data['max_wage']
+
+            jobs = request.user.creator.Posts.filter(JobType=job_type, Pay__range=[min_wage, max_wage])
+        else:
+            jobs = request.user.creator.Posts.all()
+    else:
+        jobs = request.user.creator.Posts.all()
+        form = ListJobsForm()
+        
+    return render(request, 'Jobs/listJobs.html', {'form':form, 'jobs':jobs})
 
 def new_job(request):
     return render(request, 'Jobs/viewNewJob.html')
@@ -190,3 +225,7 @@ def accepted_jobs_seeker(request):
 
 def interested_jobs_seeker(request):
     return render(request, 'Seeker/interestedJobsSeeker.html')
+	
+#User Report Page
+def generate_report(request):
+    return render(request, 'Creator/generate_report.html')

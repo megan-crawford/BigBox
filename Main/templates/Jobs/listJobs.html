@@ -9,6 +9,8 @@
 #navbar {
   float: right;
   width: 20%;
+  background-color:#a1fb8d;
+  border:5px solid #07680D;
 }
 .grid-container {
   display: grid;
@@ -24,6 +26,16 @@
   padding: 20px 0;
   font-size: 40px;
 }
+div.job{
+  background-color:#21CE2D;
+  height:150px;
+  width:200px;
+  border:5px solid #07680D;
+  float:left;
+  margin:10px;
+  
+}
+
 </style>
 <head>
     <!-- Required meta tags -->
@@ -37,6 +49,17 @@
 
 </head>
 <body>
+  <script>
+  //JS to add a job div to page
+  function addJob () { 
+  var jobDiv = document.createElement("div"); 
+  jobDiv.className="job";
+  var jobDeets = document.createTextNode("happy st patties day ;) #job #coolcash"); 
+  jobDiv.appendChild(jobDeets);  
+  var currentDiv = document.getElementById("myDiv");
+  document.body.insertBefore(jobDiv, currentDiv); 
+}
+</script>
         <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" content="width=device-width" style="height:8vw;">
                 <img src="{% static 'images/logo2.PNG' %}" style="max-height:100%;max-width:100%;">
               
@@ -63,21 +86,23 @@
           <div class="padding" style="padding-top: 9%"></div>
           <div id="container">
             <div id="content">
-              <div class="grid-container" style="background-color:lightblue; height:1000px;width:700px; align-content: center">
-                <div class="Job A">Job A</div>
-                <div class="Job B">Job B</div>
-                <div class="Job B">Job C</div>
-              </div>
+              <!--<div class="grid-container" style="background-color:lightblue; height:1000px;width:700px; align-content: center"> -->
+                <script>
+                  for (var i = 0; i <= 9; i++) {
+                    addJob();
+                  }
+                </script>
+              <!-- </div> -->
             </div>
             <div id="navbar">
              Filters
              <br><br>
-             <form>
+             <form method="GET" action="/list_job/">
               Maximum Distance
               <input type="number" name="max_distance" min="1" max="10000">
               <br><br>
               Job Type
-              <select name="Job Type">
+              <select name="job_type">
                 <option value="lawncare">Lawn Care</option>
                 <option value="dog">Dog Walking</option>
                 <option value="babysitting">BabySitting</option>

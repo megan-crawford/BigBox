@@ -30,7 +30,7 @@ class CreateAccountForm(forms.Form):
 
     def clean_email(self):
         email = self.cleaned_data['email']
-        if not User.objects.filter(email=email).exists():
+        if User.objects.filter(email=email).exists():
             raise ValidationError(message=self.error_messages['preexisting_email'], code='preexisting_email')
         return email
 
@@ -117,3 +117,21 @@ class CreateJobForm(forms.Form):
 class CreateReportForm(forms.Form):
     classification = forms.ChoiceField(choices=Report.REPORT_CHOICES, required=True)
     details = forms.CharField(required=True)
+    
+class ListJobsForm(forms.Form):
+    max_distance = forms.IntegerField(min_value=1, max_value=10000, required = False) #in ___ units?
+    job_type = forms.ChoiceField(choices=Post.TYPE_CHOICES, required=False)
+    min_wage = forms.DecimalField(min_value=0, max_value=1000, decimal_places=2, required=False)
+    max_wage = forms.DecimalField(min_value=0, max_value=1000, decimal_places=2, required=False)
+
+    error_messages = {
+        'invalid_wage' : 'Max wage cannot be less than min wage'
+    }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        min_wage = cleaned_data['min_wage']
+        max_wage = cleaned_data['max_wage']
+
+        if min_wage and max_wage and max_wage < min_wage:
+            raise ValidationError(message=self.error_messages['invalid_wage'], code='invalid_wage')
