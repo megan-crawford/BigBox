@@ -1,0 +1,15 @@
+=== Weekly Individual Report (Team 1: sturgeons++) ===
+Name: Megan Crawford
+
+Week 5/6 (Summary)
+3/6	2 hr  N/A learned how Django testing works
+3/12	1 hr  N/A learned how querying db from frontend works in django
+3/16	4 hr  N/A learned basics of javascript 	
+3/17	2 hr  0400a4e  get list jobs page to show variable num of elements (jobs)	
+3/17	1 hr  1e11427  calendar popup
+Week 7 (Plan)
+3/19    2 hr	get list jobs to show each job as an element
+3/20	2 hr	filter which jobs shown based on form search
+
+
+Individual Goal: Get list jobs page to show all jobs, and allow the search form to filter which jobs are displayed.
