@@ -97,10 +97,10 @@ def home(request):
     #return HttpResponse("home.")
 	
 def home_creator(request):
-    return render(request, 'Creator/home_creator.html')
+    return render(request, 'home_creator.html')
 	
 def home_seeker(request):
-    return render(request, 'Creator/home_seeker.html')
+    return render(request, 'home_seeker.html')
 
 def login_request(request):
     if request.method == 'POST':
