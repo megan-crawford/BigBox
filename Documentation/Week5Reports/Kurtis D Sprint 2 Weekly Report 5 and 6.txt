@@ -1,0 +1,20 @@
+=== Weekly Individual reports (Team 1: BigBox) ===
+Name: Kurtis Dressel
+
+Week 5 (Summary)
+3/6     2 hr    N/A     Discussed how to fix project issues 
+3/6     0.5 hr  85f0463 Fixed validation of blank fields
+3/8     2 hr    N/A     Discussed plans for the upcoming break
+3/9     0.5 hr  b0c79eb Changed user model to profile to fix update issues
+
+Week 6 (Summary)
+3/11    4 hr    11d7411 Fixed Update Account with view testing
+3/12    2 hr    071df2d Fixed Create Account and added view testing
+3/12    3 hr    291e2d6 Added Create Job backend with view testing
+3/13    2 hr    df7c987 Added rough Create Report backend with view testing
+3/14    2 hr    5a2e649 Added List Jobs backend with view testing
+
+Week 7 (Plan)
+3/19    4 hr   Review current work and make any needed changes for sprint review
+
+Individual Goal: Learn a good way of dealing with pages for model objects and make sure everything is ready for the sprint review

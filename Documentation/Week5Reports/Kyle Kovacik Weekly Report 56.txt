@@ -1,0 +1,22 @@
+=== Weekly Individual Report (Team 01: sturgeons++) ===
+Name: Kyle Kovacik
+
+Week 5/6 (Summary)
+3/6/19	3	9688317		Fixed Update Account Submit Buttons/forms
+3/8/19	3	NA		Finished Current Jobs Html
+3/8/19	1	NA		Started Work on Other Job Pages
+3/9/19	1	NA		Research on Get Django Functionality
+3/12/19	2	6eb2254		Finished Job Pages for Creator
+3/12/19	2	6eb2254		Started and Finished Job Pages for Seeker
+3/12/19	1	0e150f8		Fixed Create Account Bug
+
+...
+
+Week 7 (Plan)
+3/20/19	3	NA		Review and wrap up all working functionality
+3/20/19	1	NA		Quickly add redirects for the new home webpages
+3/22/19	2	NA		Reach out to supply aid to others if necessary.
+
+
+Goal: Prepare the project for sprint review while deepening the understanding between backend and frontend.
+
