@@ -13,7 +13,10 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-    <!--jQuery for Date Selection (Eventually)-->
+    <!--jQuery for Date Selection-->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://unpkg.com/gijgo@1.9.11/js/gijgo.min.js" type="text/javascript"></script>
+    <link href="https://unpkg.com/gijgo@1.9.11/css/gijgo.min.css" rel="stylesheet" type="text/css" />
     <title>Big Box: Create A Job</title>
 
     <title>Big Box</title>
@@ -64,7 +67,12 @@
                 <br>
                 <textarea name="description" required>Enter description here...</textarea>
                 <br><br>
-                <p>Select Date: <br><input name="date_time" type="text" id="datepicker" required></p>
+                <p>Select Date: <br>
+                  <input id = "datepicker" name="date_time" type="text" id="datepicker" required>
+                    <script>
+                      $('#datepicker').datepicker();
+                    </script>
+                </p>
                 Pay Amount in USD <br> 
                 <input type="number" name="pay" min="10" max="1000" required>
                 <br><br>Select State<br>
