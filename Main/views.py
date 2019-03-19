@@ -13,7 +13,7 @@ def create_account(request):
         form = CreateAccountForm(request.POST)
 
         if form.is_valid():
-            #print('create account valid')
+            #print('create account valid yeehaw')
 
             #get form data
             username = form.cleaned_data['username']
@@ -205,3 +205,4 @@ def interested_jobs_seeker(request):
 #User Report Page
 def generate_report(request):
     return render(request, 'Creator/generate_report.html')
+
