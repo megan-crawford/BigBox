@@ -6,14 +6,22 @@ from . forms import CreateAccountForm, UpdateAccountForm, CreateJobForm, ListJob
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from . models import Profile, Post, Seeker, Creator
+from django.core.exceptions import ValidationError
+
 
 def create_account(request):
     if request.method == "POST": #user clicks register button
         #print('create account post')
-        form = CreateAccountForm(request.POST)
+
+        print("Attempt CreateAccount")
+        try:
+            form = CreateAccountForm(request.POST)
+        except:
+            print("oh no")
+            #print(e)
 
         if form.is_valid():
-            #print('create account valid yeehaw')
+            print('Create Account Valid')
 
             #get form data
             username = form.cleaned_data['username']
@@ -38,7 +46,11 @@ def create_account(request):
             login(request, user)
             return redirect('/home/')
 
+        else:
+            print("Create Account not Valid")
+
     else: #user is viewing the create account page
+        print("Load Create Account")
         form = CreateAccountForm()
 
     return render(request, 'createAccount.html', {'form':form})
@@ -97,18 +109,18 @@ def home(request):
     #return HttpResponse("home.")
 	
 def home_creator(request):
-    return render(request, 'Creator/home_creator.html')
+    return render(request, 'home_creator.html')
 	
 def home_seeker(request):
-    return render(request, 'Creator/home_seeker.html')
+    return render(request, 'home_seeker.html')
 
 def login_request(request):
     if request.method == 'POST':
-        #print('login post')
+        print('login post')
         form = AuthenticationForm(request=request, data=request.POST)
 
         if form.is_valid():
-            #print('login valid')
+            print('login valid')
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
 
@@ -117,7 +129,7 @@ def login_request(request):
             if user is not None:
                 #print('login success')
                 login(request, user)
-                return redirect('/home/')
+                return redirect('/home_seeker/')
     else:
         form = AuthenticationForm()
 
