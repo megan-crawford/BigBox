@@ -26,14 +26,11 @@ def create_account(request):
             #create and add user to database
             user = User.objects.create(username=username, email=email, first_name=first_name, last_name=last_name)
             user.set_password(password)
-            profile = Profile.objects.create(User=user, Age=age)
-            seeker = Seeker.objects.create(User=user)
-            creator = Creator.objects.create(User=user)
+            Profile.objects.create(User=user, Age=age)
+            Seeker.objects.create(User=user)
+            Creator.objects.create(User=user)
 
             user.save()
-            profile.save()
-            seeker.save()
-            creator.save()
 
             login(request, user)
             return redirect('/home/')
@@ -43,10 +40,15 @@ def create_account(request):
 
     return render(request, 'createAccount.html', {'form':form})
 
-
 def profile(request):
+    if request.GET.get('username'): #the .get() needs to be used to stop error if username is null
+        username = request.GET['username']
+        user = User.objects.filter(username=username).first() #assume there is only one object
+        if user:
+            return render(request, 'profile.html', {'user_info':user})
+
+
     return render(request, 'profile.html')
-    #return HttpResponse("profile.")
 
 
 #TODO: change to update profile
