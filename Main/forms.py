@@ -6,6 +6,7 @@ from re import search #regex
 import datetime, pytz
 
 class CreateAccountForm(forms.Form):
+    print("here")
     username = forms.CharField(label='Username', max_length=50, required=True)
     password = forms.CharField(label='Password', max_length=128, required=True, widget=forms.PasswordInput)
     password_confirmation = forms.CharField(label='Password Confirmation', max_length=128, required=True, widget=forms.PasswordInput,)
@@ -24,6 +25,7 @@ class CreateAccountForm(forms.Form):
 
     def clean_username(self):
         username = self.cleaned_data['username']
+        print("username", username)
         if User.objects.filter(username=username).exists():
             raise ValidationError(message=self.error_messages['preexisting_username'], code='preexisting_username')
         return username
@@ -60,6 +62,13 @@ class UpdateAccountForm(forms.Form):
     age = forms.IntegerField(label='Update Age', min_value=0, max_value=150, required=False)
     email = forms.EmailField(label='Update Email', max_length=60, required=False)
     description = forms.CharField(label='Update Description', required=False)
+
+    error_messages = {
+        'passwords_not_match' : 'Passwords do not match',
+        'preexisting_username' : 'Username already exists',
+        'preexisting_email' : 'Email already exists',
+        'invalid_name' : 'Name can only contain letters'
+    }
 
     #TODO: add password strength checks
     password = forms.CharField(label='Update Password', max_length=128, required=False, widget=forms.PasswordInput)

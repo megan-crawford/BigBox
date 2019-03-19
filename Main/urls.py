@@ -33,10 +33,12 @@ urlpatterns = [
     path('all_jobs_creator/', views.all_jobs_creator, name='all_jobs_creator'),
     path('accepted_jobs_creator/', views.accepted_jobs_creator, name='accepted_jobs_creator'),
     path('pending_jobs_creator/', views.pending_jobs_creator, name='pending_jobs_creator'),
+    path('past_jobs_creator/', views.past_jobs_creator, name='past_jobs_creator'),
     path('all_jobs_seeker/', views.all_jobs_seeker, name='all_jobs_seeker'),
     path('accepted_jobs_seeker/', views.accepted_jobs_seeker, name="accepted_jobs_seeker"),
     path('interested_jobs_seeker/', views.interested_jobs_seeker, name='interested_jobs_seeker'),
-	path('home_creator/', views.home_creator, name='home_creator'),
+	path('past_jobs_seeker/', views.past_jobs_seeker, name='past_jobs_seeker'),
+    path('home_creator/', views.home_creator, name='home_creator'),
 	path('home_seeker/', views.home_seeker, name='home_seeker'),
 	path('generate_report/', views.generate_report, name='generate_report'),
 ]

@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="{% static 'css/jobsCreator.css' %}">
+    <link rel="stylesheet" href="{% static 'css/jobsSeeker.css' %}">
 
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -18,30 +18,32 @@
   </head>
   <body>
 
-      <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" content="width=device-width" style="height:8vw;">
-          <img src="{% static 'images/logo2.PNG' %}" style="max-height:100%;max-width:100%;">
-                
-          <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-            <ul class="navbar-nav mr-auto">
-              <li class="nav-item active" style="font-size:16px">
-                <a class="nav-link" style="font-size: 200%; padding-left: 20%" href="/home_creator">Home<span class="sr-only">(current)</span></a>
-              </li>
-              <li class="nav-item active">
-                  <a class="nav-link" style="font-size: 300%; padding-left: 280%" href="#">Creator<span class="sr-only">(current)</span></a> 
-              </li>
-            </ul>
-            <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" style="max-height:200%;max-width:200; font-size:16px" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                  Username
-                </button> 
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="font-size:16px">
-                  <a class="dropdown-item" href="/profile">Account</a>
-                  <a class="dropdown-item" href="/login">Sign Out</a>
-                </div>
-              </div>
+	<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" content="width=device-width" style="height:8vw;">
+    <img src="{% static 'images/logo2.PNG' %}" style="max-height:100%;max-width:100%;">
+          
+    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active" style="font-size:16px">
+          <a class="nav-link" style="font-size: 200%; padding-left: 20%" href="/home_seeker">Home<span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active">
+                <a class="nav-link" style="font-size: 300%; padding-left: 280%" href="#">Seeker<span class="sr-only">(current)</span></a> 
+        </li>
+      </ul>
+      <div class="dropdown">
+          <button class="btn btn-secondary dropdown-toggle" style="max-height:200%;max-width:200; font-size:16px" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            Username
+          </button> 
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="font-size:16px">
+            <a class="dropdown-item" href="/profile">Account</a>
+            <a class="dropdown-item" href="/login">Sign Out</a>
           </div>
-        </nav>
+        </div>
+    </div>
+  </nav>
 
+
+  
   <div class="padding" style="padding-top: 9%"></div>
 
   <div id="main">
@@ -52,10 +54,10 @@
                 <div class="col-md-12">
                     <form name="filter" id="filter" method="POST">
                         <ul class="nav nav-pills nav-stacked">
-                            <li  id="li"><a href="/all_jobs_creator">All Jobs</a></li>
-                            <li id="li" class="active"><a href="/accepted_jobs_creator" style="font-size: 15px;">Accepted Jobs</a></li>
-                            <li id="li"><a href="/pending_jobs_creator">Pending Jobs</a></li>
-                            <li id="li" style="padding-bottom: 10%"><a href="/past_jobs_creator">Past Jobs</a></li>
+                            <li id="li"><a href="/all_jobs_seeker">All Jobs</a></li>
+                            <li id="li"><a href="/accepted_jobs_seeker">Accepted Jobs</a></li>
+                            <li id="li"><a href="/interested_jobs_seeker">Interested Jobs</a></li>
+                            <li id="li" class="active" style="padding-bottom: 10%"><a href="/past_jobs_seeker" style="font-size: 15px">Past Jobs</a></li>
                             <li id="li">
                                 <div class="form-group">    
                                       <label for="distance" id="distanceText">Distance</label>
@@ -158,6 +160,16 @@
         <div class="row d-flex justify-content-center">
             <div class="well" id="job">
                 <p>Test Job3</p>
+            </div>
+        </div>
+        <div class="row d-flex justify-content-center">
+            <div class="well" id="job">
+                <p>Test Job4</p>
+            </div>
+        </div>
+        <div class="row d-flex justify-content-center">
+            <div class="well" id="job">
+                <p>Test Job5</p>
             </div>
         </div>
     </div>
