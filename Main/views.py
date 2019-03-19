@@ -222,4 +222,4 @@ def past_jobs_seeker(request):
 
 #User Report Page
 def generate_report(request):
-    return render(request, 'Creator/generate_report.html')
+    return render(request, 'generate_report.html')
