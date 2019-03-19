@@ -63,6 +63,13 @@ class UpdateAccountForm(forms.Form):
     email = forms.EmailField(label='Update Email', max_length=60, required=False)
     description = forms.CharField(label='Update Description', required=False)
 
+    error_messages = {
+        'passwords_not_match' : 'Passwords do not match',
+        'preexisting_username' : 'Username already exists',
+        'preexisting_email' : 'Email already exists',
+        'invalid_name' : 'Name can only contain letters'
+    }
+
     #TODO: add password strength checks
     password = forms.CharField(label='Update Password', max_length=128, required=False, widget=forms.PasswordInput)
     password_confirmation = forms.CharField(label='Confirm new Password', max_length=128, required=False, widget=forms.PasswordInput)
