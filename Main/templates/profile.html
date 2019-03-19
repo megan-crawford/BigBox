@@ -18,6 +18,11 @@
 	
   </head>
   <body>
+  
+  {% if user_info == None %}
+	
+	
+  {% else %}
 
 	<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" content="width=device-width" style="height:8vw;">
                 <img src="{% static 'images/logo2.PNG' %}" style="max-height:100%;max-width:100%;">
@@ -58,14 +63,14 @@
 		<div class="col-md-8">
 			<div class="well profile" style="font-size:26px">
 				<div class="name" style="font-size:36px">
-					<p>Nicole Pearson </p>
+					<p>{{user_info.username}} </p>
 				</div>
-				<p><strong>Description: </strong> i love cutting grass and chopping wood </p>
+				<p><strong>Description: </strong> {{user_info.profile.Description}} </p>
 				<p><strong>Preferred Jobs:</strong>
 					<span class="tags">Lawncare</span> 
 					<span class="tags">Petsitting</span>
 				</p>
-				<p><strong>Age:</strong> 23 </p>
+				<p><strong>Age:</strong> {{user_info.profile.Age}} </p>
 				<p>  </p>
 			</div>
 		</div>	
@@ -108,10 +113,13 @@
 	</div>
 </div>
 	
+
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+	
+	{% endif %}
   </body>
 </html>
