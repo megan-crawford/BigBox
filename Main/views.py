@@ -44,7 +44,7 @@ def create_account(request):
             creator.save()
 
             login(request, user)
-            return redirect('/home/')
+            return redirect('/home_seeker/')
 
         else:
             print("Create Account not Valid")
@@ -204,6 +204,9 @@ def accepted_jobs_creator(request):
 def pending_jobs_creator(request):
     return render(request, 'Creator/pendingJobsCreator.html')
 
+def past_jobs_creator(request):
+    return render(request, 'Creator/pastJobsCreator.html')
+
 #Jobs Seeker Pages
 def all_jobs_seeker(request):
     return render(request, 'Seeker/allJobsSeeker.html')
@@ -213,7 +216,10 @@ def accepted_jobs_seeker(request):
 
 def interested_jobs_seeker(request):
     return render(request, 'Seeker/interestedJobsSeeker.html')
-	
+
+def past_jobs_seeker(request):
+    return render(request, 'Seeker/pastJobsSeeker.html')
+
 #User Report Page
 def generate_report(request):
     return render(request, 'Creator/generate_report.html')
