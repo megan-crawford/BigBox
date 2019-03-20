@@ -97,7 +97,7 @@ def update_account(request):
             request.user.save()
             request.user.profile.save()
 
-            return render(request, 'updateAccount.html')
+            form = UpdateAccountForm() #goto update account page with blank form
     else:
         form = UpdateAccountForm()
 

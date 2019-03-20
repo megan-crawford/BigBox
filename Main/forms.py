@@ -63,6 +63,11 @@ class UpdateAccountForm(forms.Form):
     email = forms.EmailField(label='Update Email', max_length=60, required=False)
     description = forms.CharField(label='Update Description', required=False)
 
+    #TODO: add password strength checks
+    password = forms.CharField(label='Update Password', max_length=128, required=False, widget=forms.PasswordInput)
+    password_confirmation = forms.CharField(label='Confirm new Password', max_length=128, required=False, widget=forms.PasswordInput)
+
+
     error_messages = {
         'passwords_not_match' : 'Passwords do not match',
         'preexisting_username' : 'Username already exists',
@@ -70,14 +75,10 @@ class UpdateAccountForm(forms.Form):
         'invalid_name' : 'Name can only contain letters'
     }
 
-    #TODO: add password strength checks
-    password = forms.CharField(label='Update Password', max_length=128, required=False, widget=forms.PasswordInput)
-    password_confirmation = forms.CharField(label='Confirm new Password', max_length=128, required=False, widget=forms.PasswordInput)
-
     def clean_email(self):
         email = self.cleaned_data['email']
         if email: #skip validation if user didn't put anything
-            if not User.objects.filter(email=email).exists():
+            if User.objects.filter(email=email).exists():
                 raise ValidationError(message=self.error_messages['preexisting_email'], code='preexisting_email')
         return email
 
