@@ -1,7 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
-from . models import Post
+from . models import Post, Report
 from re import search #regex
 import datetime, pytz
 
@@ -123,6 +123,10 @@ class CreateJobForm(forms.Form):
 
         return date_time
 
+class GenerateReportForm(forms.Form):
+    classification = forms.ChoiceField(choices=Report.REPORT_CHOICES, required=True)
+    details = forms.CharField(required=True)
+    
 class ListJobsForm(forms.Form):
     max_distance = forms.IntegerField(min_value=1, max_value=10000, required = False) #in ___ units?
     job_type = forms.ChoiceField(choices=Post.TYPE_CHOICES, required=False)
