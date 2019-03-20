@@ -104,16 +104,15 @@ class GenerateReport(TestCase):
         self.client = Client()
 
         self.user = User.objects.create(username='user')
-        self.user.set_password('password')
 
     def test_view_valid(self):
         response = self.client.post('/generate_report/?username=user', {
                                     'classification': Report.PAYMENT,
                                     'details': 'User did not pay payment'
         })
-        self.assertEqual(response.status_code, 302) #302 for redirect to profile
+        self.assertEqual(response.status_code, 302) #302 for redirect to profile page
 
-        report = Report.objects.all().first() #get only object in table
+        report = Report.objects.first() #get only object in table
         self.assertNotEqual(report, None)
         self.assertEqual(report.Classification, Report.PAYMENT)
         self.assertEqual(report.Details, 'User did not pay payment')

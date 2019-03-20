@@ -156,29 +156,31 @@ def create_job(request):
 
 #User Report Page
 def generate_report(request):
-    if request.method == "POST": #?
+    #check get info
+    if request.GET.get('username'):
+        username = request.GET.get('username')
+        user = User.objects.filter(username=username).first()
+        if not user:
+            return render(request, 'generate_report.html') #no form info should be displayed, it isn't needed in this case
+    else:
+        return render(request, 'generate_report.html')
+
+    #process request
+    if request.method == "POST":
         #print('create report post')
         form = GenerateReportForm(request.POST)
 
         if form.is_valid():
             #print('create report valid')
-
             classification = form.cleaned_data['classification']
             details = form.cleaned_data['details']
+            Report.objects.create(Classification=classification, Details=details, User=user)
 
-            username = request.GET['username']
-            user = User.objects.get(username=username) #look out for does not exist exception
-            if user is None:
-                form.add_error(None, 'User does not exist')
-                return render(request, 'generate_report.html', {'form':form}) #TODO: add proper error redirecting
-            else:
-                Report.objects.create(Classification=classification, Details=details, User=user)
-
-            return redirect('/profile/') #TODO: redirect user to the profile that they previously looked at
+            return redirect('/profile/?username=' + user.username)
     else:
         form = GenerateReportForm()
 
-    return render(request, 'generate_report.html', {'form':form})
+    return render(request, 'generate_report.html', {'form':form, 'user_info':user})
 
 def list_job(request):
     #TODO: check if user is logged in

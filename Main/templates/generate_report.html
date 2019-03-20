@@ -24,16 +24,20 @@
 
         <label for="firstNameInput" id="firstNameText">Detail the reason for your report below.</label>
         <div class="row">
-          <form class="" name="inputs" id="inputs">
-           <div class="form-group col-xs-6">
-            <textarea type="firstName" class="form-control" id="firstNameInput" placeholder="Description"></textarea>
-         </div>
-          </form>
+          <form class="" name="inputs" id="inputs" method="POST">
+            {% csrf_token %}
+            <div class="form-group col-xs-6">
+              <textarea name="details" type="firstName" class="form-control" id="firstNameInput" placeholder="Description"></textarea>
+            </div>
+          
 
-         <div class="btn1 col-xs-6">
-            <button onclick="" type="button" class="btn btn-secondary" id="updateFirstNameButton">Send Report</button>
-         </div>
+            <div class="btn1 col-xs-6">
+                <button onclick="" type="submit" class="btn btn-secondary" id="updateFirstNameButton">Send Report</button>
+              </div>
+          </form> <!--The form needs to contain the submit button. However the submit button looks out of place on the page.-->
         </div>
+
+        
 
         <br>
 
