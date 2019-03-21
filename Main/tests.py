@@ -1,9 +1,63 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
-from . models import Profile, Post
+from . models import Profile, Post, Review, Report, JobChoices, Review, Seeker, Creator
 from django.test import Client
 
 # Create your tests here.
+class DatabaseClassCreation(TestCase):
+    def setUp(self):
+        user = User.objects.create(username="Winky", email="winky@gmail.com", first_name="Winky", last_name="Frib")
+        user.set_password("1234")
+        user.save()
+
+        Profile.objects.create(User=user, Age="23")
+        post = Post.objects.create(Pay=12.50, Location="Kentucky", DateTime="2018-11-20T15:58:44.767594-06:00", Description="I love Winky", JobType="Snow Shoveling")
+        Report.objects.create(Classification="No show", Details="Winky was here")
+        JobChoices.objects.create(Types = "Lawn Mowing")
+        review1 = Review.objects.create(Rating = 5)
+        review2 = Review.objects.create(Rating = 1)
+        seeker = Seeker.objects.create(User=user, Location="Delaware")
+        seeker.save()
+        seeker.IntJob.add(post)
+        seeker.Reviews.add(review1, review2)
+
+
+    def test_report(self):
+        report = Report.objects.get(Details="Winky was here")
+        self.assertNotEqual(report, None)
+        self.assertEqual(report.Classification, "No show")
+        self.assertNotEqual(report.Details, "Wrongo")
+
+    def test_post(self):
+        post = Post.objects.get(Description="I love Winky")
+        self.assertNotEqual(post, None)
+        self.assertEqual(post.Location, "Kentucky")
+        self.assertNotEqual(post.DateTime, "Wrongo")
+
+    def test_user(self):
+        user = User.objects.get(username="Winky")
+        self.assertNotEqual(user, None)
+        self.assertEqual(user.last_name, "Frib")
+        self.assertNotEqual(user.username, "winky")
+
+    def test_profile(self):
+        user = User.objects.get(username="Winky")
+        self.assertNotEqual(user, None)
+        self.assertEqual(Profile.objects.get(User=user).Age, 23)
+
+    def test_jobchoices(self):
+        choice = JobChoices.objects.get(Types = "Lawn Mowing")
+        self.assertNotEqual(choice, None)
+
+    def test_Seeker(self):
+        user = User.objects.get(username="Winky")
+        seeker = Seeker.objects.get(User=user)
+        self.assertNotEqual(seeker, None)
+        self.assertTrue(seeker.Reviews.filter(Rating = 5)[0].Rating, 5)
+        self.assertTrue(seeker.Reviews.filter(Rating = 1)[0].Rating, 1)
+        self.assertTrue(seeker.Reviews.filter(Rating = 2).count, 0)
+        
+
 class UpdateProfile(TestCase):
     def setUp(self):
         self.client = Client()
