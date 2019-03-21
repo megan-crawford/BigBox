@@ -223,23 +223,12 @@ def interested_jobs_seeker(request):
 	
 #User Report Page
 def generate_report(request):
-<<<<<<< HEAD
     return render(request, 'generate_report.html')
 
 def past_jobs_seeker(request):
     return render(request, 'Seeker/pastJobsSeeker.html')
-<<<<<<< HEAD
-=======
-    return render(request, 'Creator/generate_report.html')
 
 def sendEmail(subject, message, emailTo):
     email = EmailMessage(subject, message, to=[emailTo])
     num = email.send(fail_silently=False)
     return num
->>>>>>> Email
-=======
-
-#User Report Page
-def generate_report(request):
-    return render(request, 'generate_report.html')
->>>>>>> 34878e8e607249e7610e11be965a074166971378
