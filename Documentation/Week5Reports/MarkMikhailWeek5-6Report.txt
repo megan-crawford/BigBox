@@ -1,0 +1,20 @@
+=== Weekly Individual Report (Team 1: <sturgeon++>) ===
+Name: Mark Mikhail
+
+Week 5,6 Figured out and wrote automated tests and figuring out emails
+
+3/5	2	Figure out automated tests
+3/7	2	Figure out automated tests
+3/8 	3	Figure out automated tests
+3/9	3	Write automated tests
+3/15  	2	Figure out emails
+3/16	2	Figure out emails
+3/17	6	Figure out emails
+
+Week 7 Write automated tests for database
+
+3/20	4	Figure out emails
+3/21	6 	Connect email with frontend
+
+Individual Goal: Learn how to send emails and make sure everything is ready for sprint review
+	
