@@ -5,7 +5,8 @@ from django.http import HttpResponse
 from . forms import CreateAccountForm, UpdateAccountForm, CreateJobForm, ListJobsForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
-from . models import Profile, Post, Seeker, Creator
+from . models import Profile, Post, Seeker, Creator, Report
+from django.core.mail import EmailMessage, send_mail
 from django.core.exceptions import ValidationError
 
 
@@ -227,6 +228,7 @@ def generate_report(request):
 def past_jobs_seeker(request):
     return render(request, 'Seeker/pastJobsSeeker.html')
 
-#User Report Page
-def generate_report(request):
-    return render(request, 'generate_report.html')
+def sendEmail(subject, message, emailTo):
+    email = EmailMessage(subject, message, to=[emailTo])
+    num = email.send(fail_silently=False)
+    return num
