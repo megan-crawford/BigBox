@@ -198,6 +198,9 @@ def list_job(request):
 def new_job(request):
     return render(request, 'Jobs/viewNewJob.html')
 
+def view_one_job(request):
+    return render(request, 'Jobs/oneJob.html')
+
 #Job Creator Pages
 def all_jobs_creator(request):
     return render(request, 'Creator/allJobsCreator.html')
@@ -223,7 +226,8 @@ def interested_jobs_seeker(request):
 	
 #User Report Page
 def generate_report(request):
-    return render(request, 'generate_report.html')
+
+    return render(request, 'Creator/generate_report.html')
 
 def past_jobs_seeker(request):
     return render(request, 'Seeker/pastJobsSeeker.html')
@@ -232,3 +236,4 @@ def sendEmail(subject, message, emailTo):
     email = EmailMessage(subject, message, to=[emailTo])
     num = email.send(fail_silently=False)
     return num
+
