@@ -227,6 +227,9 @@ def list_job(request):
 def new_job(request):
     return render(request, 'Jobs/viewNewJob.html')
 
+def view_one_job(request):
+    return render(request, 'Jobs/oneJob.html')
+
 #Job Creator Pages
 def all_jobs_creator(request):
     return render(request, 'Creator/allJobsCreator.html')
@@ -249,14 +252,12 @@ def accepted_jobs_seeker(request):
 
 def interested_jobs_seeker(request):
     return render(request, 'Seeker/interestedJobsSeeker.html')
-<<<<<<< HEAD
 	
 #User Report Page
 def generate_report(request):
     return render(request, 'Creator/generate_report.html')
 
-=======
 
 def past_jobs_seeker(request):
     return render(request, 'Seeker/pastJobsSeeker.html')
->>>>>>> 180453d6b64d35d18a6544bb547e4682599d705e
+

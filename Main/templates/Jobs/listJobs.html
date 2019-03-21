@@ -49,16 +49,27 @@ div.job{
 
 </head>
 <body>
+
+  {% for post in Posts.all %}
+   <p>djkflsd </p>
+  {% endfor %}
   <script>
-  //JS to add a job div to page
-  function addJob () { 
-  var jobDiv = document.createElement("div"); 
-  jobDiv.className="job";
-  var jobDeets = document.createTextNode("happy st patties day ;) #job #coolcash"); 
-  jobDiv.appendChild(jobDeets);  
-  var currentDiv = document.getElementById("myDiv");
-  document.body.insertBefore(jobDiv, currentDiv); 
-}
+    //JS to add a job div to page
+    function addJob () { 
+    var jobDiv = document.createElement("div"); 
+    jobDiv.className="job";
+    var jobDeets = document.createTextNode("Job Details: "); 
+    jobDiv.appendChild(jobDeets);  
+    var button = document.createElement("button");
+    button.onclick = viewOneJob();
+    button.innerHTML = "View this Job"
+    jobDiv.appendChild(button);
+    var currentDiv = document.getElementById("myDiv");
+    document.body.insertBefore(jobDiv, currentDiv); 
+  }
+  function viewOneJob(){
+    //window.location.replace("")
+  }
 </script>
         <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" content="width=device-width" style="height:8vw;">
                 <img src="{% static 'images/logo2.PNG' %}" style="max-height:100%;max-width:100%;">
