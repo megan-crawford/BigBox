@@ -15,8 +15,28 @@
   <body>
       <div class="blank_space"></div>
     
-      <img src="{% static 'images/logo2.PNG' %}" style="width:20%">
-
+<!-- Navigation -->
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" content="width=device-width" style="height:8vw;">
+                <img src="{% static 'images/logo2.PNG' %}" style="max-height:100%;max-width:100%;">
+          
+                <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+                  <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active" style="font-size:16px">
+                      <a class="nav-link" style="font-size: 200%; padding-left: 20%" href="/home_creator">Home<span class="sr-only">(current)</span></a>
+                    </li>
+                  </ul>
+                  <div class="dropdown">
+                      <button class="btn btn-secondary dropdown-toggle" style="max-height:200%;max-width:200; font-size:16px" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {{ request.user.username }}
+                      </button> 
+                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="font-size:16px">
+                        <a class="dropdown-item" href="/profile">Account</a>
+                        <a class="dropdown-item" href="/login">Sign Out</a>
+                      </div>
+                    </div>
+                </div>
+          </nav>
+          <div class="padding" style="padding-top: 5%"></div>
       <br>
       <br>
 
