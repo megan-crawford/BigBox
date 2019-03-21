@@ -114,6 +114,12 @@ def home_creator(request):
     return render(request, 'home_creator.html')
 	
 def home_seeker(request):
+    if request.GET.get('username'): #the .get() needs to be used to stop error if username is null
+        username = request.GET['username']
+        user = User.objects.filter(username=username).first() #assume there is only one object
+        if user:
+            return render(request, 'home_seeker.html', {'user_info':user})
+
     return render(request, 'home_seeker.html')
 
 def login_request(request):
