@@ -6,6 +6,7 @@ from . forms import CreateAccountForm, UpdateAccountForm, CreateJobForm, ListJob
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from . models import Profile, Post, Seeker, Creator, Report
+from django.core.mail import EmailMessage, send_mail
 
 def create_account(request):
     if request.method == "POST": #user clicks register button
@@ -252,7 +253,16 @@ def interested_jobs_seeker(request):
 	
 #User Report Page
 def generate_report(request):
+<<<<<<< HEAD
     return render(request, 'generate_report.html')
 
 def past_jobs_seeker(request):
     return render(request, 'Seeker/pastJobsSeeker.html')
+=======
+    return render(request, 'Creator/generate_report.html')
+
+def sendEmail(subject, message, emailTo):
+    email = EmailMessage(subject, message, to=[emailTo])
+    num = email.send(fail_silently=False)
+    return num
+>>>>>>> Email

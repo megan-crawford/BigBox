@@ -2,6 +2,17 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 from . models import Profile, Post, Review, Report, JobChoices, Review, Seeker, Creator
 from django.test import Client
+from .views import sendEmail
+from django.core import mail
+from django.conf import settings
+
+import os
+
+
+
+
+
+
 
 # Create your tests here.
 class DatabaseClassCreation(TestCase):
@@ -247,3 +258,36 @@ class ListJob(TestCase):
                                     'max_wage': 10.00,
         })
         self.assertFalse(response.context['form'].is_valid())
+
+
+
+class TestSendEmail(TestCase):
+    def test1(self):
+        with self.settings(
+            EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend',
+            EMAIL_HOST = 'smtp.gmail.com',
+            EMAIL_PORT = 587,
+            EMAIL_HOST_USER = 'djangoBoiii@gmail.com',
+            EMAIL_HOST_PASSWORD = 'Pa$Sword1',
+            EMAIL_USE_TLS = True,
+            DEFAULT_FROM_EMAIL = 'djangoBoiii@gmail.com'
+        ):
+            sendEmail("test_subject1", "test_message1", 'mkm1899@gmail.com')
+
+    def test2(self):    
+        with self.settings(
+            EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend',
+            EMAIL_HOST = 'smtp.gmail.com',
+            EMAIL_PORT = 587,
+            EMAIL_HOST_USER = 'djangoBoiii@gmail.com',
+            EMAIL_HOST_PASSWORD = 'Pa$Sword1',
+            EMAIL_USE_TLS = True,
+            DEFAULT_FROM_EMAIL = 'djangoBoiii@gmail.com'
+        ):
+            sendEmail("test_subject2", "test_message2", 'pattnewbie@gmail.com')
+        #connection = mail.get_connection()
+        #connection.open()
+
+        #email1 = mail.EmailMessage('Hello', 'Body','djangoBoiii@gmail.com',['djangoBoiii@gmail.com'], connection=connection)
+        #email1.send()
+        #connection.close()
