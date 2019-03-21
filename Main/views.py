@@ -219,6 +219,10 @@ def accepted_jobs_seeker(request):
 
 def interested_jobs_seeker(request):
     return render(request, 'Seeker/interestedJobsSeeker.html')
+	
+#User Report Page
+def generate_report(request):
+    return render(request, 'generate_report.html')
 
 def past_jobs_seeker(request):
     return render(request, 'Seeker/pastJobsSeeker.html')

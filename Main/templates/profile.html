@@ -20,7 +20,7 @@
   <body>
   
   {% if user_info == None %}
-	
+	No such user exists.
 	
   {% else %}
 
@@ -63,7 +63,10 @@
 		<div class="col-md-8">
 			<div class="well profile" style="font-size:26px">
 				<div class="name" style="font-size:36px">
-					<p>{{user_info.username}} </p>
+					<p>{{user_info.first_name}} {{user_info.last_name}} </p>
+				</div>
+				<div class="username" style="font-size:14px">
+					<p>{{user_info.username}}</p>
 				</div>
 				<p><strong>Description: </strong> {{user_info.profile.Description}} </p>
 				<p><strong>Preferred Jobs:</strong>
@@ -97,14 +100,14 @@
 	
 	<div class="row" style="font-size:26px">
 		<div class="col-md-6">
-			<p>Reviews of Nicole (as Worker): </p>
+			<p>Reviews of {{user_info.username}} (as Worker): </p>
 			<div class="well well-lg">
 			
 			</div>
 		</div>
 		
 		<div class="col-md-6">
-			<p>Reviews of Nicole (as Creator): </p>
+			<p>Reviews of {{user_info.username}} (as Creator): </p>
 			<div class="well well-lg">
 			
 			</div>
