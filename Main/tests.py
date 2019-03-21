@@ -180,15 +180,3 @@ class TestSendEmail(TestCase):
         #email1 = mail.EmailMessage('Hello', 'Body','djangoBoiii@gmail.com',['djangoBoiii@gmail.com'], connection=connection)
         #email1.send()
         #connection.close()
-    #def tearDown(self):
-
-
-
-
-
-
-
-
-
-
-#python manage.py test Main.tests.TestSendEmail

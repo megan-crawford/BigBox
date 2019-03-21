@@ -211,8 +211,3 @@ def sendEmail(subject, message, emailTo):
     email = EmailMessage(subject, message, to=[emailTo])
     num = email.send(fail_silently=False)
     return num
-
-#def sendMassEmail
-        
-    #email = EmailMessage(subject, message, emailTo)
-    #email.send()
