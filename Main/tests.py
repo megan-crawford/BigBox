@@ -1,10 +1,6 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
-<<<<<<< HEAD
 from . models import Profile, Post, Review, Report, JobChoices, Review, Seeker, Creator
-=======
-from . models import Profile, Seeker, Creator, Post, Report
->>>>>>> 180453d6b64d35d18a6544bb547e4682599d705e
 from django.test import Client
 
 # Create your tests here.
@@ -251,7 +247,3 @@ class ListJob(TestCase):
                                     'max_wage': 10.00,
         })
         self.assertFalse(response.context['form'].is_valid())
-<<<<<<< HEAD
-=======
-
->>>>>>> 180453d6b64d35d18a6544bb547e4682599d705e
