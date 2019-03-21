@@ -1,7 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
-from . models import Post
+from . models import Post, Report
 from re import search #regex
 import datetime, pytz
 
@@ -67,10 +67,18 @@ class UpdateAccountForm(forms.Form):
     password = forms.CharField(label='Update Password', max_length=128, required=False, widget=forms.PasswordInput)
     password_confirmation = forms.CharField(label='Confirm new Password', max_length=128, required=False, widget=forms.PasswordInput)
 
+
+    error_messages = {
+        'passwords_not_match' : 'Passwords do not match',
+        'preexisting_username' : 'Username already exists',
+        'preexisting_email' : 'Email already exists',
+        'invalid_name' : 'Name can only contain letters'
+    }
+
     def clean_email(self):
         email = self.cleaned_data['email']
         if email: #skip validation if user didn't put anything
-            if not User.objects.filter(email=email).exists():
+            if User.objects.filter(email=email).exists():
                 raise ValidationError(message=self.error_messages['preexisting_email'], code='preexisting_email')
         return email
 
@@ -116,6 +124,10 @@ class CreateJobForm(forms.Form):
 
         return date_time
 
+class GenerateReportForm(forms.Form):
+    classification = forms.ChoiceField(choices=Report.REPORT_CHOICES, required=True)
+    details = forms.CharField(required=True)
+    
 class ListJobsForm(forms.Form):
     max_distance = forms.IntegerField(min_value=1, max_value=10000, required = False) #in ___ units?
     job_type = forms.ChoiceField(choices=Post.TYPE_CHOICES, required=False)

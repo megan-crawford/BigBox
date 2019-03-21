@@ -19,23 +19,32 @@ from . import views
 app_name='Main'
 
 urlpatterns = [
+    #home
 	path('', views.home, name='home'),
 	path('home/', views.home, name='home'),
-    path('login/', views.login_request, name='login'),
 	
+    #account
+    path('login/', views.login_request, name='login'),
+    path('logout/', views.logout_request, name='logout'),
 	path('create_account/', views.create_account, name='create_account'),
-    path('create_job/', views.create_job, name='create_job'),
-    path('list_job/', views.list_job, name='list_job'),
-    path('add_job', views.new_job, name='add_job'),
-    path('profile/', views.profile, name='profile'),
     path('update_account/', views.update_account, name='update_account'),
+    path('profile/', views.profile, name='profile'),
+    path('generate_report/', views.generate_report, name='generate_report'),
+
+    #creator
+    path('home_creator/', views.home_creator, name='home_creator'),
+    path('create_job/', views.create_job, name='create_job'),
+    path('add_job/', views.new_job, name='add_job'),
     path('all_jobs_creator/', views.all_jobs_creator, name='all_jobs_creator'),
     path('accepted_jobs_creator/', views.accepted_jobs_creator, name='accepted_jobs_creator'),
     path('pending_jobs_creator/', views.pending_jobs_creator, name='pending_jobs_creator'),
+    path('past_jobs_creator/', views.past_jobs_creator, name='past_jobs_creator'),
+
+    #seeker
+    path('home_seeker/', views.home_seeker, name='home_seeker'),
+    path('list_job/', views.list_job, name='list_job'),
     path('all_jobs_seeker/', views.all_jobs_seeker, name='all_jobs_seeker'),
     path('accepted_jobs_seeker/', views.accepted_jobs_seeker, name="accepted_jobs_seeker"),
     path('interested_jobs_seeker/', views.interested_jobs_seeker, name='interested_jobs_seeker'),
-	path('home_creator/', views.home_creator, name='home_creator'),
-	path('home_seeker/', views.home_seeker, name='home_seeker'),
-	path('generate_report/', views.generate_report, name='generate_report'),
+	path('past_jobs_seeker/', views.past_jobs_seeker, name='past_jobs_seeker'),
 ]

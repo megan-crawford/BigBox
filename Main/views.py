@@ -2,12 +2,10 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout
 from django.contrib.auth import authenticate
 from django.http import HttpResponse
-from . forms import CreateAccountForm, UpdateAccountForm, CreateJobForm, ListJobsForm
+from . forms import CreateAccountForm, UpdateAccountForm, CreateJobForm, ListJobsForm, GenerateReportForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
-from . models import Profile, Post, Seeker, Creator
-from django.core.exceptions import ValidationError
-
+from . models import Profile, Post, Seeker, Creator, Report
 
 def create_account(request):
     if request.method == "POST": #user clicks register button
@@ -34,17 +32,14 @@ def create_account(request):
             #create and add user to database
             user = User.objects.create(username=username, email=email, first_name=first_name, last_name=last_name)
             user.set_password(password)
-            profile = Profile.objects.create(User=user, Age=age)
-            seeker = Seeker.objects.create(User=user)
-            creator = Creator.objects.create(User=user)
+            Profile.objects.create(User=user, Age=age)
+            Seeker.objects.create(User=user)
+            Creator.objects.create(User=user)
 
             user.save()
-            profile.save()
-            seeker.save()
-            creator.save()
 
             login(request, user)
-            return redirect('/home/')
+            return redirect('/home_seeker/')
 
         else:
             print("Create Account not Valid")
@@ -55,10 +50,15 @@ def create_account(request):
 
     return render(request, 'createAccount.html', {'form':form})
 
-
 def profile(request):
+    if request.GET.get('username'): #the .get() needs to be used to stop error if username is null
+        username = request.GET['username']
+        user = User.objects.filter(username=username).first() #assume there is only one object
+        if user:
+            return render(request, 'profile.html', {'user_info':user})
+
+
     return render(request, 'profile.html')
-    #return HttpResponse("profile.")
 
 
 #TODO: change to update profile
@@ -97,7 +97,7 @@ def update_account(request):
             request.user.save()
             request.user.profile.save()
 
-            return render(request, 'updateAccount.html')
+            form = UpdateAccountForm() #goto update account page with blank form
     else:
         form = UpdateAccountForm()
 
@@ -112,6 +112,12 @@ def home_creator(request):
     return render(request, 'home_creator.html')
 	
 def home_seeker(request):
+    if request.GET.get('username'): #the .get() needs to be used to stop error if username is null
+        username = request.GET['username']
+        user = User.objects.filter(username=username).first() #assume there is only one object
+        if user:
+            return render(request, 'home_seeker.html', {'user_info':user})
+
     return render(request, 'home_seeker.html')
 
 def login_request(request):
@@ -127,7 +133,6 @@ def login_request(request):
             user = authenticate(username=username, password=password)
 
             if user is not None:
-                #print('login success')
                 login(request, user)
                 return redirect('/home_seeker/')
     else:
@@ -167,6 +172,34 @@ def create_job(request):
 
     return render(request, 'Jobs/bigBoxJob.html', {'form':form})
 
+#User Report Page
+def generate_report(request):
+    #check get info
+    if request.GET.get('username'):
+        username = request.GET.get('username')
+        user = User.objects.filter(username=username).first()
+        if not user:
+            return render(request, 'generate_report.html') #no form info should be displayed, it isn't needed in this case
+    else:
+        return render(request, 'generate_report.html')
+
+    #process request
+    if request.method == "POST":
+        #print('create report post')
+        form = GenerateReportForm(request.POST)
+
+        if form.is_valid():
+            #print('create report valid')
+            classification = form.cleaned_data['classification']
+            details = form.cleaned_data['details']
+            Report.objects.create(Classification=classification, Details=details, User=user)
+
+            return redirect('/profile/?username=' + user.username)
+    else:
+        form = GenerateReportForm()
+
+    return render(request, 'generate_report.html', {'form':form, 'user_info':user})
+
 def list_job(request):
     #TODO: check if user is logged in
 
@@ -204,6 +237,9 @@ def accepted_jobs_creator(request):
 def pending_jobs_creator(request):
     return render(request, 'Creator/pendingJobsCreator.html')
 
+def past_jobs_creator(request):
+    return render(request, 'Creator/pastJobsCreator.html')
+
 #Jobs Seeker Pages
 def all_jobs_seeker(request):
     return render(request, 'Seeker/allJobsSeeker.html')
@@ -213,8 +249,14 @@ def accepted_jobs_seeker(request):
 
 def interested_jobs_seeker(request):
     return render(request, 'Seeker/interestedJobsSeeker.html')
+<<<<<<< HEAD
 	
 #User Report Page
 def generate_report(request):
     return render(request, 'Creator/generate_report.html')
 
+=======
+
+def past_jobs_seeker(request):
+    return render(request, 'Seeker/pastJobsSeeker.html')
+>>>>>>> 180453d6b64d35d18a6544bb547e4682599d705e
