@@ -66,7 +66,7 @@
 					<p>{{user_info.first_name}} {{user_info.last_name}} </p>
 				</div>
 				<div class="username" style="font-size:14px">
-					<p>{{user_info.username}}</p>
+					<p>Username: {{user_info.username}}</p>
 				</div>
 				<p><strong>Description: </strong> {{user_info.profile.Description}} </p>
 				<p><strong>Preferred Jobs:</strong>
@@ -88,11 +88,11 @@
 			</div>
 		</div>
 		<div class="col-md-1">
-		<a href="/generate_report">
+		<a href="/generate_report/?{{user_info.username}}">
 			<div class="button">
 				<button type="button" class="btn btn-danger btn-sm btn-block">Report User</button>
 			</div>
-			</div>
+			</a>
 		</div>
 	</div>
 	
