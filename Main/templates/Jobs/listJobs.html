@@ -49,10 +49,6 @@ div.job{
 
 </head>
 <body>
-
-  {% for post in Posts.all %}
-   <p>djkflsd </p>
-  {% endfor %}
         <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" content="width=device-width" style="height:8vw;">
                 <img src="{% static 'images/logo2.PNG' %}" style="max-height:100%;max-width:100%;">
               
@@ -80,6 +76,10 @@ div.job{
           <div id="container">
             <div id="content">
               <!--<div class="grid-container" style="background-color:lightblue; height:1000px;width:700px; align-content: center"> -->
+              omg
+              {% for post in request.user.Posts.all %}
+              <p>djkflsd </p>
+              {% endfor %}
               <!-- </div> -->
             </div>
             <div id="navbar">
