@@ -202,9 +202,9 @@ def list_job(request):
                         jobs = Post.objects.filter(Q(Pay__lte=max_wage))
                 elif not min_wage and not max_wage:
                     if(job_type!=''):
-                        jobs = Post.objects.filter(Q(JobType=job_type) | Q(Pay__range=[min_wage, max_wage]))
+                        jobs = Post.objects.filter(Q(JobType=job_type))
                     else:
-                        jobs = Post.objects.filter(Q(Pay__range=[min_wage, max_wage]))
+                        jobs = Post.objects.filter()
                 else:
                     if(job_type!=''):
                         jobs = Post.objects.filter(Q(JobType=job_type))
