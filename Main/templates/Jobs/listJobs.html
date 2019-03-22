@@ -7,7 +7,7 @@
   width: 80% ;
 }
 #navbar {
-  float: right;
+  float: left;
   width: 20%;
   background-color:#a1fb8d;
   border:5px solid #07680D;
@@ -36,6 +36,36 @@ div.job{
 }
 
 </style>
+  <script>
+    //JS to add a job div to page
+    function addJob (pay, description, type) { //, location, datetime, 
+    var jobDiv = document.createElement("div"); 
+    jobDiv.className="job";
+    var jobFeatures = document.createElement("li");
+    var jobPay = document.createTextNode(pay);
+    jobFeatures.appendChild(jobPay); 
+    //var jobLoc = document.createTextNode(location);
+    //var jobdate = document.createTextNode(datetime);
+    var description = document.createTextNode(description);
+    jobFeatures.appendChild(description);
+    var jobType = document.createTextNode(type);
+    jobFeatures.appendChild(jobType); 
+    
+    
+    //jobDiv.appendChild(datetime);
+    //jobDiv.appendChile(location);
+    var button = document.createElement("button");
+    button.onclick = viewOneJob();
+    button.innerHTML = "View this Job"
+    jobDiv.appendChild(jobFeatures);
+    jobDiv.appendChild(button);
+    var currentDiv = document.getElementById("myDiv");
+    document.body.insertBefore(jobDiv, currentDiv); 
+  }
+  function viewOneJob(){
+    //window.location.replace("")
+  }
+</script>
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -61,11 +91,11 @@ div.job{
                     </li>
                   </ul>
                   <div class="dropdown">
-                      <button class="btn btn-secondary dropdown-toggle" style="max-height:200%;max-width:200;" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      {{ request.user.username }}
-                      </button>
-                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="/profile">Account</a>
+                      <button class="btn btn-secondary dropdown-toggle" style="max-height:200%;max-width:200; font-size:16px" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {{ request.user.username }}
+                      </button> 
+                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="font-size:16px">
+                        <a class="dropdown-item" href="/profile/?username={{ request.user.username }}">Account</a>
                         <a class="dropdown-item" href="/login">Sign Out</a>
                       </div>
                     </div>
@@ -75,9 +105,17 @@ div.job{
           <div id="container">
             <div id="content">
               <!--<div class="grid-container" style="background-color:lightblue; height:1000px;width:700px; align-content: center"> -->
-              
+
               {% for job in jobs %}
-                {{job}}
+                {{Job.DateTime}}
+                <script>
+                  var pay = '{{job.Pay}}';
+                  //var location = '{{job.Location}}';
+                  //var datetime = '{{job.DateTime.}}';
+                  var description = '{{job.Description}}';
+                  var type = '{{job.JobType}}';
+                  addJob(pay, description, type);
+                </script>
               {% endfor %}
               <!-- </div> -->
             </div>
@@ -89,6 +127,8 @@ div.job{
               <input type="number" name="max_distance" min="1" max="10000">
               <br><br>
               Job Type
+              {{form.job_type}}
+              <!--
               <select name="job_type">
                 <option value="lawncare">Lawn Care</option>
                 <option value="dog">Dog Walking</option>
@@ -97,6 +137,7 @@ div.job{
                 <option value="manual labor">Manual Labor</option>
                 <option value="other">Other</option>
               </select>
+              -->
               <br><br>
               Minimum Wage
               <input type="number" name="min_wage" min="1" max="10000">

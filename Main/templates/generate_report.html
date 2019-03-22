@@ -29,7 +29,7 @@
                         {{ request.user.username }}
                       </button> 
                       <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="font-size:16px">
-                        <a class="dropdown-item" href="/profile">Account</a>
+                        <a class="dropdown-item" href="/profile/?username={{ request.user.username }}">Account</a>
                         <a class="dropdown-item" href="/login">Sign Out</a>
                       </div>
                     </div>
@@ -49,7 +49,9 @@
         <label for="firstNameInput" id="firstNameText">Detail the reason for your report below.</label>
         <div class="row">
           <form class="" name="inputs" id="inputs" method="POST">
+		  {{ form.classification}}
             {% csrf_token %}
+			{{ form.classification}}
             <div class="form-group col-xs-6">
               <textarea name="details" type="firstName" class="form-control" id="firstNameInput" placeholder="Description"></textarea>
             </div>

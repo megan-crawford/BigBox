@@ -174,11 +174,11 @@ def create_job(request):
 def list_job(request):
     #TODO: check if user is logged in
     if request.method == "GET":
-        #print('list job get')
+        print('list job get')
         form = ListJobsForm(request.GET)
 
         if form.is_valid():
-            #print('list job valid')
+            print('list job valid')
 
             #max_distance = form.cleaned_data['max_distance']
             job_type = form.cleaned_data['job_type']
@@ -200,6 +200,7 @@ def list_job(request):
         jobs = Post.objects.all()
         form = ListJobsForm()
 
+    jobs = jobs.order_by('Pay', 'DateTime')
     return render(request, 'Jobs/listJobs.html', {'form':form, 'jobs':jobs})
 
 def new_job(request):
