@@ -258,10 +258,7 @@ def generate_report(request):
 def past_jobs_seeker(request):
     return render(request, 'Seeker/pastJobsSeeker.html')
 
-<<<<<<< HEAD
-=======
 def sendEmail(subject, message, emailTo):
     email = EmailMessage(subject, message, to=[emailTo])
     num = email.send(fail_silently=False)
     return num
->>>>>>> 1f39f775626df49df811fcb1c5fb2dfebca4d765
