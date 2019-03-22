@@ -329,6 +329,9 @@ def past_jobs_seeker(request):
     return render(request, 'Seeker/pastJobsSeeker.html')
 
 def sendEmail(subject, message, emailTo):
-    email = EmailMessage(subject, message, to=[emailTo])
-    num = email.send(fail_silently=False)
-    return num
+    try:
+        email = EmailMessage(subject, message, to=[emailTo])
+        num = email.send()
+    except:
+        return -1
+    return 1
