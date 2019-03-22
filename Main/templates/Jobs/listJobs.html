@@ -33,7 +33,6 @@ div.job{
   border:5px solid #07680D;
   float:left;
   margin:10px;
-  
 }
 
 </style>
@@ -63,7 +62,7 @@ div.job{
                   </ul>
                   <div class="dropdown">
                       <button class="btn btn-secondary dropdown-toggle" style="max-height:200%;max-width:200;" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Username
+                      {{ request.user.username }}
                       </button>
                       <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <a class="dropdown-item" href="/profile">Account</a>
@@ -76,9 +75,9 @@ div.job{
           <div id="container">
             <div id="content">
               <!--<div class="grid-container" style="background-color:lightblue; height:1000px;width:700px; align-content: center"> -->
-              omg
-              {% for post in request.user.Posts.all %}
-              <p>djkflsd </p>
+              
+              {% for job in allJobs %}
+              {{job}}
               {% endfor %}
               <!-- </div> -->
             </div>

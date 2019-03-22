@@ -37,6 +37,7 @@ class Post(models.Model):
             max_length=100,
             choices=TYPE_CHOICES,
     )
+    #posts=models.Manager()
 
 class Report(models.Model):
     PAYMENT = 'PI'

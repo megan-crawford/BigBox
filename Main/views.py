@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 from . models import Profile, Post, Seeker, Creator, Report
 from django.core.mail import EmailMessage, send_mail
 from django.core.exceptions import ValidationError
-
+from django.template import loader #?
 
 def create_account(request):
     if request.method == "POST": #user clicks register button
@@ -172,8 +172,8 @@ def create_job(request):
     return render(request, 'Jobs/bigBoxJob.html', {'form':form})
 
 def list_job(request):
+    allJobs = Post.objects.all() #
     #TODO: check if user is logged in
-
     if request.method == "GET":
         #print('list job get')
         form = ListJobsForm(request.GET)
@@ -192,8 +192,8 @@ def list_job(request):
     else:
         jobs = request.user.creator.Posts.all()
         form = ListJobsForm()
-        
-    return render(request, 'Jobs/listJobs.html', {'form':form, 'jobs':jobs})
+    return render(request, 'Jobs/listJobs.html', {'allJobs': allJobs})
+    #return render(request, 'Jobs/listJobs.html', {'form':form, 'jobs':jobs})
 
 def new_job(request):
     return render(request, 'Jobs/viewNewJob.html')
@@ -236,4 +236,3 @@ def sendEmail(subject, message, emailTo):
     email = EmailMessage(subject, message, to=[emailTo])
     num = email.send(fail_silently=False)
     return num
-
