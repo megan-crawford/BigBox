@@ -26,7 +26,6 @@
 
 	<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" content="width=device-width" style="height:8vw;">
                 <img src="{% static 'images/logo2.PNG' %}" style="max-height:100%;max-width:100%;">
-			{{ num_reports }}
                 <div class="collapse navbar-collapse" id="navbarsExampleDefault">
                   <ul class="navbar-nav mr-auto">
                     <li class="nav-item active" style="font-size:16px">
@@ -81,7 +80,16 @@
 
 	<div class="row">
 	
+	{% if num_reports == 0 %}
 		<div class="col-md-7"><img src="{% static 'images/rategood.png' %}" title="User has No Reports!" width="20" height="20"></div>
+		
+	{% elif num_reports > 3 %}
+		<div class="col-md-7"><img src="{% static 'images/ratemedium.png' %}" title="User has No Reports!" width="20" height="20"></div>
+	
+	{% else %}
+		<div class="col-md-7"><img src="{% static 'images/ratebad.png' %}" title="User has No Reports!" width="20" height="20"></div>
+
+	{% endif %}
 		<div class="col-md-4">
 		<div class="button">
 				<button type="button" class="btn btn-primary btn-lg btn-block">View my Job Listings</button>
