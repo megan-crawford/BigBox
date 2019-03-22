@@ -18,7 +18,7 @@ class DatabaseClassCreation(TestCase):
 
         Profile.objects.create(User=user, Age="23")
         post = Post.objects.create(Pay=12.50, Location="Kentucky", DateTime="2018-11-20T15:58:44.767594-06:00", Description="I love Winky", JobType="Snow Shoveling")
-        Report.objects.create(Classification="No show", Details="Winky was here")
+        Report.objects.create(User=user, Classification="No show", Details="Winky was here")
         JobChoices.objects.create(Types = "Lawn Mowing")
         review1 = Review.objects.create(Rating = 5)
         review2 = Review.objects.create(Rating = 1)
@@ -338,6 +338,35 @@ class TestSendEmail(TestCase):
             DEFAULT_FROM_EMAIL = 'djangoBoiii@gmail.com'
         ):
             sendEmail("test_subject2", "test_message2", 'pattnewbie@gmail.com')
+
+    def test3(self):
+        email = input("Enter your email: ")
+        with self.settings(
+            EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend',
+            EMAIL_HOST = 'smtp.gmail.com',
+            EMAIL_PORT = 587,
+            EMAIL_HOST_USER = 'djangoBoiii@gmail.com',
+            EMAIL_HOST_PASSWORD = 'Pa$Sword1',
+            EMAIL_USE_TLS = True,
+            DEFAULT_FROM_EMAIL = 'djangoBoiii@gmail.com'
+        ):
+            sendEmail("test_subject3", "test_message3", email)
+
+    def test4(self):
+        subject = input("Enter the subject: ")
+        message = input("Enter the message: ")
+        email = input("Enter your email: ")
+        with self.settings(
+            EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend',
+            EMAIL_HOST = 'smtp.gmail.com',
+            EMAIL_PORT = 587,
+            EMAIL_HOST_USER = 'djangoBoiii@gmail.com',
+            EMAIL_HOST_PASSWORD = 'Pa$Sword1',
+            EMAIL_USE_TLS = True,
+            DEFAULT_FROM_EMAIL = 'djangoBoiii@gmail.com'
+        ):
+            num = sendEmail(subject, message, email)
+            print(num)
         #connection = mail.get_connection()
         #connection.open()
 
