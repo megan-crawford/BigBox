@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
 from . models import Profile, Post, Review, Report, JobChoices, Review, Seeker, Creator
-from . forms import ListJobsForm
+from . forms import ListJobsForm, GenerateReportForm
 from django.test import Client
 from .views import sendEmail
 from django.core import mail
@@ -208,6 +208,10 @@ class GenerateReport(TestCase):
         user = User.objects.first() #get the only user
         self.assertTrue(Report.objects.filter(User=user).exists())
 
+    def test_form_invalid_empty_details(self):
+        form = GenerateReportForm({'classification': Report.PAYMENT, 'details': ''})
+        self.assertFalse(form.is_valid())
+
 class ListJob(TestCase):
     def setUp(self):
         self.client = Client()
@@ -215,6 +219,7 @@ class ListJob(TestCase):
                         'username': 'user1', 'password': 'vf83g9f7fg', 'password_confirmation': 'vf83g9f7fg',
                         'email': 'email@email.com', 'first_name': 'John', 'last_name': 'Smith', 'age': 20                    
         })
+
         self.client.post('/create_job/', {
                         'pay': 15.00, 'date_time': '2020-10-25',
                         'description': 'work involves ...', 'job_type': Post.DOGWALKING,
@@ -262,6 +267,43 @@ class ListJob(TestCase):
 
     def test_view_correct_jobs_type_and_wage(self):
         response = self.client.get('/list_job/', {'job_type': Post.DOGWALKING, 'min_wage': 15.00, 'max_wage': 25.00})
+        self.assertEqual(response.context['jobs'].count(), 1)
+
+class AllJobsCreator(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.client.post('/create_account/', { #user requered to be logged in to create jobs
+                        'username': 'user', 'password': 'vf83g9f7fg', 'password_confirmation': 'vf83g9f7fg',
+                        'email': 'email3@email.com', 'first_name': 'Jack', 'last_name': 'Smith', 'age': 24                   
+        })
+
+        self.client.post('/create_job/', {
+                        'pay': 4.00, 'date_time': '2020-5-20',
+                        'description': 'work involves ...', 'job_type': Post.DOGWALKING,
+        })
+        self.client.post('/create_job/', {
+                        'pay': 50.00, 'date_time': '2021-10-13',
+                        'description': 'work involves ...', 'job_type': Post.BABYSITTING,
+        })
+        self.client.post('/create_job/', {
+                        'pay': 13.00, 'date_time': '2020-10-26',
+                        'description': 'work involves ...', 'job_type': Post.SNOWSHOVELING,
+        })
+
+    def test_view_correct_jobs_max_wage(self):
+        response = self.client.get('/list_job/', {'max_wage': 13.00})
+        self.assertEqual(response.context['jobs'].count(), 2)
+
+    def test_view_correct_jobs_min_wage(self):
+        response = self.client.get('/list_job/', {'min_wage': 30.00})
+        self.assertEqual(response.context['jobs'].count(), 1)
+
+    def test_view_correct_jobs_wage(self):
+        response = self.client.get('/list_job/', {'min_wage': 4.00, 'max_wage': 25.00})
+        self.assertEqual(response.context['jobs'].count(), 2)
+
+    def test_view_correct_jobs_type(self):
+        response = self.client.get('/list_job/', {'job_type': Post.DOGWALKING})
         self.assertEqual(response.context['jobs'].count(), 1)
 
 class TestSendEmail(TestCase):
