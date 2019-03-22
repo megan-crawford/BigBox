@@ -210,6 +210,9 @@ def pending_jobs_creator(request):
 def past_jobs_creator(request):
     return render(request, 'Creator/pastJobsCreator.html')
 
+def one_job(request):
+    return render(request, 'Jobs/oneJob.html')
+
 #Jobs Seeker Pages
 def all_jobs_seeker(request):
     return render(request, 'Seeker/allJobsSeeker.html')
@@ -227,6 +230,3 @@ def generate_report(request):
 def past_jobs_seeker(request):
     return render(request, 'Seeker/pastJobsSeeker.html')
 
-#User Report Page
-def generate_report(request):
-    return render(request, 'generate_report.html')
