@@ -10,7 +10,7 @@ from django.core.mail import EmailMessage, send_mail
 from django.core.exceptions import ValidationError
 from django.template import loader #?
 from django.db.models import Q #for Django OR filters
-
+from django.db.models.fields import BLANK_CHOICE_DASH
 def create_account(request):
     if request.method == "POST": #user clicks register button
         #print('create account post')
@@ -179,21 +179,38 @@ def list_job(request):
 
         if form.is_valid():
             print('list job valid')
-
             #max_distance = form.cleaned_data['max_distance']
             job_type = form.cleaned_data['job_type']
             min_wage = form.cleaned_data['min_wage']
             max_wage = form.cleaned_data['max_wage']
-
+              
             if (job_type and min_wage and max_wage):
-                jobs = Post.objects.filter(JobType=job_type, Pay__range=[min_wage, max_wage])
+                if(job_type!=''):
+                    jobs = Post.objects.filter(JobType=job_type, Pay__range=[min_wage, max_wage])
+                else:
+                    jobs = Post.objects.filter(Pay__range=[min_wage, max_wage])
             else:
                 if min_wage and not max_wage:
-                    jobs = Post.objects.filter(Q(JobType=job_type) | Q(Pay__gte=min_wage))
+                    if(job_type!=''):
+                        jobs = Post.objects.filter(Q(JobType=job_type) | Q(Pay__gte=min_wage))
+                    else:
+                        jobs = Post.objects.filter(Q(Pay__gte=min_wage))
                 elif not min_wage and max_wage:
-                    jobs = Post.objects.filter(Q(JobType=job_type) | Q(Pay__lte=max_wage))
+                    if(job_type!=''):
+                        jobs = Post.objects.filter(Q(JobType=job_type) | Q(Pay__lte=max_wage))
+                    else:
+                        jobs = Post.objects.filter(Q(Pay__lte=max_wage))
+                elif not min_wage and not max_wage:
+                    if(job_type!=''):
+                        jobs = Post.objects.filter(Q(JobType=job_type) | Q(Pay__range=[min_wage, max_wage]))
+                    else:
+                        jobs = Post.objects.filter(Q(Pay__range=[min_wage, max_wage]))
                 else:
-                    jobs = Post.objects.filter(Q(JobType=job_type) | Q(Pay__range=[min_wage, max_wage]))
+                    if(job_type!=''):
+                        jobs = Post.objects.filter(Q(JobType=job_type))
+                    else:
+                        jobs = Post.objects.all()
+
         else:
             jobs = Post.objects.all()
     else:

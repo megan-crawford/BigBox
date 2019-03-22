@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from . models import Post, Report
 from re import search #regex
 import datetime, pytz
+from django.db.models.fields import BLANK_CHOICE_DASH
 
 class CreateAccountForm(forms.Form):
     print("here")
@@ -130,7 +131,7 @@ class GenerateReportForm(forms.Form):
     
 class ListJobsForm(forms.Form):
     max_distance = forms.IntegerField(min_value=1, max_value=10000, required = False) #in ___ units?
-    job_type = forms.ChoiceField(choices=Post.TYPE_CHOICES, required=False)
+    job_type = forms.ChoiceField(choices= BLANK_CHOICE_DASH + list(Post.TYPE_CHOICES), required=False)
     min_wage = forms.DecimalField(min_value=0, max_value=1000, decimal_places=2, required=False)
     max_wage = forms.DecimalField(min_value=0, max_value=1000, decimal_places=2, required=False)
 
