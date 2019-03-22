@@ -35,6 +35,7 @@ urlpatterns = [
     path('home_creator/', views.home_creator, name='home_creator'),
     path('create_job/', views.create_job, name='create_job'),
     path('add_job/', views.new_job, name='add_job'),
+    path('one_job/', views.one_job, name='one_job'),
     path('all_jobs_creator/', views.all_jobs_creator, name='all_jobs_creator'),
     path('accepted_jobs_creator/', views.accepted_jobs_creator, name='accepted_jobs_creator'),
     path('pending_jobs_creator/', views.pending_jobs_creator, name='pending_jobs_creator'),

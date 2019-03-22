@@ -31,14 +31,14 @@
         </li>
       </ul>
       <div class="dropdown">
-          <button class="btn btn-secondary dropdown-toggle" style="max-height:200%;max-width:200; font-size:16px" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-            Username
-          </button> 
-          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="font-size:16px">
-            <a class="dropdown-item" href="/profile">Account</a>
-            <a class="dropdown-item" href="/login">Sign Out</a>
-          </div>
-        </div>
+                      <button class="btn btn-secondary dropdown-toggle" style="max-height:200%;max-width:200; font-size:16px" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {{ request.user.username }}
+                      </button> 
+                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="font-size:16px">
+                        <a class="dropdown-item" href="/profile/?username={{ request.user.username }}">Account</a>
+                        <a class="dropdown-item" href="/login">Sign Out</a>
+                      </div>
+                    </div>
     </div>
   </nav>
 
@@ -61,7 +61,7 @@
                             <li id="li">
                                 <div class="form-group">    
                                       <label for="distance" id="distanceText">Distance</label>
-                                      <input class="textInput" type="number" id="distance" min="0" data-bind="value:replyNumber"/>
+                                      <input class="textInput" name="distanceInput" type="number" id="distance" min="0" data-bind="value:replyNumber"/>
                                 </div>
                             </li>
                             <li id="li">
@@ -130,6 +130,14 @@
       </div>  
        
         {% for post in request.user.creator.Posts.all %}
+          <!---{% if distanceText.value == 10 %}
+            <p>Nothing</p>
+          {% else %}
+            <p>Something</p>
+          {% endif %}
+          -->
+
+        <a href="\one_job">
         <div class="row d-flex justify-content-center">
           <div class="well" id="job">
               <div class="col-sm-2" style="">
@@ -185,7 +193,7 @@
               
           </div>
       </div>
-      
+    </a>
         {% endfor %}
           
 
@@ -201,6 +209,11 @@
 
            <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script>
+    var distance = document.getElementById("distance").value
+    
+    
+    </script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
