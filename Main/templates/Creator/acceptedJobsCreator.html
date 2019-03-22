@@ -50,7 +50,7 @@
           <div class="row-offcanvas row-offcanvas-left" id="sidebar">
             <div id="sidebar" class="sidebar-offcanvas">
                 <div class="col-md-12">
-                    <form name="filter" id="filter" method="POST">
+                    <form name="filter" id="filter" method="GET">
                         <ul class="nav nav-pills nav-stacked">
                             <li  id="li"><a href="/all_jobs_creator">All Jobs</a></li>
                             <li id="li" class="active"><a href="/accepted_jobs_creator" style="font-size: 15px;">Accepted Jobs</a></li>
@@ -127,39 +127,7 @@
         </form>
       </div>  
 
-      <div class="row d-flex justify-content-center">
-            <div class="well" id="job">
-                <div class="col-sm-2" style="">
-                    <img src="{% static 'images/Work Icons/lawn_care.PNG' %}" style="max-height:100%;max-width:100%;">
-                </div>
-                <div class="col-sm-2" style="">
-                    <p>Job Type</p>
-                </div>
-                <div class="col-sm-4" style="">
-                    <p>Description</p>
-                </div>
-                <div class="col-sm-1" style="">
-                    <p>Pay</p>
-                </div>
-                <div class="col-sm-1" style="">
-                    <p>Date</p>
-                </div>
-                <div class="col-sm-2" style="">
-                    <p>profileName</p>
-                </div>
-                
-            </div>
-        </div>
-        <div class="row d-flex justify-content-center">
-          <div class="well" id="job">
-                <a>Test Job2</a>
-          </div>
-        </div>
-        <div class="row d-flex justify-content-center">
-            <div class="well" id="job">
-                <p>Test Job3</p>
-            </div>
-        </div>
+      
     </div>
 </div>
 

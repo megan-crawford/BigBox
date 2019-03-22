@@ -50,7 +50,7 @@
           <div class="row-offcanvas row-offcanvas-left" id="sidebar">
             <div id="sidebar" class="sidebar-offcanvas">
                 <div class="col-md-12">
-                    <form name="filter" id="filter" method="POST">
+                    <form name="filter" id="filter" method="GET">
                         <ul class="nav nav-pills nav-stacked">
                             <li id="li"><a href="/all_jobs_creator">All Jobs</a></li>
                             <li id="li"><a href="/accepted_jobs_creator">Accepted Jobs</a></li>
@@ -59,12 +59,13 @@
                             <li id="li">
                                 <div class="form-group">    
                                       <label for="distance" id="distanceText">Distance</label>
-                                      <input class="textInput" type="number" id="distance" min="0" data-bind="value:replyNumber"/>
+                                      <input class="textInput" name="max_distance" type="number" id="distance" min="0" data-bind="value:replyNumber"/>
                                 </div>
                             </li>
                             <li id="li">
-                              <div class="form-group">    
-                                <label for="jobType" id="jobTypeText">Job Type</label>
+                              <div class="form-group">
+                                {{ form.job_type }}
+                                <!---<label for="jobType" id="jobTypeText">Job Type</label>
                                 <div class="input-group">
                                   <select class="custom-select" id="inputGroupSelect04">
                                     <option selected>Choose...</option>
@@ -76,18 +77,19 @@
                                     <option value="Other">Other</option>
                                   </select>
                                 </div>
+                              -->
                               </div>
                             </li>
                             <li id="li">
                               <div class="form-group">    
                                     <label for="minimumWage" id="minimumWageText">Minimum Wage</label>
-                                    <input class="textInput" type="number" id="minimumWage" min="0" data-bind="value:replyNumber"/>
+                                    <input name="min_wage" class="textInput" type="number" id="minimumWage" min="0" data-bind="value:replyNumber"/>
                               </div>
                           </li>
                           <li id="li">
                             <div class="form-group">    
                                   <label for="maximumWage" id="maximumWageText">Maximum Wage</label>
-                                  <input class="textInput" type="number" id="maximumWage" min="0" data-bind="value:replyNumber"/>
+                                  <input name="max_wage" class="textInput" type="number" id="maximumWage" min="0" data-bind="value:replyNumber"/>
                             </div>
                           </li>
                           <li id="li">
@@ -118,7 +120,7 @@
       </div>
     <div class="col-sm-10">
       <div class="row d-flex justify-content-center">
-        <form name="search" id="search" method="POST">
+        <form name="search" id="search" method="GET">
           {% csrf_token %}
           <div class="form-group">
             <input type="search" class="form-control" id="searchInput" placeholder="Search Job">
@@ -126,17 +128,69 @@
 
         </form>
       </div>  
+       
+        {% for post in jobs %}
+          
 
+        <a href="\one_job">
         <div class="row d-flex justify-content-center">
-            <div class="well" id="job">
-                <p>Test Job4</p>
-            </div>
-        </div>
-        <div class="row d-flex justify-content-center">
-            <div class="well" id="job">
-                <p>Test Job5</p>
-            </div>
-        </div>
+          <div class="well" id="job">
+              <div class="col-sm-2" style="">
+                {% if post.JobType == 'LM' %}
+                  <img src="{% static 'images/Work Icons/lawn_care.PNG' %}" style="max-height:100%;max-width:100%;">
+                {% elif post.JobType == 'SS' %}
+                  <img src="{% static 'images/Work Icons/snow_shoveling.PNG' %}" style="max-height:100%;max-width:100%;">
+                {% elif post.JobType == 'DW' %}
+                  <img src="{% static 'images/Work Icons/dog_walking.PNG' %}" style="max-height:100%;max-width:100%;">
+                {% elif post.JobType == 'PS' %}
+                  <img src="{% static 'images/Work Icons/pet_care.PNG' %}" style="max-height:100%;max-width:100%;">
+                {% elif post.JobType == 'BS' %}
+                  <img src="{% static 'images/Work Icons/baby_sitting.PNG' %}" style="max-height:100%;max-width:100%;">
+                {% elif post.JobType == 'C' %}
+                  <img src="{% static 'images/Work Icons/cleaning.PNG' %}" style="max-height:100%;max-width:100%;">
+                {% elif post.JobType == 'M' %}
+                  <img src="{% static 'images/Work Icons/manual_labor.PNG' %}" style="max-height:100%;max-width:100%;">
+                {% elif post.JobType == 'O' %}
+                  <img src="{% static 'images/Work Icons/other.PNG' %}" style="max-height:100%;max-width:100%;">
+                {% endif %}
+              </div>
+              <div class="col-sm-2" style="">
+              {% if post.JobType == 'LM' %}
+                <p>Lawn-Mowing</p>  
+              {% elif post.JobType == 'SS' %}
+                <p>Snow-Shoveling</p>  
+              {% elif post.JobType == 'DW' %}
+                <p>Dog-Walking</p>  
+              {% elif post.JobType == 'PS' %}
+                <p>Pet-Sitting</p>  
+              {% elif post.JobType == 'BS' %}
+                <p>Baby-Sitting</p>  
+              {% elif post.JobType == 'C' %}
+                <p>Cleaning</p>  
+              {% elif post.JobType == 'M' %}
+                <p>Moving</p>  
+              {% elif post.JobType == 'O' %}
+                <p>Other</p>  
+              {% endif %}
+              </div>
+              <div class="col-sm-4" style="">
+                  <p>{{ post.Description }}</p>
+              </div>              
+              <div class="col-sm-1" style="">
+                  <p>Pay: {{ post.Pay }}</p>
+              </div>
+              <div class="col-sm-1" style="">
+                  <!--<p>Date: {{ post.Date }}</p>-->
+              </div>
+              <div class="col-sm-2" style="">
+                  <p>{{ request.user.username }}</p>
+              </div>
+              
+          </div>
+      </div>
+    </a>
+        {% endfor %}
+        
     </div>
 </div>
 
