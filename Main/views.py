@@ -225,9 +225,11 @@ def all_jobs_creator(request):
             min_wage = form.cleaned_data['min_wage']
             max_wage = form.cleaned_data['max_wage']
 
-            if (job_type and min_wage and max_wage):
+            if (job_type != '' and min_wage and max_wage): #all inputs filled in
                 jobs = request.user.creator.Posts.filter(JobType=job_type, Pay__range=[min_wage, max_wage])
-            else:
+            elif (job_type == '' and not min_wage and not max_wage): #no inputs filled in
+                jobs = request.user.creator.Posts.all()
+            else: #mixed inputs filled in
                 if min_wage and not max_wage:
                     jobs = request.user.creator.Posts.filter(Q(JobType=job_type) | Q(Pay__gte=min_wage))
                 elif not min_wage and max_wage:
@@ -259,9 +261,11 @@ def pending_jobs_creator(request):
             min_wage = form.cleaned_data['min_wage']
             max_wage = form.cleaned_data['max_wage']
 
-            if (job_type and min_wage and max_wage):
+            if (job_type != '' and min_wage and max_wage): #all inputs filled in
                 jobs = request.user.creator.Posts.filter(JobType=job_type, Pay__range=[min_wage, max_wage])
-            else:
+            elif (job_type == '' and not min_wage and not max_wage): #no inputs filled in
+                jobs = request.user.creator.Posts.all()
+            else: #mixed inputs filled in
                 if min_wage and not max_wage:
                     jobs = request.user.creator.Posts.filter(Q(JobType=job_type) | Q(Pay__gte=min_wage))
                 elif not min_wage and max_wage:
