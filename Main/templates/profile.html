@@ -6,6 +6,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+	<title>{{ request.user.username }}'s Profile</title>
+
     <!-- Bootstrap CSS -->
 
 
@@ -90,17 +92,24 @@
 		<div class="col-md-7"><img src="{% static 'images/ratebad.png' %}" title="User has No Reports!" width="20" height="20"></div>
 
 	{% endif %}
-		<div class="col-md-4">
+		<div class="col-md-3">
 		<div class="button">
 				<button type="button" class="btn btn-primary btn-lg btn-block">View my Job Listings</button>
 			</div>
 		</div>
-		<div class="col-md-1">
-		<a href="/generate_report/?{{user_info.username}}">
+		<div class="col-md-2">
 			<div class="button">
-				<button type="button" class="btn btn-danger btn-sm btn-block">Report User</button>
+			{% if user_info.username == request.user.username %}
+							<a href="/update_account">
+							<button type="button" class="btn btn-primary btn-lg btn-block">Edit Account Info</button>
+							</a>
+				{% else %}
+								<a href="/generate_report/?{{user_info.username}}">
+								<button type="button" class="btn btn-danger btn-sm btn-block">Report User</button>
+								</a>
+
+				{% endif %}
 			</div>
-			</a>
 		</div>
 	</div>
 	
