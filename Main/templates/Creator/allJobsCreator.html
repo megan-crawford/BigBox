@@ -52,7 +52,7 @@
           <div class="row-offcanvas row-offcanvas-left" id="sidebar">
             <div id="sidebar" class="sidebar-offcanvas">
                 <div class="col-md-12">
-                    <form name="filter" id="filter" method="POST">
+                    <form name="filter" id="filter" method="GET">
                         <ul class="nav nav-pills nav-stacked">
                             <li id="li" class="active"><a href="/all_jobs_creator" style="font-size: 15px">All Jobs</a></li>
                             <li id="li"><a href="/accepted_jobs_creator">Accepted Jobs</a></li>
@@ -61,12 +61,13 @@
                             <li id="li">
                                 <div class="form-group">    
                                       <label for="distance" id="distanceText">Distance</label>
-                                      <input class="textInput" name="distanceInput" type="number" id="distance" min="0" data-bind="value:replyNumber"/>
+                                      <input class="textInput" name="max_distance" type="number" id="distance" min="0" data-bind="value:replyNumber"/>
                                 </div>
                             </li>
                             <li id="li">
-                              <div class="form-group">    
-                                <label for="jobType" id="jobTypeText">Job Type</label>
+                              <div class="form-group">
+                                {{ form.job_type }}
+                                <!---<label for="jobType" id="jobTypeText">Job Type</label>
                                 <div class="input-group">
                                   <select class="custom-select" id="inputGroupSelect04">
                                     <option selected>Choose...</option>
@@ -78,18 +79,19 @@
                                     <option value="Other">Other</option>
                                   </select>
                                 </div>
+                              -->
                               </div>
                             </li>
                             <li id="li">
                               <div class="form-group">    
                                     <label for="minimumWage" id="minimumWageText">Minimum Wage</label>
-                                    <input class="textInput" type="number" id="minimumWage" min="0" data-bind="value:replyNumber"/>
+                                    <input name="min_wage" class="textInput" type="number" id="minimumWage" min="0" data-bind="value:replyNumber"/>
                               </div>
                           </li>
                           <li id="li">
                             <div class="form-group">    
                                   <label for="maximumWage" id="maximumWageText">Maximum Wage</label>
-                                  <input class="textInput" type="number" id="maximumWage" min="0" data-bind="value:replyNumber"/>
+                                  <input name="max_wage" class="textInput" type="number" id="maximumWage" min="0" data-bind="value:replyNumber"/>
                             </div>
                           </li>
                           <li id="li">
@@ -129,13 +131,8 @@
         </form>
       </div>  
        
-        {% for post in request.user.creator.Posts.all %}
-          <!---{% if distanceText.value == 10 %}
-            <p>Nothing</p>
-          {% else %}
-            <p>Something</p>
-          {% endif %}
-          -->
+        {% for post in jobs %}
+          
 
         <a href="\one_job">
         <div class="row d-flex justify-content-center">
