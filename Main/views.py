@@ -11,6 +11,7 @@ from django.core.exceptions import ValidationError
 from django.template import loader #?
 from django.db.models import Q #for Django OR filters
 from django.db.models.fields import BLANK_CHOICE_DASH
+
 def create_account(request):
     if request.method == "POST": #user clicks register button
         #print('create account post')
@@ -174,43 +175,27 @@ def create_job(request):
 def list_job(request):
     #TODO: check if user is logged in
     if request.method == "GET":
-        print('list job get')
+        #print('list job get')
         form = ListJobsForm(request.GET)
 
         if form.is_valid():
-            print('list job valid')
+            #print('list job valid')
             #max_distance = form.cleaned_data['max_distance']
             job_type = form.cleaned_data['job_type']
             min_wage = form.cleaned_data['min_wage']
             max_wage = form.cleaned_data['max_wage']
-              
-            if (job_type and min_wage and max_wage):
-                if(job_type!=''):
-                    jobs = Post.objects.filter(JobType=job_type, Pay__range=[min_wage, max_wage])
-                else:
-                    jobs = Post.objects.filter(Pay__range=[min_wage, max_wage])
-            else:
-                if min_wage and not max_wage:
-                    if(job_type!=''):
-                        jobs = Post.objects.filter(Q(JobType=job_type) | Q(Pay__gte=min_wage))
-                    else:
-                        jobs = Post.objects.filter(Q(Pay__gte=min_wage))
-                elif not min_wage and max_wage:
-                    if(job_type!=''):
-                        jobs = Post.objects.filter(Q(JobType=job_type) | Q(Pay__lte=max_wage))
-                    else:
-                        jobs = Post.objects.filter(Q(Pay__lte=max_wage))
-                elif not min_wage and not max_wage:
-                    if(job_type!=''):
-                        jobs = Post.objects.filter(Q(JobType=job_type))
-                    else:
-                        jobs = Post.objects.filter()
-                else:
-                    if(job_type!=''):
-                        jobs = Post.objects.filter(Q(JobType=job_type))
-                    else:
-                        jobs = Post.objects.all()
 
+            if (job_type != '' and min_wage and max_wage): #all inputs filled in
+                jobs = Post.objects.filter(JobType=job_type, Pay__range=[min_wage, max_wage])
+            elif (job_type == '' and not min_wage and not max_wage): #no inputs filled in
+                jobs = Post.objects.all()
+            else: #mixed inputs filled in
+                if min_wage and not max_wage:
+                    jobs = Post.objects.filter(Q(JobType=job_type) | Q(Pay__gte=min_wage))
+                elif not min_wage and max_wage:
+                    jobs = Post.objects.filter(Q(JobType=job_type) | Q(Pay__lte=max_wage))
+                else:
+                    jobs = Post.objects.filter(Q(JobType=job_type) | Q(Pay__range=[min_wage, max_wage]))
         else:
             jobs = Post.objects.all()
     else:
@@ -233,16 +218,18 @@ def all_jobs_creator(request):
         form = ListJobsForm(request.GET)
 
         if form.is_valid():
-            print('list job valid')
+            print('creator job valid')
 
             #max_distance = form.cleaned_data['max_distance']
             job_type = form.cleaned_data['job_type']
             min_wage = form.cleaned_data['min_wage']
             max_wage = form.cleaned_data['max_wage']
 
-            if (job_type and min_wage and max_wage):
+            if (job_type != '' and min_wage and max_wage): #all inputs filled in
                 jobs = request.user.creator.Posts.filter(JobType=job_type, Pay__range=[min_wage, max_wage])
-            else:
+            elif (job_type == '' and not min_wage and not max_wage): #no inputs filled in
+                jobs = request.user.creator.Posts.all()
+            else: #mixed inputs filled in
                 if min_wage and not max_wage:
                     jobs = request.user.creator.Posts.filter(Q(JobType=job_type) | Q(Pay__gte=min_wage))
                 elif not min_wage and max_wage:
@@ -274,9 +261,11 @@ def pending_jobs_creator(request):
             min_wage = form.cleaned_data['min_wage']
             max_wage = form.cleaned_data['max_wage']
 
-            if (job_type and min_wage and max_wage):
+            if (job_type != '' and min_wage and max_wage): #all inputs filled in
                 jobs = request.user.creator.Posts.filter(JobType=job_type, Pay__range=[min_wage, max_wage])
-            else:
+            elif (job_type == '' and not min_wage and not max_wage): #no inputs filled in
+                jobs = request.user.creator.Posts.all()
+            else: #mixed inputs filled in
                 if min_wage and not max_wage:
                     jobs = request.user.creator.Posts.filter(Q(JobType=job_type) | Q(Pay__gte=min_wage))
                 elif not min_wage and max_wage:
@@ -340,6 +329,9 @@ def past_jobs_seeker(request):
     return render(request, 'Seeker/pastJobsSeeker.html')
 
 def sendEmail(subject, message, emailTo):
-    email = EmailMessage(subject, message, to=[emailTo])
-    num = email.send(fail_silently=False)
-    return num
+    try:
+        email = EmailMessage(subject, message, to=[emailTo])
+        num = email.send()
+    except:
+        return -1
+    return 1

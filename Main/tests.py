@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
 from . models import Profile, Post, Review, Report, JobChoices, Review, Seeker, Creator
-from . forms import ListJobsForm
+from . forms import ListJobsForm, GenerateReportForm
 from django.test import Client
 from .views import sendEmail
 from django.core import mail
@@ -18,7 +18,7 @@ class DatabaseClassCreation(TestCase):
 
         Profile.objects.create(User=user, Age="23")
         post = Post.objects.create(Pay=12.50, Location="Kentucky", DateTime="2018-11-20T15:58:44.767594-06:00", Description="I love Winky", JobType="Snow Shoveling")
-        Report.objects.create(Classification="No show", Details="Winky was here")
+        Report.objects.create(User=user, Classification="No show", Details="Winky was here")
         JobChoices.objects.create(Types = "Lawn Mowing")
         review1 = Review.objects.create(Rating = 5)
         review2 = Review.objects.create(Rating = 1)
@@ -160,7 +160,7 @@ class CreateJob(TestCase):
 
     def test_view_valid(self):
         self.client.post('/create_job/', {
-                        'pay': 20.00, 'date_time': '2019-10-25',
+                        'pay': 10.00, 'date_time': '2019-10-25',
                         'description': 'work involves ...', 'job_type': Post.BABYSITTING,
         })
 
@@ -173,8 +173,8 @@ class CreateJob(TestCase):
 
     def test_view_empty_fields(self):
         response = self.client.post('/create_job/', {
-                                    #no pay, no date time
-                                    'description': 'work involves ...', 'job_type': Post.BABYSITTING,
+                                    'pay': None, 'date_time': '',
+                                    'description': 'will be moving ...', 'job_type': Post.MOVING,
         })
         self.assertFalse(response.context['form'].is_valid())
         self.assertEqual(Post.objects.all().count(), 0)
@@ -182,7 +182,15 @@ class CreateJob(TestCase):
     def test_view_invalid_date(self):
         response = self.client.post('/create_job/', {
                                     'pay': 20.00, 'date_time': '2000-10-25', #date was a long time ago
-                                    'description': 'work involves ...', 'job_type': Post.BABYSITTING,
+                                    'description': 'work is ...', 'job_type': Post.SNOWSHOVELING,
+        })
+        self.assertFalse(response.context['form'].is_valid())
+        self.assertEqual(Post.objects.all().count(), 0)
+
+    def test_view_invalid_pay(self):
+        response = self.client.post('/create_job/', {
+                                    'pay': -20.00, 'date_time': '2020-10-25',
+                                    'description': 'work will be ...', 'job_type': Post.DOGWALKING,
         })
         self.assertFalse(response.context['form'].is_valid())
         self.assertEqual(Post.objects.all().count(), 0)
@@ -208,6 +216,10 @@ class GenerateReport(TestCase):
         user = User.objects.first() #get the only user
         self.assertTrue(Report.objects.filter(User=user).exists())
 
+    def test_form_invalid_empty_details(self):
+        form = GenerateReportForm({'classification': Report.PAYMENT, 'details': ''})
+        self.assertFalse(form.is_valid())
+
 class ListJob(TestCase):
     def setUp(self):
         self.client = Client()
@@ -215,6 +227,7 @@ class ListJob(TestCase):
                         'username': 'user1', 'password': 'vf83g9f7fg', 'password_confirmation': 'vf83g9f7fg',
                         'email': 'email@email.com', 'first_name': 'John', 'last_name': 'Smith', 'age': 20                    
         })
+
         self.client.post('/create_job/', {
                         'pay': 15.00, 'date_time': '2020-10-25',
                         'description': 'work involves ...', 'job_type': Post.DOGWALKING,
@@ -264,6 +277,43 @@ class ListJob(TestCase):
         response = self.client.get('/list_job/', {'job_type': Post.DOGWALKING, 'min_wage': 15.00, 'max_wage': 25.00})
         self.assertEqual(response.context['jobs'].count(), 1)
 
+class AllJobsCreator(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.client.post('/create_account/', { #user requered to be logged in to create jobs
+                        'username': 'user', 'password': 'vf83g9f7fg', 'password_confirmation': 'vf83g9f7fg',
+                        'email': 'email3@email.com', 'first_name': 'Jack', 'last_name': 'Smith', 'age': 24                   
+        })
+
+        self.client.post('/create_job/', {
+                        'pay': 4.00, 'date_time': '2020-5-20',
+                        'description': 'work involves ...', 'job_type': Post.DOGWALKING,
+        })
+        self.client.post('/create_job/', {
+                        'pay': 50.00, 'date_time': '2021-10-13',
+                        'description': 'work involves ...', 'job_type': Post.BABYSITTING,
+        })
+        self.client.post('/create_job/', {
+                        'pay': 13.00, 'date_time': '2020-10-26',
+                        'description': 'work involves ...', 'job_type': Post.SNOWSHOVELING,
+        })
+
+    def test_view_correct_jobs_max_wage(self):
+        response = self.client.get('/all_jobs_creator/', {'max_wage': 13.00})
+        self.assertEqual(response.context['jobs'].count(), 2)
+
+    def test_view_correct_jobs_min_wage(self):
+        response = self.client.get('/all_jobs_creator/', {'min_wage': 30.00})
+        self.assertEqual(response.context['jobs'].count(), 1)
+
+    def test_view_correct_jobs_wage(self):
+        response = self.client.get('/all_jobs_creator/', {'min_wage': 4.00, 'max_wage': 25.00})
+        self.assertEqual(response.context['jobs'].count(), 2)
+
+    def test_view_correct_jobs_type(self):
+        response = self.client.get('/list_job/', {'job_type': Post.DOGWALKING})
+        self.assertEqual(response.context['jobs'].count(), 1)
+
 class TestSendEmail(TestCase):
     def test1(self):
         with self.settings(
@@ -288,6 +338,35 @@ class TestSendEmail(TestCase):
             DEFAULT_FROM_EMAIL = 'djangoBoiii@gmail.com'
         ):
             sendEmail("test_subject2", "test_message2", 'pattnewbie@gmail.com')
+
+    def test3(self):
+        email = input("Enter your email: ")
+        with self.settings(
+            EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend',
+            EMAIL_HOST = 'smtp.gmail.com',
+            EMAIL_PORT = 587,
+            EMAIL_HOST_USER = 'djangoBoiii@gmail.com',
+            EMAIL_HOST_PASSWORD = 'Pa$Sword1',
+            EMAIL_USE_TLS = True,
+            DEFAULT_FROM_EMAIL = 'djangoBoiii@gmail.com'
+        ):
+            sendEmail("test_subject3", "test_message3", email)
+
+    def test4(self):
+        subject = input("Enter the subject: ")
+        message = input("Enter the message: ")
+        email = input("Enter your email: ")
+        with self.settings(
+            EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend',
+            EMAIL_HOST = 'smtp.gmail.com',
+            EMAIL_PORT = 587,
+            EMAIL_HOST_USER = 'djangoBoiii@gmail.com',
+            EMAIL_HOST_PASSWORD = 'Pa$Sword1',
+            EMAIL_USE_TLS = True,
+            DEFAULT_FROM_EMAIL = 'djangoBoiii@gmail.com'
+        ):
+            num = sendEmail(subject, message, email)
+            print(num)
         #connection = mail.get_connection()
         #connection.open()
 
