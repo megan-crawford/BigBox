@@ -9,6 +9,7 @@ from . models import Profile, Post, Seeker, Creator, Report
 from django.core.mail import EmailMessage, send_mail
 from django.core.exceptions import ValidationError
 from django.template import loader #?
+from django.db.models import Q #for Django OR filters
 
 def create_account(request):
     if request.method == "POST": #user clicks register button
@@ -62,7 +63,6 @@ def profile(request):
             return render(request, 'profile.html', {'user_info':user, 'num_reports':num_reports})
 
     return render(request, 'profile.html')
-
 
 #TODO: change to update profile
 def update_account(request):
@@ -172,7 +172,6 @@ def create_job(request):
     return render(request, 'Jobs/bigBoxJob.html', {'form':form})
 
 def list_job(request):
-    allJobs = Post.objects.all() #
     #TODO: check if user is logged in
     if request.method == "GET":
         #print('list job get')
@@ -186,14 +185,22 @@ def list_job(request):
             min_wage = form.cleaned_data['min_wage']
             max_wage = form.cleaned_data['max_wage']
 
-            jobs = request.user.creator.Posts.filter(JobType=job_type, Pay__range=[min_wage, max_wage])
+            if (job_type and min_wage and max_wage):
+                jobs = Post.objects.filter(JobType=job_type, Pay__range=[min_wage, max_wage])
+            else:
+                if min_wage and not max_wage:
+                    jobs = Post.objects.filter(Q(JobType=job_type) | Q(Pay__gte=min_wage))
+                elif not min_wage and max_wage:
+                    jobs = Post.objects.filter(Q(JobType=job_type) | Q(Pay__lte=max_wage))
+                else:
+                    jobs = Post.objects.filter(Q(JobType=job_type) | Q(Pay__range=[min_wage, max_wage]))
         else:
-            jobs = request.user.creator.Posts.all()
+            jobs = Post.objects.all()
     else:
-        jobs = request.user.creator.Posts.all()
+        jobs = Post.objects.all()
         form = ListJobsForm()
-    return render(request, 'Jobs/listJobs.html', {'allJobs': allJobs})
-    #return render(request, 'Jobs/listJobs.html', {'form':form, 'jobs':jobs})
+
+    return render(request, 'Jobs/listJobs.html', {'form':form, 'jobs':jobs})
 
 def new_job(request):
     return render(request, 'Jobs/viewNewJob.html')
@@ -258,10 +265,7 @@ def generate_report(request):
 def past_jobs_seeker(request):
     return render(request, 'Seeker/pastJobsSeeker.html')
 
-<<<<<<< HEAD
-=======
 def sendEmail(subject, message, emailTo):
     email = EmailMessage(subject, message, to=[emailTo])
     num = email.send(fail_silently=False)
     return num
->>>>>>> 1f39f775626df49df811fcb1c5fb2dfebca4d765

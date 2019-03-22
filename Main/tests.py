@@ -211,7 +211,7 @@ class GenerateReport(TestCase):
 class ListJob(TestCase):
     def setUp(self):
         self.client = Client()
-        self.client.post('/create_account/', {
+        self.client.post('/create_account/', { #user requered to be logged in to create jobs
                         'username': 'user1', 'password': 'vf83g9f7fg', 'password_confirmation': 'vf83g9f7fg',
                         'email': 'email@email.com', 'first_name': 'John', 'last_name': 'Smith', 'age': 20                    
         })
@@ -225,11 +225,11 @@ class ListJob(TestCase):
         })
         self.client.post('/create_job/', {
                         'pay': 25.00, 'date_time': '2020-10-25',
-                        'description': 'work involves ...', 'job_type': Post.DOGWALKING,
+                        'description': 'work involves ...', 'job_type': Post.SNOWSHOVELING,
         })
         self.client.post('/create_job/', {
                         'pay': 30.00, 'date_time': '2021-10-25',
-                        'description': 'work involves ...', 'job_type': Post.SNOWSHOVELING,
+                        'description': 'work involves ...', 'job_type': Post.DOGWALKING,
         })
 
     def test_form_valid(self):
@@ -245,12 +245,24 @@ class ListJob(TestCase):
         self.assertFalse(form.is_valid())
 
     def test_view_correct_jobs_wage(self):
-        response = self.client.post('/list_job/', {'min_wage': 15.00, 'max_wage': 25.00})
+        response = self.client.get('/list_job/', {'min_wage': 15.00, 'max_wage': 25.00})
+        self.assertEqual(response.context['jobs'].count(), 3)
+
+    def test_view_correct_jobs_max_wage(self):
+        response = self.client.get('/list_job/', {'max_wage': 20.00})
+        self.assertEqual(response.context['jobs'].count(), 2)
+
+    def test_view_correct_jobs_min_wage(self):
+        response = self.client.get('/list_job/', {'min_wage': 20.00})
         self.assertEqual(response.context['jobs'].count(), 3)
 
     def test_view_correct_jobs_type(self):
-        response = self.client.post('/list_job/', {'job_type': Post.DOGWALKING})
+        response = self.client.get('/list_job/', {'job_type': Post.DOGWALKING})
         self.assertEqual(response.context['jobs'].count(), 2)
+
+    def test_view_correct_jobs_type_and_wage(self):
+        response = self.client.get('/list_job/', {'job_type': Post.DOGWALKING, 'min_wage': 15.00, 'max_wage': 25.00})
+        self.assertEqual(response.context['jobs'].count(), 1)
 
 class TestSendEmail(TestCase):
     def test1(self):
