@@ -160,7 +160,7 @@ class CreateJob(TestCase):
 
     def test_view_valid(self):
         self.client.post('/create_job/', {
-                        'pay': 20.00, 'date_time': '2019-10-25',
+                        'pay': 10.00, 'date_time': '2019-10-25',
                         'description': 'work involves ...', 'job_type': Post.BABYSITTING,
         })
 
@@ -173,8 +173,8 @@ class CreateJob(TestCase):
 
     def test_view_empty_fields(self):
         response = self.client.post('/create_job/', {
-                                    #no pay, no date time
-                                    'description': 'work involves ...', 'job_type': Post.BABYSITTING,
+                                    'pay': None, 'date_time': '',
+                                    'description': 'will be moving ...', 'job_type': Post.MOVING,
         })
         self.assertFalse(response.context['form'].is_valid())
         self.assertEqual(Post.objects.all().count(), 0)
@@ -182,7 +182,15 @@ class CreateJob(TestCase):
     def test_view_invalid_date(self):
         response = self.client.post('/create_job/', {
                                     'pay': 20.00, 'date_time': '2000-10-25', #date was a long time ago
-                                    'description': 'work involves ...', 'job_type': Post.BABYSITTING,
+                                    'description': 'work is ...', 'job_type': Post.SNOWSHOVELING,
+        })
+        self.assertFalse(response.context['form'].is_valid())
+        self.assertEqual(Post.objects.all().count(), 0)
+
+    def test_view_invalid_pay(self):
+        response = self.client.post('/create_job/', {
+                                    'pay': -20.00, 'date_time': '2020-10-25',
+                                    'description': 'work will be ...', 'job_type': Post.DOGWALKING,
         })
         self.assertFalse(response.context['form'].is_valid())
         self.assertEqual(Post.objects.all().count(), 0)
@@ -291,15 +299,15 @@ class AllJobsCreator(TestCase):
         })
 
     def test_view_correct_jobs_max_wage(self):
-        response = self.client.get('/list_job/', {'max_wage': 13.00})
+        response = self.client.get('/all_jobs_creator/', {'max_wage': 13.00})
         self.assertEqual(response.context['jobs'].count(), 2)
 
     def test_view_correct_jobs_min_wage(self):
-        response = self.client.get('/list_job/', {'min_wage': 30.00})
+        response = self.client.get('/all_jobs_creator/', {'min_wage': 30.00})
         self.assertEqual(response.context['jobs'].count(), 1)
 
     def test_view_correct_jobs_wage(self):
-        response = self.client.get('/list_job/', {'min_wage': 4.00, 'max_wage': 25.00})
+        response = self.client.get('/all_jobs_creator/', {'min_wage': 4.00, 'max_wage': 25.00})
         self.assertEqual(response.context['jobs'].count(), 2)
 
     def test_view_correct_jobs_type(self):
