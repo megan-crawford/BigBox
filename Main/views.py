@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout
 from django.contrib.auth import authenticate
 from django.http import HttpResponse
-from . forms import CreateAccountForm, UpdateAccountForm, CreateJobForm, ListJobsForm
+from . forms import CreateAccountForm, UpdateAccountForm, CreateJobForm, ListJobsForm, GenerateReportForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from . models import Profile, Post, Seeker, Creator, Report
@@ -226,8 +226,31 @@ def interested_jobs_seeker(request):
 	
 #User Report Page
 def generate_report(request):
+    #check get info
+    if request.GET.get('username'):
+        username = request.GET.get('username')
+        user = User.objects.filter(username=username).first()
+        if not user:
+            return render(request, 'generate_report.html') #no form info should be displayed, it isn't needed in this case
+    else:
+        return render(request, 'generate_report.html')
 
-    return render(request, 'Creator/generate_report.html')
+    #process request
+    if request.method == "POST":
+        #print('create report post')
+        form = GenerateReportForm(request.POST)
+
+        if form.is_valid():
+            #print('create report valid')
+            classification = form.cleaned_data['classification']
+            details = form.cleaned_data['details']
+            Report.objects.create(Classification=classification, Details=details, User=user)
+
+            return redirect('/profile/?username=' + user.username)
+    else:
+        form = GenerateReportForm()
+
+    return render(request, 'generate_report.html', {'form':form, 'user_info':user})
 
 def past_jobs_seeker(request):
     return render(request, 'Seeker/pastJobsSeeker.html')
