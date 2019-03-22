@@ -85,11 +85,11 @@
 	{% if num_reports == 0 %}
 		<div class="col-md-7"><img src="{% static 'images/rategood.png' %}" title="User has No Reports!" width="20" height="20"></div>
 		
-	{% elif num_reports > 3 %}
-		<div class="col-md-7"><img src="{% static 'images/ratemedium.png' %}" title="User has No Reports!" width="20" height="20"></div>
+	{% elif num_reports < 3 %}
+		<div class="col-md-7"><img src="{% static 'images/ratemedium.png' %}" title="User has some reports." width="20" height="20"></div>
 	
 	{% else %}
-		<div class="col-md-7"><img src="{% static 'images/ratebad.png' %}" title="User has No Reports!" width="20" height="20"></div>
+		<div class="col-md-7"><img src="{% static 'images/ratebad.png' %}" title="User has many reports..." width="20" height="20"></div>
 
 	{% endif %}
 		<div class="col-md-3">
@@ -104,7 +104,7 @@
 							<button type="button" class="btn btn-primary btn-lg btn-block">Edit Account Info</button>
 							</a>
 				{% else %}
-								<a href="/generate_report/?{{user_info.username}}">
+								<a href="/generate_report/?username={{user_info.username}}">
 								<button type="button" class="btn btn-danger btn-sm btn-block">Report User</button>
 								</a>
 
