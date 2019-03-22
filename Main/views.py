@@ -2,12 +2,13 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout
 from django.contrib.auth import authenticate
 from django.http import HttpResponse
-from . forms import CreateAccountForm, UpdateAccountForm, CreateJobForm, ListJobsForm
+from . forms import CreateAccountForm, UpdateAccountForm, CreateJobForm, ListJobsForm, GenerateReportForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
-from . models import Profile, Post, Seeker, Creator
+from . models import Profile, Post, Seeker, Creator, Report
+from django.core.mail import EmailMessage, send_mail
 from django.core.exceptions import ValidationError
-
+from django.template import loader #?
 
 def create_account(request):
     if request.method == "POST": #user clicks register button
@@ -171,8 +172,8 @@ def create_job(request):
     return render(request, 'Jobs/bigBoxJob.html', {'form':form})
 
 def list_job(request):
+    allJobs = Post.objects.all() #
     #TODO: check if user is logged in
-
     if request.method == "GET":
         #print('list job get')
         form = ListJobsForm(request.GET)
@@ -191,11 +192,14 @@ def list_job(request):
     else:
         jobs = request.user.creator.Posts.all()
         form = ListJobsForm()
-        
-    return render(request, 'Jobs/listJobs.html', {'form':form, 'jobs':jobs})
+    return render(request, 'Jobs/listJobs.html', {'allJobs': allJobs})
+    #return render(request, 'Jobs/listJobs.html', {'form':form, 'jobs':jobs})
 
 def new_job(request):
     return render(request, 'Jobs/viewNewJob.html')
+
+def view_one_job(request):
+    return render(request, 'Jobs/oneJob.html')
 
 #Job Creator Pages
 def all_jobs_creator(request):
@@ -225,8 +229,39 @@ def interested_jobs_seeker(request):
 	
 #User Report Page
 def generate_report(request):
-    return render(request, 'generate_report.html')
+    #check get info
+    if request.GET.get('username'):
+        username = request.GET.get('username')
+        user = User.objects.filter(username=username).first()
+        if not user:
+            return render(request, 'generate_report.html') #no form info should be displayed, it isn't needed in this case
+    else:
+        return render(request, 'generate_report.html')
+
+    #process request
+    if request.method == "POST":
+        #print('create report post')
+        form = GenerateReportForm(request.POST)
+
+        if form.is_valid():
+            #print('create report valid')
+            classification = form.cleaned_data['classification']
+            details = form.cleaned_data['details']
+            Report.objects.create(Classification=classification, Details=details, User=user)
+
+            return redirect('/profile/?username=' + user.username)
+    else:
+        form = GenerateReportForm()
+
+    return render(request, 'generate_report.html', {'form':form, 'user_info':user})
 
 def past_jobs_seeker(request):
     return render(request, 'Seeker/pastJobsSeeker.html')
 
+<<<<<<< HEAD
+=======
+def sendEmail(subject, message, emailTo):
+    email = EmailMessage(subject, message, to=[emailTo])
+    num = email.send(fail_silently=False)
+    return num
+>>>>>>> 1f39f775626df49df811fcb1c5fb2dfebca4d765

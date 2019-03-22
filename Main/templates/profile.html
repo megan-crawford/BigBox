@@ -35,7 +35,7 @@
                   </ul>
                   <div class="dropdown">
                       <button class="btn btn-secondary dropdown-toggle" style="max-height:200%;max-width:200; font-size:16px" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Username
+                        {{ request.user.username }}
                       </button> 
                       <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="font-size:16px">
                         <a class="dropdown-item" href="/profile">Account</a>
@@ -66,7 +66,7 @@
 					<p>{{user_info.first_name}} {{user_info.last_name}} </p>
 				</div>
 				<div class="username" style="font-size:14px">
-					<p>{{user_info.username}}</p>
+					<p>Username: {{user_info.username}}</p>
 				</div>
 				<p><strong>Description: </strong> {{user_info.profile.Description}} </p>
 				<p><strong>Preferred Jobs:</strong>
@@ -88,11 +88,11 @@
 			</div>
 		</div>
 		<div class="col-md-1">
-		<a href="/generate_report">
+		<a href="/generate_report/?{{user_info.username}}">
 			<div class="button">
 				<button type="button" class="btn btn-danger btn-sm btn-block">Report User</button>
 			</div>
-			</div>
+			</a>
 		</div>
 	</div>
 	

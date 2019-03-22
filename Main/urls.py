@@ -48,4 +48,5 @@ urlpatterns = [
     path('accepted_jobs_seeker/', views.accepted_jobs_seeker, name="accepted_jobs_seeker"),
     path('interested_jobs_seeker/', views.interested_jobs_seeker, name='interested_jobs_seeker'),
 	path('past_jobs_seeker/', views.past_jobs_seeker, name='past_jobs_seeker'),
+    path('view_one_job/', views.view_one_job, name='view_one_job'),
 ]
