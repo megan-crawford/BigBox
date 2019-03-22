@@ -58,8 +58,8 @@ def profile(request):
         username = request.GET['username']
         user = User.objects.filter(username=username).first() #assume there is only one object
         if user:
-            return render(request, 'profile.html', {'user_info':user})
-
+            num_reports = Report.objects.filter(User=user).count()
+            return render(request, 'profile.html', {'user_info':user, 'num_reports':num_reports})
 
     return render(request, 'profile.html')
 
