@@ -7,7 +7,7 @@
   width: 80% ;
 }
 #navbar {
-  float: right;
+  float: left;
   width: 20%;
   background-color:#a1fb8d;
   border:5px solid #07680D;
@@ -36,6 +36,36 @@ div.job{
 }
 
 </style>
+  <script>
+    //JS to add a job div to page
+    function addJob (pay, description, type) { //, location, datetime, 
+    var jobDiv = document.createElement("div"); 
+    jobDiv.className="job";
+    var jobFeatures = document.createElement("li");
+    var jobPay = document.createTextNode(pay);
+    jobFeatures.appendChild(jobPay); 
+    //var jobLoc = document.createTextNode(location);
+    //var jobdate = document.createTextNode(datetime);
+    var description = document.createTextNode(description);
+    jobFeatures.appendChild(description);
+    var jobType = document.createTextNode(type);
+    jobFeatures.appendChild(jobType); 
+    
+    
+    //jobDiv.appendChild(datetime);
+    //jobDiv.appendChile(location);
+    var button = document.createElement("button");
+    button.onclick = viewOneJob();
+    button.innerHTML = "View this Job"
+    jobDiv.appendChild(jobFeatures);
+    jobDiv.appendChild(button);
+    var currentDiv = document.getElementById("myDiv");
+    document.body.insertBefore(jobDiv, currentDiv); 
+  }
+  function viewOneJob(){
+    //window.location.replace("")
+  }
+</script>
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -75,9 +105,17 @@ div.job{
           <div id="container">
             <div id="content">
               <!--<div class="grid-container" style="background-color:lightblue; height:1000px;width:700px; align-content: center"> -->
-              
+
               {% for job in allJobs %}
-              {{job}}
+                {{Job.DateTime}}
+                <script>
+                  var pay = '{{job.Pay}}';
+                  //var location = '{{job.Location}}';
+                  //var datetime = '{{job.DateTime.}}';
+                  var description = '{{job.Description}}';
+                  var type = '{{job.JobType}}';
+                  addJob(pay, description, type);
+                </script>
               {% endfor %}
               <!-- </div> -->
             </div>
