@@ -1,0 +1,18 @@
+=== Weekly Individual Report (Team 1: <sturgeon++>) ===
+Name: Mark Mikhail
+
+Week 7 Figured out how emails work and write automated tests for it
+
+3/17	4	N/A		Figuring out emails
+3/18	3	bd46c53		Figure out emails
+3/20	2	345c411		Write test cases
+3/24	2	N/A		Sprint Planning Retrospective
+
+Week 8 Write automated tests for database
+
+3/26	4	Sprint Planning Document
+3/28	3	Develop automated email functionality
+3/30	2	Research messaging 
+
+Individual Goal: Research messagning and develop the automated email functionality
+	
