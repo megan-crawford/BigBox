@@ -1,0 +1,16 @@
+=== Weekly Individual reports (Team 1: BigBox) ===
+Name: Kurtis Dressel
+
+Week 7 (Summary)
+3/19	3 hr	d035af4	added get method support for profile
+3/19	1 hr	b3c38e0	finalized generate report
+3/19	1 hr	e1cf541	added create and update profile tests
+3/20	1 hr	N/A	worked on documenting test cases
+3/21	2 hr	40c155e	added num_reports for profile on backend
+3/22	2 hr	055774e	added list job form with tests and searching
+3/22	2 hr	45b98fa	improved test cases and added job creator view
+
+Week 8 (Plan)
+3/24	3 hr	work on sprint retrospective
+3/25	3 hr	work on sprint planning doc
+3/29	3 hr	work on adding a feature
