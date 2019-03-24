@@ -1,0 +1,18 @@
+=== Weekly Individual Report (Team 2: sturgeons++) ===
+Name: Thomas Bower
+
+Week 6 (Summary)
+3/19	1 hr	b525195	Added icon on profile page to indicate report standing
+3/19	3 hrs	6b0c754	Added basic backend linking for profile page
+3/21	2 hrs	d3c0814 Added more front/backend linkage in profile page
+3/21	3 hrs	ff21bbd	Added correct backend username for navbar
+3/21	4 hrs	637cd75	Replaced report button with edit profile button if viewing own profile
+3/24	2 hrs	N/A	Created sprint 2 retrospective
+
+Week 7 (Plan)
+[Meetings]
+3/26	4 hrs	Fully plan out Sprint 3
+3/29	3 hrs	Complete profile picture functionality in frontend
+3/29	1 hr	Assist in creation of "single job" page
+
+Individual goal: Use new knowledge of frontend/backend linking to polish website, look into potential addition of messaging
