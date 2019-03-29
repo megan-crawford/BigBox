@@ -1,0 +1,18 @@
+=== Weekly Individual Report (Team 01: sturgeons++) ===
+Name: Kyle Kovacik
+
+Week 7 (Summary)
+3/18/19		2	29d2765	Added Redirects to homepage and tested UI login
+3/19/19		2	5666f20	Worked on linking past jobs page and started creating view function	
+3/21/19 	6	89258aa	Created Filter view functions for job listing pages
+3/24/19		2	NA	Created Sprint Retrospective
+
+...
+
+Week 8 (Plan)
+3/26/19		3	NA	Created Sprint 3 Planning Document
+3/26/19		2	NA	Research Django Messaging
+3/29/19		2	NA	Build view functions for other job pages
+3/29/19		2	NA 	Get job pages to link to their respective pages
+
+Goal: Begin research on messaging while fixing the few problems that weren't handled last sprint.
