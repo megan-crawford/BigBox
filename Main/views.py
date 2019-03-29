@@ -201,7 +201,7 @@ def list_job(request):
     else:
         jobs = Post.objects.all()
         form = ListJobsForm()
-
+    jobs = jobs.filter(Active=0)
     jobs = jobs.order_by('Pay', 'DateTime')
     return render(request, 'Jobs/listJobs.html', {'form':form, 'jobs':jobs})
 
