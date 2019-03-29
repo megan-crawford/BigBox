@@ -166,7 +166,7 @@ class CreateJob(TestCase):
 
         post = Post.objects.all().first() #get only object in table
         self.assertNotEqual(post, None)
-        self.assertEqual(post.Pay, 20.00)
+        self.assertEqual(post.Pay, 10.00)
 
         user = User.objects.first() #get the only user
         self.assertEqual(user.creator.Posts.all().count(), 1)
