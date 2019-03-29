@@ -107,6 +107,10 @@ def update_account(request):
 
     return render(request, 'updateAccount.html', {'form': form})
 
+	#reset password
+def reset_password(request):
+	return render(request, 'reset_password.html')
+	
 #home pages
 def home(request):
     return render(request, 'home.html')
