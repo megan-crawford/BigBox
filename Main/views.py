@@ -95,17 +95,24 @@ def update_account(request):
             if form.cleaned_data['description'] and ('description_button' in request.POST or update_all):
                 request.user.profile.Description = form.cleaned_data['description']
 
+            if form.cleaned_data['description'] and ('description_button' in request.POST or update_all):
+                request.user.profile.Description = form.cleaned_data['description']
+            
+            if (form.cleaned_data['pref_job_type'] != '') and ('pref_job_type_button' in request.POST or update_all):
+                request.user.seeker.PrefType = form.cleaned_data['pref_job_type']
+
             if (form.cleaned_data['password'] and form.cleaned_data['password_confirmation']) and ('password_button' in request.POST or update_all):
                 request.user.set_password(form.cleaned_data['password'])
 
             request.user.save()
             request.user.profile.save()
+            request.user.seeker.save()
 
             return render(request, 'updateAccount.html')
     else:
         form = UpdateAccountForm()
 
-    return render(request, 'updateAccount.html', {'form': form})
+    return render(request, 'updateAccount.html', {'form': form, 'user_info':request.user})
 
 #home pages
 def home(request):

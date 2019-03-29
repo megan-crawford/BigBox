@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
-from . models import Profile, Post, Review, Report, JobChoices, Review, Seeker, Creator
+from . models import Profile, Post, Review, Report, Review, Seeker, Creator
 from . forms import ListJobsForm, GenerateReportForm
 from django.test import Client
 from .views import sendEmail
@@ -19,7 +19,6 @@ class DatabaseClassCreation(TestCase):
         Profile.objects.create(User=user, Age="23")
         post = Post.objects.create(Pay=12.50, Location="Kentucky", DateTime="2018-11-20T15:58:44.767594-06:00", Description="I love Winky", JobType="Snow Shoveling")
         Report.objects.create(User=user, Classification="No show", Details="Winky was here")
-        JobChoices.objects.create(Types = "Lawn Mowing")
         review1 = Review.objects.create(Rating = 5)
         review2 = Review.objects.create(Rating = 1)
         seeker = Seeker.objects.create(User=user, Location="Delaware")
@@ -50,10 +49,6 @@ class DatabaseClassCreation(TestCase):
         user = User.objects.get(username="Winky")
         self.assertNotEqual(user, None)
         self.assertEqual(Profile.objects.get(User=user).Age, 23)
-
-    def test_jobchoices(self):
-        choice = JobChoices.objects.get(Types = "Lawn Mowing")
-        self.assertNotEqual(choice, None)
 
     def test_Seeker(self):
         user = User.objects.get(username="Winky")
@@ -88,14 +83,22 @@ class UpdateProfile(TestCase):
         user1 = User.objects.get(username='user1')
         self.assertEqual(user1.email, 'new@email.com')
 
+    def test_view_valid_pref_job_type(self):
+        self.client.post('/update_account/', {'pref_job_type': Post.BABYSITTING, 'pref_job_type_button': ''}) 
+
+        user1 = User.objects.get(username='user1')
+        self.assertEqual(user1.seeker.PrefType, Post.BABYSITTING)
+
     def test_view_valid_all(self):
-        self.client.post('/update_account/', {'password': 'oscusifwc', 'password_confirmation': 'oscusifwc', 'first_name': 'Jack', 'email': 'newer@email.com', 'age': 40, 'update_all_button': ''}) 
+        self.client.post('/update_account/', {'password': 'oscusifwc', 'password_confirmation': 'oscusifwc', 
+                        'first_name': 'Jack', 'email': 'newer@email.com', 'age': 40, 'update_all_button': ''}) 
 
         user1 = User.objects.get(username='user1')
         self.assertEqual(user1.first_name, 'Jack')
         self.assertEqual(user1.email, 'newer@email.com')
         self.assertEqual(user1.profile.Age, 40)
         self.assertTrue(user1.check_password('oscusifwc'))
+        self.assertEqual(user1.seeker.PrefType, None)
 
     def test_view_invalid_email(self):
         #email already exists
@@ -166,7 +169,7 @@ class CreateJob(TestCase):
 
         post = Post.objects.all().first() #get only object in table
         self.assertNotEqual(post, None)
-        self.assertEqual(post.Pay, 20.00)
+        self.assertEqual(post.Pay, 10.00)
 
         user = User.objects.first() #get the only user
         self.assertEqual(user.creator.Posts.all().count(), 1)

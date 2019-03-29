@@ -70,24 +70,13 @@ class Profile(models.Model):
     Age = models.SmallIntegerField()
     Portrait = models.ImageField(upload_to=get_image_path, blank=True, null=True)
     Contacts = models.ManyToManyField("self", blank=True)
-
-class JobChoices(models.Model):
-    Types = models.CharField(
-            max_length=100,
-            choices=Post.TYPE_CHOICES,
-    )
             
 class Review(models.Model):
     Rating = models.SmallIntegerField() #Precision undecided
 
 class Seeker(models.Model):     #Job Seeker, subclass to User
     User = models.OneToOneField(User, on_delete=models.CASCADE)
-    PrefType = models.ForeignKey(
-            JobChoices,
-            on_delete=models.CASCADE,
-            blank=True,
-            null=True,
-    )
+    PrefType = models.CharField(max_length=2, choices=Post.TYPE_CHOICES, blank=True, null=True)
     IntJob = models.ManyToManyField(Post, blank=True)
     Reviews = models.ManyToManyField(Review, blank=True)
     Location = models.TextField(blank=True, null=True)
