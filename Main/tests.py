@@ -6,6 +6,7 @@ from django.test import Client
 from .views import sendEmail
 from django.core import mail
 from django.conf import settings
+from base64 import b64encode
 
 import os
 
@@ -373,3 +374,11 @@ class TestSendEmail(TestCase):
         #email1 = mail.EmailMessage('Hello', 'Body','djangoBoiii@gmail.com',['djangoBoiii@gmail.com'], connection=connection)
         #email1.send()
         #connection.close()
+
+class TestCryptoSecureRNG(TestCase):
+    def test1(self):
+        a = os.urandom(35)
+        b = b64encode(a).decode('utf-8')
+        b = b[0:len(b)-2]
+        print(b)
+        print(b.replace('/','1'))
