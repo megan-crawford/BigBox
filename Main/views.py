@@ -105,7 +105,7 @@ def update_account(request):
     else:
         form = UpdateAccountForm()
 
-    return render(request, 'updateAccount.html', {'form': form})
+    return render(request, 'updateAccount.html', {'form': form, 'user_info':request.user})
 
 	#reset password
 def reset_password(request):
