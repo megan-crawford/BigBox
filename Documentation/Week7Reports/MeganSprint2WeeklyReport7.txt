@@ -1,0 +1,17 @@
+=== Weekly Individual Report (Team 1: sturgeons++) ===
+Name: Megan Crawford
+
+Week 7 (Summary)
+3/19	3 hr  N/A learned how frontend interacts with models with python
+3/21	1 hr  66ec95e display  filtered job posts
+3/21	4 hr  e7b40e1 incorporated python with javascript to show posts as page elements
+3/21	1 hr  bbfbf6c added blank option on job search so page doesn't automatically filter	
+3/24  2 hr  N/A worked on sprint retrospective
+
+Week 8 (Plan)
+3/26   4 hr	sprint 2 plan
+3/28	 3 hr	add features to page displaying one job/ link that job to the user who posted
+3/30   2 hr research how messaging works in django
+
+
+Individual Goal: allow user to show interest in a job and notify job poster
