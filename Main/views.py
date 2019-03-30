@@ -208,8 +208,9 @@ def list_job(request):
 def new_job(request):
     return render(request, 'Jobs/viewNewJob.html')
 
-def view_one_job(request):
-    return render(request, 'Jobs/oneJob.html')
+def view_one_job(request, jobID): #yeehaw im making progress
+    jobs = Post.objects.filter(id=jobID)
+    return render(request, 'Jobs/oneJob.html', {'jobs':jobs})
 
 #Job Creator Pages
 def all_jobs_creator(request):

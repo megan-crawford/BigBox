@@ -51,6 +51,10 @@ div.job{
             <div id="content" style="job">
               <!--<div class="grid-container" style="background-color:lightblue; height:1000px;width:700px; align-content: center"> -->
               <div class="main_text">You are at this page because you clicked on a Job.</div></div>
+              {%for job in jobs%}
+              <p>yip</p> 
+                {{job.id}}
+              {%endfor%}
               <button onclick="window.location.href = '/list_job';">Click Here</button>
               <!-- </div> -->
             </div>
