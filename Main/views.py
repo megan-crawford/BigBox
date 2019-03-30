@@ -95,18 +95,29 @@ def update_account(request):
             if form.cleaned_data['description'] and ('description_button' in request.POST or update_all):
                 request.user.profile.Description = form.cleaned_data['description']
 
+            if form.cleaned_data['description'] and ('description_button' in request.POST or update_all):
+                request.user.profile.Description = form.cleaned_data['description']
+            
+            if (form.cleaned_data['pref_job_type'] != '') and ('pref_job_type_button' in request.POST or update_all):
+                request.user.seeker.PrefType = form.cleaned_data['pref_job_type']
+
             if (form.cleaned_data['password'] and form.cleaned_data['password_confirmation']) and ('password_button' in request.POST or update_all):
                 request.user.set_password(form.cleaned_data['password'])
 
             request.user.save()
             request.user.profile.save()
+            request.user.seeker.save()
 
             return render(request, 'updateAccount.html')
     else:
         form = UpdateAccountForm()
 
-    return render(request, 'updateAccount.html', {'form': form})
+    return render(request, 'updateAccount.html', {'form': form, 'user_info':request.user})
 
+	#reset password
+def reset_password(request):
+	return render(request, 'reset_password.html')
+	
 #home pages
 def home(request):
     return render(request, 'home.html')
@@ -201,7 +212,7 @@ def list_job(request):
     else:
         jobs = Post.objects.all()
         form = ListJobsForm()
-
+    jobs = jobs.filter(Active=0)
     jobs = jobs.order_by('Pay', 'DateTime')
     return render(request, 'Jobs/listJobs.html', {'form':form, 'jobs':jobs})
 
@@ -213,6 +224,17 @@ def view_one_job(request, jobID): #yeehaw im making progress
     return render(request, 'Jobs/oneJob.html', {'jobs':jobs})
 
 #Job Creator Pages
+def reopen_job(request, post_id):
+    if post_id is not None:
+        post = Post.objects.filter(id=post_id).first()
+        if post is not None:
+            post.Active = 0 #open
+            post.Interested.clear()
+            #reset chosen seeker
+            post.save()          
+
+    return redirect('/past_jobs_creator/')
+
 def all_jobs_creator(request):
     if request.method == "GET":
         print('creator job get')

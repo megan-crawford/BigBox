@@ -48,12 +48,12 @@
            <input name="profile_picture" type="file" name="profilepic">
        </div>
 
-        <br>
-
+		 <br>
+		 
         <label for="firstNameInput" id="firstNameText">Update First Name</label>
         <div class="row">
            <div id="inputs" class="form-group col-xs-6">
-            <input name="first_name" type="firstName" class="form-control" id="firstNameInput" placeholder="Ex: John">
+            <input name="first_name" type="firstName" value={{user_info.first_name}} class="form-control" id="firstNameInput" placeholder="Ex: John">
          </div>
           
 
@@ -65,7 +65,7 @@
         <label for="lastNameInput" id="lastNameText">Update Last Name</label>
         <div class="row">
             <div id="inputs" class="form-group col-xs-6">
-            <input name="last_name" type="lastName" class="form-control" id="lastNameInput" placeholder="Ex: Doe">
+            <input name="last_name" type="lastName" value={{user_info.last_name}} class="form-control" id="lastNameInput">
             </div>
 
           <div class="btn1 col-xs-6">
@@ -78,7 +78,7 @@
         <label for="ageInput" id="ageText">Update Age</label>
         <div class="row">
            <div id="inputs" class="form-group col-xs-6">
-            <input name="age" type="age" class="form-control" id="ageInput" placeholder="Ex: 21">
+            <input name="age" type="age" value={{user_info.profile.Age}} class="form-control" id="ageInput">
            </div>
 
            <div class="btn1 col-xs-6">
@@ -91,7 +91,7 @@
         <label for="emailInput" id="emailText">Update Email</label>
         <div class="row">
            <div id="inputs" class="form-group col-xs-6">
-            <input name="email" type="email" class="form-control" name="emailInput" id="emailInput" placeholder="Ex: John_Doe@mail.com">
+            <input name="email" type="email" value={{user_info.email}} class="form-control" name="emailInput" id="emailInput">
            </div>
 
            <div class="btn1 col-xs-6">
@@ -103,7 +103,7 @@
         <label for="descriptionInput" id="descriptionText">Update Description</label>
         <div class="row">
            <div id="inputs" class="form-group col-xs-6">
-            <textarea name="description" class="form-control" id="descriptionInput" placeholder="Ex: I am a cool dude"></textarea>
+            <textarea name="description" class="form-control" id="descriptionInput">{{user_info.profile.Description}}</textarea>
          </div>
 
          <div class="btn1 col-xs-6">
@@ -115,6 +115,32 @@
         <div class="errorMessage" id="errorPassword" style="display:none">
             <p>Passwords Do Not Match - You Suck</p>
         </div>
+		
+
+			<div class="row">
+
+			
+			<div id="inputs" class="form-group col-xs-6">
+            <div class="form-group">    
+                                <label for="jobType" id="jobTypeText">Preferred Job Type</label>
+                                <div class="input-group">
+                                  <select class="custom-select" id="inputGroupSelect01">
+                                    <option selected>Choose...</option>
+                                    <option value="Lawn Care">Lawn Care</option>
+                                    <option value="Dog Walking">Dog Walking</option>
+                                    <option value="Babysitting">Babysitting</option>
+                                    <option value="Pet Care">Pet Care</option>
+                                    <option value="Manual Labor">Manual Labor</option>
+                                    <option value="Other">Other</option>
+                                  </select>
+                                </div>
+                              </div>
+							  
+         </div>
+                              <div class="btn1 col-xs-6">
+            <button name="description_button" type="submit" class="btn btn-secondary" id="updateFirstNameButton">Update Preferred Job Type</button>
+         </div>
+							</div>
 
         <label for="passwordInput" id="passwordText">Update Password</label>
         <div id="inputs" class="form-group">
