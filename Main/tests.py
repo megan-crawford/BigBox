@@ -376,3 +376,24 @@ class TestSendEmail(TestCase):
         #email1 = mail.EmailMessage('Hello', 'Body','djangoBoiii@gmail.com',['djangoBoiii@gmail.com'], connection=connection)
         #email1.send()
         #connection.close()
+
+class ReopenJob(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.client.post('/create_account/', { #user requered to be logged in to create jobs
+                        'username': 'user', 'password': 'vf83g9f7fg', 'password_confirmation': 'vf83g9f7fg',
+                        'email': 'email@email.com', 'first_name': 'John', 'last_name': 'Smith', 'age': 24                   
+        })
+
+        self.client.post('/create_job/', {
+                        'pay': 45.00, 'date_time': '2020-09-25',
+                        'description': 'work involves ...', 'job_type': Post.DOGWALKING,
+        })
+
+        #TODO: add more actions for having a seeker accept the job and closing the job
+
+    def test_view(self):
+        post = Post.objects.first()
+        self.client.post(f'/reopen_job/{post.id}')
+        post = Post.objects.first()
+        self.assertEqual(post.Active, 0)

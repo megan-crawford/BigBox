@@ -223,6 +223,17 @@ def view_one_job(request):
     return render(request, 'Jobs/oneJob.html')
 
 #Job Creator Pages
+def reopen_job(request, post_id):
+    if post_id is not None:
+        post = Post.objects.filter(id=post_id).first()
+        if post is not None:
+            post.Active = 0 #open
+            post.Interested.clear()
+            #reset chosen seeker
+            post.save()          
+
+    return redirect('/past_jobs_creator/')
+
 def all_jobs_creator(request):
     if request.method == "GET":
         print('creator job get')
