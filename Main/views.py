@@ -114,6 +114,10 @@ def update_account(request):
 
     return render(request, 'updateAccount.html', {'form': form, 'user_info':request.user})
 
+	#reset password
+def reset_password(request):
+	return render(request, 'reset_password.html')
+	
 #home pages
 def home(request):
     return render(request, 'home.html')
@@ -208,7 +212,7 @@ def list_job(request):
     else:
         jobs = Post.objects.all()
         form = ListJobsForm()
-
+    jobs = jobs.filter(Active=0)
     jobs = jobs.order_by('Pay', 'DateTime')
     return render(request, 'Jobs/listJobs.html', {'form':form, 'jobs':jobs})
 

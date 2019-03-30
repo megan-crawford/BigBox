@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from enum import Enum
 from django.db import models
 import os
 
@@ -28,15 +29,26 @@ class Post(models.Model):
             (OTHER, 'Other'),
     )
 
+    ACTIVE_CHOICES = (
+            (0, 'OPEN'),
+            (1, 'CLOSED'),
+            (2, 'COMPLETED'),
+    )
+
     Pay = models.FloatField()
     Location = models.TextField()
     DateTime = models.DateTimeField()
-    #Interested = models.ManyToManyField(Seeker)
+    Interested = models.ManyToManyField('Seeker', blank=True)
     Description = models.TextField()
     JobType = models.CharField(
             max_length=100,
             choices=TYPE_CHOICES,
     )
+    Active = models.SmallIntegerField(
+            choices=ACTIVE_CHOICES,
+            default=0,
+    )
+
     #posts=models.Manager()
 
 class Report(models.Model):
