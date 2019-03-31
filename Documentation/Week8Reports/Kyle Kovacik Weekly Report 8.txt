@@ -1,0 +1,18 @@
+=== Weekly Individual Report (Team 01: sturgeons++) ===
+Name: Kyle Kovacik
+
+Week 8 (Summary)
+3/26/19		3	NA	Created Sprint 3 Planning Document
+3/26/19		1	NA	Considered and Researched Django Messaging
+3/29/19		2	NA	Combined creator job pages into one
+3/29/19		2	6386cf1 Reworked creator, seeker job pages, and their view functions to filter by type of stored job
+3/30/19		2	6386cf1	Restored linking from home pages to reworked pages
+...
+
+Week 9 (Plan)
+4/2/19		3	NA	Add delete job functionality
+4/2/19		1	NA	Begin work on redirecting to one job page
+4/5/19		2	NA	Add notify element in navbar
+4/5/19		2	NA	Add redirects to element to my jobs pages
+
+Goal: Focus on being able to delete a job and notifiying users in the navbar.
