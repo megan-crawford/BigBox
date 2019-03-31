@@ -63,6 +63,7 @@ class UpdateAccountForm(forms.Form):
     age = forms.IntegerField(label='Update Age', min_value=0, max_value=150, required=False)
     email = forms.EmailField(label='Update Email', max_length=60, required=False)
     description = forms.CharField(label='Update Description', required=False)
+    pref_job_type = forms.ChoiceField(label='Update Perferred Job Type', choices=BLANK_CHOICE_DASH+list(Post.TYPE_CHOICES), required=False)
 
     #TODO: add password strength checks
     password = forms.CharField(label='Update Password', max_length=128, required=False, widget=forms.PasswordInput)
