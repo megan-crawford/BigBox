@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
 from . models import Profile, Post, Review, Report, Review, Seeker, Creator
-from . forms import ListJobsForm, GenerateReportForm
+from . forms import ListJobsForm, GenerateReportForm, CreateJobForm
 from django.test import Client
 from .views import sendEmail
 from django.core import mail
@@ -163,7 +163,7 @@ class CreateJob(TestCase):
 
     def test_view_valid(self):
         self.client.post('/create_job/', {
-                        'pay': 10.00, 'date_time': '2019-10-25',
+                        'pay': 10.00, 'date_time': '2019-10-25', 'zip_code': '99811',
                         'description': 'work involves ...', 'job_type': Post.BABYSITTING,
         })
 
@@ -197,6 +197,16 @@ class CreateJob(TestCase):
         })
         self.assertFalse(response.context['form'].is_valid())
         self.assertEqual(Post.objects.all().count(), 0)
+
+    def test_form_valid_zip_code(self):
+        form = CreateJobForm({'pay': 20.00, 'date_time': '2020-10-25', 'zip_code': '99811',
+                                'description': 'work will be ...', 'job_type': Post.DOGWALKING})
+        self.assertTrue(form.is_valid())
+
+    def test_form_invalid_zip_code(self):
+        form = CreateJobForm({'pay': 20.00, 'date_time': '2020-10-25', 'zip_code': '99813',
+                                    'description': 'work will be ...', 'job_type': Post.DOGWALKING})
+        self.assertFalse(form.is_valid())
 
 class GenerateReport(TestCase):
     def setUp(self):

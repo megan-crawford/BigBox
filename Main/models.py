@@ -2,6 +2,9 @@ from django.contrib.auth.models import User
 from enum import Enum
 from django.db import models
 import os
+import pandas
+
+locations = pandas.read_csv('zip_code_database.csv', index_col=['zip'], usecols=['zip', 'state', 'latitude', 'longitude'])
 
 # Create your models here.
 

@@ -5,6 +5,7 @@ from . models import Post, Report
 from re import search #regex
 import datetime, pytz
 from django.db.models.fields import BLANK_CHOICE_DASH
+from . models import locations
 
 class CreateAccountForm(forms.Form):
     print("here")
@@ -111,10 +112,11 @@ class CreateJobForm(forms.Form):
     date_time = forms.DateTimeField(required=True)
     description = forms.CharField(required=True)
     job_type = forms.ChoiceField(choices=Post.TYPE_CHOICES, required=True)
-    #TODO: create location field after geodjango is implemented
+    zip_code = forms.CharField(max_length=10, required=True)
 
     error_messages = {
-        'invalid_date' : 'You cannot go back in time to get a job done'
+        'invalid_date' : 'You cannot go back in time to get a job done',
+        'invalid_zip_code' : 'That zip code does not exist',
     }
 
     def clean_date_time(self):
@@ -125,6 +127,16 @@ class CreateJobForm(forms.Form):
             raise ValidationError(message=self.error_messages['invalid_date'], code='invalid_date')
 
         return date_time
+
+    def clean_zip_code(self):
+        zip_code = self.cleaned_data['zip_code']
+
+        try:
+            locations.loc[int(zip_code)]
+        except (KeyError, ValueError): #unknown zip codes and zip codes with non numeric characters
+            raise ValidationError(message=self.error_messages['invalid_zip_code'], code='invalid_zip_code')
+
+        return zip_code
 
 class GenerateReportForm(forms.Form):
     classification = forms.ChoiceField(choices=Report.REPORT_CHOICES, required=True)
