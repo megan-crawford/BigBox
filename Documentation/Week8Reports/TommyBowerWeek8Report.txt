@@ -1,0 +1,15 @@
+=== Weekly Individual Report (Team 2: sturgeons++) ===
+Name: Thomas Bower
+
+Week 7 (Summary)
+3/26	4 hrs	Fully planned out Sprint 3 
+3/29	1 hr	4b8da51 Created HTML page for resetting password
+3/29	1 hr	f8f3688 Made update account page autoload user info
+3/29	1 hr	40870a2	Added preferred job type field in update account
+3/29 	.5 hr	0a6f007 Created school email logo
+
+Week 8 (Plan)
+4/3	3 hrs	Complete profile picture functionality in frontend
+4/5	3 hrs 	Link newly made pages frontend to backend fully
+
+Individual goal: Continue linking finished HTML pages to backend, collaborate with backend for that
