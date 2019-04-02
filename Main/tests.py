@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from . models import Profile, Post, Review, Report, Review, Seeker, Creator
 from . forms import ListJobsForm, GenerateReportForm, CreateJobForm
 from django.test import Client
-from .views import sendEmail
+from .views import sendEmail, distBetween
 from django.core import mail
 from django.conf import settings
 
@@ -407,3 +407,12 @@ class ReopenJob(TestCase):
         self.client.post(f'/reopen_job/{post.id}')
         post = Post.objects.first()
         self.assertEqual(post.Active, 0)
+
+class ZipCodeDist(TestCase):
+    def test_valid(self):
+        realDist = 2399.4 #according to google maps
+        approxDist = distBetween(99811, 48380)
+        self.assertTrue(abs(realDist - approxDist) <= 1)
+
+    def test_invalid(self):
+        self.assertEqual(distBetween(99811, 48384), -1)

@@ -11,6 +11,8 @@ from django.core.exceptions import ValidationError
 from django.template import loader #?
 from django.db.models import Q #for Django OR filters
 from django.db.models.fields import BLANK_CHOICE_DASH
+from . models import locations
+from math import sin, cos, sqrt, atan2, radians
 
 def create_account(request):
     if request.method == "POST": #user clicks register button
@@ -357,3 +359,23 @@ def sendEmail(subject, message, emailTo):
     except:
         return -1
     return 1
+
+#distance between 2 zip codes in miles
+def distBetween(zip1, zip2):
+    try:
+        radius = 3958.8 #radius of the Earth in miles
+
+        lat1 = radians(locations.loc[int(zip1)].latitude)
+        long1 = radians(locations.loc[int(zip1)].longitude)
+        lat2 = radians(locations.loc[int(zip2)].latitude)
+        long2 = radians(locations.loc[int(zip2)].longitude)
+
+        dlon = long2 - long1
+        dlat = lat2 - lat1
+
+        a = sin(dlat / 2)**2 + cos(lat1) * cos(lat2) * sin(dlon / 2)**2
+        c = 2 * atan2(sqrt(a), sqrt(1 - a))
+
+        return radius * c
+    except (KeyError, ValueError): #unknown zip codes and zip codes with non numeric characters
+        return -1
