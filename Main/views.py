@@ -216,7 +216,7 @@ def list_job(request):
     jobs = jobs.order_by('Pay', 'DateTime')
     return render(request, 'Jobs/listJobs.html', {'form':form, 'jobs':jobs})
 
-def new_job(request):
+def new_job(request): #need to change this so it shows that job info !!!
     return render(request, 'Jobs/viewNewJob.html')
 
 def view_one_job(request, jobID): #yeehaw im making progress
@@ -475,3 +475,14 @@ def sendEmail(subject, message, emailTo):
     except:
         return -1
     return 1
+
+#get job from job id
+#add seeker id to Interested field of appropriate job record
+#get seeker from users table
+#get their email
+#compose a generic message lol
+def show_interest(request, jobID, seekerID):
+    job = Post.objects.filter(id=jobID).first()
+    #do error checking !!!!!!!! yip yap
+    job.Interested.add(seekerID)
+    return render(request, 'Jobs/showInterest.html')    

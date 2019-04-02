@@ -118,10 +118,9 @@ div.job{
                 </script>
               {% endfor %}
               -->
-
               {% for post in jobs%}
 
-      <a href="/one_job/{{post.id}}/"> 
+      <a href="/view_one_job/{{post.id}}/"> 
         <div class="row d-flex justify-content-center">
           <div class="well" id="job">
               <div class="col-sm-2" style="">
@@ -188,6 +187,10 @@ div.job{
             <div id="navbar">
              Filters
              <br><br>
+             <form method="GET" action="/list_job/">
+              Search
+              <input type="string" name="search" min="1" max="10000">
+              <br><br>
              <form method="GET" action="/list_job/">
               Maximum Distance
               <input type="number" name="max_distance" min="1" max="10000">

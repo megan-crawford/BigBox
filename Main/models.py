@@ -35,6 +35,7 @@ class Post(models.Model):
             (2, 'COMPLETED'),
     )
 
+    userID = models.IntegerField(default=0)
     Pay = models.FloatField()
     Location = models.TextField()
     DateTime = models.DateTimeField()
@@ -49,6 +50,7 @@ class Post(models.Model):
             default=0,
     )
 
+    Chosen = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     #posts=models.Manager()
 
 class Report(models.Model):
@@ -75,9 +77,9 @@ class Report(models.Model):
 
 class Profile(models.Model):
     User = models.OneToOneField(User, on_delete=models.CASCADE)
-    Email = models.CharField(max_length = 60)
-    FirstName = models.CharField(max_length = 50)
-    LastName = models.CharField(max_length = 50)
+    #Email = models.CharField(max_length = 60)
+    #FirstName = models.CharField(max_length = 50)
+    #LastName = models.CharField(max_length = 50)
     Description = models.TextField()
     Age = models.SmallIntegerField()
     Portrait = models.ImageField(upload_to=get_image_path, blank=True, null=True)

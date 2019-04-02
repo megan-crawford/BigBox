@@ -50,6 +50,6 @@ urlpatterns = [
     path('accepted_jobs_seeker/', views.accepted_jobs_seeker, name="accepted_jobs_seeker"),
     path('interested_jobs_seeker/', views.interested_jobs_seeker, name='interested_jobs_seeker'),
 	path('past_jobs_seeker/', views.past_jobs_seeker, name='past_jobs_seeker'),
-    path('one_job/<jobID>/', views.view_one_job, name='view_one_job'),
-    #IDKKKKK
+    path('view_one_job/<jobID>/', views.view_one_job, name='view_one_job'),
+    path('show_interest/<jobID>/<seekerID>/', views.show_interest, name='show_interest'),
 ]
