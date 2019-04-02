@@ -166,7 +166,7 @@
 
 
                         </ul>
-                    <
+                    
                 </div>
               </div>
         
@@ -178,7 +178,7 @@
         <!----<form name="search" id="search" action="#" method="GET">-->
           {% csrf_token %}
           <div class="form-group" style="width:100%;">
-            <input type="search" name="search" class="form-control" id="searchInput" placeholder="Search Job">
+            <input type="search" name="search" class="form-control" id="search" placeholder="Search Job">
           </div>
         <!--</form>-->
       </div>  
@@ -187,7 +187,7 @@
           
         <div class="row d-flex justify-content-center" style="padding-top: 0.5%;">
           <div class = "col-sm-10">
-          <a href="\one_job">
+          <a href="/one_job/{{post.id}}/">
             <div class="well" id="job" style="height: 100%; width: 100%;">
               <div class="col-sm-2" style="padding-bottom: 3%;">
                 {% if post.JobType == 'LM' %}
@@ -241,8 +241,10 @@
         </div>
           <div class="col-sm-2" style="width:100%;">
               <!--<form name="filter" id="filter" method="GET">-->
-                <button type="submit" name="delete_jobs" value="delete_jobs" style="width: 100%;">Delete Job</button>
-              
+                <a href="/all_jobs_creator/{{post.id}}/">
+                  Delete Job
+                  <!--<button style="width: 100%;">Delete Job</button>-->
+                </a>
           </div>
       </div>
     

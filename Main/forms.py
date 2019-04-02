@@ -7,7 +7,6 @@ import datetime, pytz
 from django.db.models.fields import BLANK_CHOICE_DASH
 
 class CreateAccountForm(forms.Form):
-    print("here")
     username = forms.CharField(label='Username', max_length=50, required=True)
     password = forms.CharField(label='Password', max_length=128, required=True, widget=forms.PasswordInput)
     password_confirmation = forms.CharField(label='Password Confirmation', max_length=128, required=True, widget=forms.PasswordInput,)
@@ -153,10 +152,16 @@ class ListJobsCreator(forms.Form):
     job_type = forms.ChoiceField(choices= BLANK_CHOICE_DASH + list(Post.TYPE_CHOICES), required=False)
     min_wage = forms.DecimalField(min_value=0, max_value=1000, decimal_places=2, required=False)
     max_wage = forms.DecimalField(min_value=0, max_value=1000, decimal_places=2, required=False)
+    search = forms.CharField(label='search', max_length=50, required=True)
 
     error_messages = {
         'invalid_wage' : 'Max wage cannot be less than min wage'
     }
+
+    def clean_search(self):
+        search = self.cleaned_data['search']
+        print("search", search)
+        return search
 
     def clean(self):
         cleaned_data = super().clean()

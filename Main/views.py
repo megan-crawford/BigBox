@@ -238,10 +238,12 @@ def reopen_job(request, post_id):
 
 def all_jobs_creator(request):
 
-    if(request.GET.get('delete_jobs')):
-        print("delete job")
+    if (request.GET.get('all_jobs')):
+        print("Request.get:", request.GET.get('all_jobs'))
 
-        #Insert stuff to delete a job
+
+    if(request.GET.get('search')):
+        print("search")
 
         typeOfJob = "all_jobs"
     elif(request.GET.get('all_jobs')):
@@ -273,10 +275,17 @@ def all_jobs_creator(request):
                 job_type = form.cleaned_data['job_type']
                 min_wage = form.cleaned_data['min_wage']
                 max_wage = form.cleaned_data['max_wage']
+                search = form.cleaned_data['search']
+                print("search:", search)
 
                 if (job_type != '' and min_wage and max_wage): #all inputs filled in
                     jobs = request.user.creator.Posts.filter(JobType=job_type, Pay__range=[min_wage, max_wage])
                 elif (job_type == '' and not min_wage and not max_wage): #no inputs filled in
+                    #array = ['dog']
+                    #regex = '^.*(%s).*$' % '|'.join(array)
+                    #print(regex)
+                    #Profile.objects.filter(full_name__iregex=regex)
+                    #jobs = request.user.creator.Posts.filter(Description=regex)
                     jobs = request.user.creator.Posts.all()
                 else: #mixed inputs filled in
                     if min_wage and not max_wage:
@@ -323,6 +332,12 @@ def all_jobs_creator(request):
     print(request.user.creator.Posts.all())
     jobs = jobs.order_by('Pay', 'DateTime')
     return render(request, 'Creator/allJobsCreator.html', {'form':form, 'jobs':jobs, 'typeOfJob':typeOfJob})
+
+def delete_job(request, deletedJobID):
+    #print("delete job")
+    job = Post.objects.filter(id=deletedJobID).first()
+    job.delete()
+    return redirect('/all_jobs_creator/')
 
 def accepted_jobs_creator(request):
     return render(request, 'Creator/acceptedJobsCreator.html')
