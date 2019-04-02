@@ -1,0 +1,14 @@
+=== Weekly Individual Report (Team 1: sturgeons++) ===
+Name: Megan Crawford
+
+Week 8 (Summary)
+3/26  4 hr N/A	sprint 2 planning doc
+3/29	2 hr N/A researched how to pass variables to backend through urls
+3/30  3 hr e4f01a7 passing arguments to one job view function
+
+Week 9 (Plan)
+4/2    4 hr	work on using email function to notify user of interested seeker
+3/5	   3 hr	job deletion on frontend
+3/6    3 hr work on UI
+
+Individual Goal: job interest, notifying, and job accepting functionality

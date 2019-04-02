@@ -7,16 +7,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="{% static 'css/jobsSeeker.css' %}">
+    <link rel="stylesheet" href="{% static 'css/jobsCreator.css' %}">
 
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="{% static 'js/allJobsCreator.js' %}"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <style>
+    .chosen {
+      background-color: white; /* Blue */
+      border: solid;
+      color: black;
+      padding: 15px 32px;
+      text-align: center;
+      text-decoration: none;
+      font-size: 16px;
+      height: 50px;
+      width: 100%;
+    }
 
-	
+    .typeOfJob {
+      background-color: #008CBA; /* Blue */
+      border: none;
+      color: white;
+      padding: 15px 32px;
+      text-align: center;
+      text-decoration: none;
+      font-size: 16px;
+      height: 50px;
+      width: 90%;
+    }
+
+  </style>
+
   </head>
   <body>
+  
 
 	<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" content="width=device-width" style="height:8vw;">
     <img src="{% static 'images/logo2.PNG' %}" style="max-height:100%;max-width:100%;">
@@ -24,7 +51,7 @@
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item active" style="font-size:16px">
-          <a class="nav-link" style="font-size: 200%; padding-left: 20%" href="/home_seeker">Home<span class="sr-only">(current)</span></a>
+          <a class="nav-link" style="font-size: 200%; padding-left: 20%" href="/home_creator">Home<span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item active">
                 <a class="nav-link" style="font-size: 300%; padding-left: 280%" href="#">Seeker<span class="sr-only">(current)</span></a> 
@@ -33,7 +60,7 @@
       <div class="dropdown">
                       <button class="btn btn-secondary dropdown-toggle" style="max-height:200%;max-width:200; font-size:16px" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         {{ request.user.username }}
-                      </button> 
+                      </button>
                       <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="font-size:16px">
                         <a class="dropdown-item" href="/profile/?username={{ request.user.username }}">Account</a>
                         <a class="dropdown-item" href="/login">Sign Out</a>
@@ -54,20 +81,45 @@
                 <div class="col-md-12">
                     <form name="filter" id="filter" method="GET">
                         <ul class="nav nav-pills nav-stacked">
-                            <li id="li" class="active"><a href="/all_jobs_seeker" style="font-size: 15px">All Jobs</a></li>
-                            <li id="li"><a href="/accepted_jobs_seeker">Accepted Jobs</a></li>
-                            <li id="li"><a href="/interested_jobs_seeker">Interested Jobs</a></li>
-                            <li id="li" style="padding-bottom: 10%"><a href="/past_jobs_seeker">Past Jobs</a></li>
+                            {% if typeOfJob == 'all_jobs' %}
+                            <li id="li"><button class="chosen" type="submit" name="all_jobs" value="all_jobs" style="font-size: 15px">All</button></li>
+                            <li id="li"><button class="typeOfJob" type="submit" name="accepted_jobs" value="accepted_jobs">Accepted</button></li>
+                            <li id="li"><button class="typeOfJob" type="submit" name="interested_jobs" value="interested_jobs">Interested</button></li>
+                            <li id="li"><button class="typeOfJob" type="submit" name="past_jobs" value="past_jobs">Past</button></li>
+                            {% elif typeOfJob == 'accepted_jobs' %}
+                            <li id="li"><button class="typeOfJob" type="submit" name="all_jobs" value="all_jobs">All</button></li>
+                            <li id="li"><button class="chosen" type="submit" name="accepted_jobs" value="accepted_jobs" style="font-size: 15px">Accepted</button></li>
+                            <li id="li"><button class="typeOfJob" type="submit" name="interested_jobs" value="interested_jobs">Interested</button></li>
+                            <li id="li"><button class="typeOfJob" type="submit" name="past_jobs" value="past_jobs">Past</button></li>
+                            {% elif typeOfJob == 'interested_jobs' %}
+                            <li id="li"><button class="typeOfJob" type="submit" name="all_jobs" value="all_jobs">All</button></li>
+                            <li id="li"><button class="typeOfJob" type="submit" name="accepted_jobs" value="accepted_jobs">Accepted</button></li>
+                            <li id="li"><button class="chosen" type="submit" name="interested_jobs" value="interested_jobs" style="font-size: 15px">Interested</button></li>
+                            <li id="li"><button class="typeOfJob" type="submit" name="past_jobs" value="past_jobs">Past</button></li>
+                            {% elif typeOfJob == 'past_jobs' %}
+                            <li id="li"><button class="typeOfJob" type="submit" name="all_jobs" value="all_jobs">All</button></li>
+                            <li id="li"><button class="typeOfJob" type="submit" name="accepted_jobs" value="accepted_jobs">Accepted</button></li>
+                            <li id="li"><button class="typeOfJob" type="submit" name="interested_jobs" value="interested_jobs">Interested</button></li>
+                            <li id="li"><button class="chosen" type="submit" name="past_jobs" value="past_jobs" style="font-size: 15px">Past</button></li>
+                            {% endif %}
 
-                            <li id="li">
-                                <div class="form-group">    
+
+                            <!---
+                            <li id="li"><input type="submit" name="accepted_jobs" value="accepted_jobs">Accepted Jobs</input></li>
+                            <li id="li"><a href="/pending_jobs_creator">Pending Jobs</a></li>
+                            <li id="li" style="padding-bottom: 10%"><a id="PastJobs" href="#">Past Jobs</a></li>
+                            -->
+
+                            <li id="li" style="padding-top: 10%;">
+                                <div class="form-group">
                                       <label for="distance" id="distanceText">Distance</label>
-                                      <input class="textInput" type="number" id="distance" min="0" data-bind="value:replyNumber"/>
+                                      <input class="textInput" name="max_distance" type="number" id="distance" min="0" data-bind="value:replyNumber"/>
                                 </div>
                             </li>
                             <li id="li">
-                              <div class="form-group">    
-                                <label for="jobType" id="jobTypeText">Job Type</label>
+                              <div class="form-group">
+                                {{ form.job_type }}
+                                <!---<label for="jobType" id="jobTypeText">Job Type</label>
                                 <div class="input-group">
                                   <select class="custom-select" id="inputGroupSelect04">
                                     <option selected>Choose...</option>
@@ -79,18 +131,19 @@
                                     <option value="Other">Other</option>
                                   </select>
                                 </div>
+                              -->
                               </div>
                             </li>
                             <li id="li">
                               <div class="form-group">    
                                     <label for="minimumWage" id="minimumWageText">Minimum Wage</label>
-                                    <input class="textInput" type="number" id="minimumWage" min="0" data-bind="value:replyNumber"/>
+                                    <input name="min_wage" class="textInput" type="number" id="minimumWage" min="0" data-bind="value:replyNumber"/>
                               </div>
                           </li>
                           <li id="li">
                             <div class="form-group">    
                                   <label for="maximumWage" id="maximumWageText">Maximum Wage</label>
-                                  <input class="textInput" type="number" id="maximumWage" min="0" data-bind="value:replyNumber"/>
+                                  <input name="max_wage" class="textInput" type="number" id="maximumWage" min="0" data-bind="value:replyNumber"/>
                             </div>
                           </li>
                           <li id="li">
@@ -121,25 +174,96 @@
       </div>
     <div class="col-sm-10">
       <div class="row d-flex justify-content-center">
-        <form name="search" id="search" method="GET">
+        <form name="search" id="search" action="#" method="GET">
+          {% csrf_token %}
           <div class="form-group">
-            <input type="search" class="form-control" id="searchInput" placeholder="Search Job">
+            <input type="search" name="search" class="form-control" id="searchInput" placeholder="Search Job">
           </div>
-
         </form>
       </div>  
+       
+      {% for post in jobs %}
+          
 
+      <a href="\one_job">
+      <div class="row d-flex justify-content-center">
+        <div class="well" id="job">
+            <div class="col-sm-2" style="">
+              {% if post.JobType == 'LM' %}
+                <img src="{% static 'images/Work Icons/lawn_care.PNG' %}" style="max-height:100%;max-width:100%;">
+              {% elif post.JobType == 'SS' %}
+                <img src="{% static 'images/Work Icons/snow_shoveling.PNG' %}" style="max-height:100%;max-width:100%;">
+              {% elif post.JobType == 'DW' %}
+                <img src="{% static 'images/Work Icons/dog_walking.PNG' %}" style="max-height:100%;max-width:100%;">
+              {% elif post.JobType == 'PS' %}
+                <img src="{% static 'images/Work Icons/pet_care.PNG' %}" style="max-height:100%;max-width:100%;">
+              {% elif post.JobType == 'BS' %}
+                <img src="{% static 'images/Work Icons/baby_sitting.PNG' %}" style="max-height:100%;max-width:100%;">
+              {% elif post.JobType == 'C' %}
+                <img src="{% static 'images/Work Icons/cleaning.PNG' %}" style="max-height:100%;max-width:100%;">
+              {% elif post.JobType == 'M' %}
+                <img src="{% static 'images/Work Icons/manual_labor.PNG' %}" style="max-height:100%;max-width:100%;">
+              {% elif post.JobType == 'O' %}
+                <img src="{% static 'images/Work Icons/other.PNG' %}" style="max-height:100%;max-width:100%;">
+              {% endif %}
+            </div>
+            <div class="col-sm-2" style="">
+            {% if post.JobType == 'LM' %}
+              <p>Lawn-Mowing</p>  
+            {% elif post.JobType == 'SS' %}
+              <p>Snow-Shoveling</p>  
+            {% elif post.JobType == 'DW' %}
+              <p>Dog-Walking</p>  
+            {% elif post.JobType == 'PS' %}
+              <p>Pet-Sitting</p>  
+            {% elif post.JobType == 'BS' %}
+              <p>Baby-Sitting</p>  
+            {% elif post.JobType == 'C' %}
+              <p>Cleaning</p>  
+            {% elif post.JobType == 'M' %}
+              <p>Moving</p>  
+            {% elif post.JobType == 'O' %}
+              <p>Other</p>  
+            {% endif %}
+            </div>
+            <div class="col-sm-4" style="">
+                <p>{{ post.Description }}</p>
+            </div>              
+            <div class="col-sm-1" style="">
+                <p>Pay: {{ post.Pay }}</p>
+            </div>
+            <div class="col-sm-1" style="">
+                <!--<p>Date: {{ post.Date }}</p>-->
+            </div>
+            <div class="col-sm-2" style="">
+                <p>{{ request.user.username }}</p>
+            </div>
+            
+        </div>
+    </div>
+  </a>
+      {% endfor %}
+    <p>{{ typeOfJob }}</p>
+
+    
     </div>
 </div>
 
 
 
+  
+
+
+
            <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script>
+    var distance = document.getElementById("distance").value
+    
+    
+    </script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
   </body>
 </html>
-  
- 

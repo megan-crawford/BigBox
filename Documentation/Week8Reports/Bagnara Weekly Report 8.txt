@@ -1,0 +1,14 @@
+=== Weekly Team Report (Team 1: sturgeons++) ===
+Name: Jason Bagnara
+
+Week 8
+3/26	4 hr	N/A	Planning Doc
+3/29	2 hr	4bfb98d	Job status and filtering
+3/30	1 hr	N/A	Job taker added
+3/30	2 hr	N/A	Study backend-frontend interaction specifics
+
+Week 9 (plan)
+4/3	3 hr	N/A	Write backend functions for various updates
+4/5	3 hr	N/A	Research time dependant events
+
+Goal:	Understand frontend-backend interaction better to create more functions

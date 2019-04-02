@@ -1,0 +1,19 @@
+=== Weekly Individual Report (Team 1: <sturgeon++>) ===
+Name: Mark Mikhail
+
+Week 8 Start Work on change Password
+
+3/26	4	Sprint Planning Document
+3/29	2	made a cryptographically secure string generator
+3/29	1	made tests to test generate string			
+3/30	3	Figuring out dynamic urls
+
+Week 9 Finish work on change password
+
+4/2	1	Finish Figuring out dynamic urls
+4/3 	2	Figure out change password
+4/5	3	Develop automated email functionality
+4/6	3	Start working on email notification
+
+Individual Goal: Finish work on reset password functionality and start working on email notifications
+	

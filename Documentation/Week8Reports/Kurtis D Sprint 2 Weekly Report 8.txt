@@ -1,0 +1,15 @@
+=== Weekly Individual reports (Team 1: BigBox) ===
+Name: Kurtis Dressel
+
+Week 8 (Summary)
+3/26    4 hr    N/A     Worked on Sprint 2 Planning Doc
+3/29    2 hr    e5166c0 Added prefered job type for update account
+3/20    1 hr    3c3cd32 Added reopen job backend
+3/30    2 hr    2f3c629 Added zip code checking
+
+Week 9 (Plan)
+4/2     3 hr    Update Seeker list jobs to filter by zip code
+4/5     3 hr    Try getting a basic location system working
+4/6     3 hr    Add recommened job type on seeker list jobs
+
+Individual Goal: Look into getting a rough location service working with zip codes

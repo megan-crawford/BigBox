@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout
 from django.contrib.auth import authenticate
 from django.http import HttpResponse
-from . forms import CreateAccountForm, UpdateAccountForm, CreateJobForm, ListJobsForm, GenerateReportForm
+from . forms import CreateAccountForm, UpdateAccountForm, CreateJobForm, ListJobsForm, GenerateReportForm, ListJobsCreator
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from . models import Profile, Post, Seeker, Creator, Report
@@ -223,6 +223,7 @@ def view_one_job(request, jobID): #yeehaw im making progress
     jobs = Post.objects.filter(id=jobID)
     return render(request, 'Jobs/oneJob.html', {'jobs':jobs})
 
+
 #Job Creator Pages
 def reopen_job(request, post_id):
     if post_id is not None:
@@ -236,37 +237,92 @@ def reopen_job(request, post_id):
     return redirect('/past_jobs_creator/')
 
 def all_jobs_creator(request):
-    if request.method == "GET":
-        print('creator job get')
-        form = ListJobsForm(request.GET)
 
-        if form.is_valid():
-            print('creator job valid')
+    if(request.GET.get('delete_jobs')):
+        print("delete job")
 
-            #max_distance = form.cleaned_data['max_distance']
-            job_type = form.cleaned_data['job_type']
-            min_wage = form.cleaned_data['min_wage']
-            max_wage = form.cleaned_data['max_wage']
+        #Insert stuff to delete a job
 
-            if (job_type != '' and min_wage and max_wage): #all inputs filled in
-                jobs = request.user.creator.Posts.filter(JobType=job_type, Pay__range=[min_wage, max_wage])
-            elif (job_type == '' and not min_wage and not max_wage): #no inputs filled in
+        typeOfJob = "all_jobs"
+    elif(request.GET.get('all_jobs')):
+        typeOfJob = "all_jobs"
+        active = -1
+    elif(request.GET.get("accepted_jobs")):
+        typeOfJob = "accepted_jobs"
+        active = 1
+    elif(request.GET.get("pending_jobs")):
+        typeOfJob = "pending_jobs"
+        active = 0
+    elif(request.GET.get("past_jobs")):
+        typeOfJob = "past_jobs"
+        active = 2
+    else:
+        typeOfJob = "all_jobs"
+        active = -1
+
+    print(typeOfJob)
+
+    if (typeOfJob == "all_jobs"):
+        if request.method == "GET":
+            print('creator job get')
+            form = ListJobsCreator(request.GET)
+            if form.is_valid():
+                print('creator job valid')
+
+                #max_distance = form.cleaned_data['max_distance']
+                job_type = form.cleaned_data['job_type']
+                min_wage = form.cleaned_data['min_wage']
+                max_wage = form.cleaned_data['max_wage']
+
+                if (job_type != '' and min_wage and max_wage): #all inputs filled in
+                    jobs = request.user.creator.Posts.filter(JobType=job_type, Pay__range=[min_wage, max_wage])
+                elif (job_type == '' and not min_wage and not max_wage): #no inputs filled in
+                    jobs = request.user.creator.Posts.all()
+                else: #mixed inputs filled in
+                    if min_wage and not max_wage:
+                        jobs = request.user.creator.Posts.filter(Q(JobType=job_type) | Q(Pay__gte=min_wage))
+                    elif not min_wage and max_wage:
+                        jobs = request.user.creator.Posts.filter(Q(JobType=job_type) | Q(Pay__lte=max_wage))
+                    else:
+                        jobs = request.user.creator.Posts.filter(Q(JobType=job_type) | Q(Pay__range=[min_wage, max_wage]))
+            else:
                 jobs = request.user.creator.Posts.all()
-            else: #mixed inputs filled in
-                if min_wage and not max_wage:
-                    jobs = request.user.creator.Posts.filter(Q(JobType=job_type) | Q(Pay__gte=min_wage))
-                elif not min_wage and max_wage:
-                    jobs = request.user.creator.Posts.filter(Q(JobType=job_type) | Q(Pay__lte=max_wage))
-                else:
-                    jobs = request.user.creator.Posts.filter(Q(JobType=job_type) | Q(Pay__range=[min_wage, max_wage]))
         else:
             jobs = request.user.creator.Posts.all()
-    else:
-        jobs = request.user.creator.Posts.all()
-        form = ListJobsForm()
+            form = ListJobsCreator()
+    else: #get filter by other type of job
+        if request.method == "GET":
+            print('get accepted jobs')
+            form = ListJobsCreator(request.GET)
+            if form.is_valid():
+                print('form valid')
 
+                #max_distance = form.cleaned_data['max_distance']
+                job_type = form.cleaned_data['job_type']
+                min_wage = form.cleaned_data['min_wage']
+                max_wage = form.cleaned_data['max_wage']
+
+                if (job_type != '' and min_wage and max_wage): #all inputs filled in
+                    jobs = request.user.creator.Posts.filter(JobType=job_type, Pay__range=[min_wage, max_wage], Active=active)
+                elif (job_type == '' and not min_wage and not max_wage): #no inputs filled in
+                    jobs = request.user.creator.Posts.filter(Active=active)
+                else: #mixed inputs filled in
+                    if min_wage and not max_wage:
+                        jobs = request.user.creator.Posts.filter((Q(JobType=job_type) | Q(Pay__gte=min_wage)) & Q(Active=active)) 
+                    elif not min_wage and max_wage:
+                        jobs = request.user.creator.Posts.filter((Q(JobType=job_type) | Q(Pay__lte=max_wage)) & Q(Active=active))
+                    else:
+                        jobs = request.user.creator.Posts.filter((Q(JobType=job_type) | Q(Pay__range=[min_wage, max_wage])) & Q(Active=active))
+            else:
+                jobs = request.user.creator.Posts.filter(Active=active)
+        else:
+            print("here")
+            jobs = request.user.creator.Posts.filter(Active=active)
+            form = ListJobsCreator()
+    
+    print(request.user.creator.Posts.all())
     jobs = jobs.order_by('Pay', 'DateTime')
-    return render(request, 'Creator/allJobsCreator.html', {'form':form, 'jobs':jobs})
+    return render(request, 'Creator/allJobsCreator.html', {'form':form, 'jobs':jobs, 'typeOfJob':typeOfJob})
 
 def accepted_jobs_creator(request):
     return render(request, 'Creator/acceptedJobsCreator.html')
@@ -312,7 +368,53 @@ def one_job(request):
 
 #Jobs Seeker Pages
 def all_jobs_seeker(request):
-    return render(request, 'Seeker/allJobsSeeker.html')
+
+
+    if(request.GET.get('all_jobs')):
+        typeOfJob = "all_jobs"
+    elif(request.GET.get("accepted_jobs")):
+        typeOfJob = "accepted_jobs"
+    elif(request.GET.get("interested_jobs")):
+        typeOfJob = "interested_jobs"
+    elif(request.GET.get("past_jobs")):
+        typeOfJob = "past_jobs"
+    else:
+        typeOfJob = "all_jobs"
+
+    print(typeOfJob)
+
+    if request.method == "GET":
+        print('seeker job get')
+        form = ListJobsCreator(request.GET)
+
+        if form.is_valid():
+            print('seeker job valid')
+
+            #max_distance = form.cleaned_data['max_distance']
+            job_type = form.cleaned_data['job_type']
+            min_wage = form.cleaned_data['min_wage']
+            max_wage = form.cleaned_data['max_wage']
+
+            #Needs to be changed to seeker stuff, when accepting jobs gets added
+            if (job_type != '' and min_wage and max_wage): #all inputs filled in
+                jobs = request.user.creator.Posts.filter(JobType=job_type, Pay__range=[min_wage, max_wage])
+            elif (job_type == '' and not min_wage and not max_wage): #no inputs filled in
+                jobs = request.user.creator.Posts.all()
+            else: #mixed inputs filled in
+                if min_wage and not max_wage:
+                    jobs = request.user.creator.Posts.filter(Q(JobType=job_type) | Q(Pay__gte=min_wage))
+                elif not min_wage and max_wage:
+                    jobs = request.user.creator.Posts.filter(Q(JobType=job_type) | Q(Pay__lte=max_wage))
+                else:
+                    jobs = request.user.creator.Posts.filter(Q(JobType=job_type) | Q(Pay__range=[min_wage, max_wage]))
+        else:
+            jobs = request.user.creator.Posts.all()
+    else:
+        jobs = request.user.creator.Posts.all()
+        form = ListJobsForm()
+
+    jobs = jobs.order_by('Pay', 'DateTime')
+    return render(request, 'Seeker/allJobsSeeker.html', {'form':form, 'jobs':jobs, 'typeOfJob':typeOfJob})
 
 def accepted_jobs_seeker(request):
     return render(request, 'Seeker/acceptedJobsSeeker.html')

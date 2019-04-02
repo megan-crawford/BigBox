@@ -9,14 +9,41 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{% static 'css/jobsCreator.css' %}">
 
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="{% static 'js/allJobsCreator.js' %}"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <style>
+    .chosen {
+      background-color: white; /* Blue */
+      border: solid;
+      color: black;
+      padding: 15px 32px;
+      text-align: center;
+      text-decoration: none;
+      font-size: 16px;
+      height: 50px;
+      width: 100%;
+    }
 
-	
+    .typeOfJob {
+      background-color: #008CBA; /* Blue */
+      border: none;
+      color: white;
+      padding: 15px 32px;
+      text-align: center;
+      text-decoration: none;
+      font-size: 16px;
+      height: 50px;
+      width: 90%;
+    }
+
+  </style>
+
   </head>
   <body>
+  
 
 	<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" content="width=device-width" style="height:8vw;">
     <img src="{% static 'images/logo2.PNG' %}" style="max-height:100%;max-width:100%;">
@@ -33,7 +60,7 @@
       <div class="dropdown">
                       <button class="btn btn-secondary dropdown-toggle" style="max-height:200%;max-width:200; font-size:16px" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         {{ request.user.username }}
-                      </button> 
+                      </button>
                       <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="font-size:16px">
                         <a class="dropdown-item" href="/profile/?username={{ request.user.username }}">Account</a>
                         <a class="dropdown-item" href="/login">Sign Out</a>
@@ -42,6 +69,7 @@
     </div>
   </nav>
 
+  <form name="filter" id="filter" method="GET">
 
   
   <div class="padding" style="padding-top: 9%"></div>
@@ -52,14 +80,39 @@
           <div class="row-offcanvas row-offcanvas-left" id="sidebar">
             <div id="sidebar" class="sidebar-offcanvas">
                 <div class="col-md-12">
-                    <form name="filter" id="filter" method="GET">
+                    
                         <ul class="nav nav-pills nav-stacked">
-                            <li id="li" class="active"><a href="/all_jobs_creator" style="font-size: 15px">All Jobs</a></li>
-                            <li id="li"><a href="/accepted_jobs_creator">Accepted Jobs</a></li>
+                            {% if typeOfJob == 'all_jobs' %}
+                            <li id="li"><button class="chosen" type="submit" name="all_jobs" value="all_jobs" style="font-size: 15px">All</button></li>
+                            <li id="li"><button class="typeOfJob" type="submit" name="accepted_jobs" value="accepted_jobs">Accepted</button></li>
+                            <li id="li"><button class="typeOfJob" type="submit" name="pending_jobs" value="pending_jobs">Pending</button></li>
+                            <li id="li"><button class="typeOfJob" type="submit" name="past_jobs" value="past_jobs">Past</button></li>
+                            {% elif typeOfJob == 'accepted_jobs' %}
+                            <li id="li"><button class="typeOfJob" type="submit" name="all_jobs" value="all_jobs">All</button></li>
+                            <li id="li"><button class="chosen" type="submit" name="accepted_jobs" value="accepted_jobs" style="font-size: 15px">Accepted</button></li>
+                            <li id="li"><button class="typeOfJob" type="submit" name="pending_jobs" value="pending_jobs">Pending</button></li>
+                            <li id="li"><button class="typeOfJob" type="submit" name="past_jobs" value="past_jobs">Past</button></li>
+                            {% elif typeOfJob == 'pending_jobs' %}
+                            <li id="li"><button class="typeOfJob" type="submit" name="all_jobs" value="all_jobs">All</button></li>
+                            <li id="li"><button class="typeOfJob" type="submit" name="accepted_jobs" value="accepted_jobs">Accepted</button></li>
+                            <li id="li"><button class="chosen" type="submit" name="pending_jobs" value="pending_jobs" style="font-size: 15px">Pending</button></li>
+                            <li id="li"><button class="typeOfJob" type="submit" name="past_jobs" value="past_jobs">Past</button></li>
+                            {% elif typeOfJob == 'past_jobs' %}
+                            <li id="li"><button class="typeOfJob" type="submit" name="all_jobs" value="all_jobs">All</button></li>
+                            <li id="li"><button class="typeOfJob" type="submit" name="accepted_jobs" value="accepted_jobs">Accepted</button></li>
+                            <li id="li"><button class="typeOfJob" type="submit" name="pending_jobs" value="pending_jobs">Pending</button></li>
+                            <li id="li"><button class="chosen" type="submit" name="past_jobs" value="past_jobs" style="font-size: 15px">Past</button></li>
+                            {% endif %}
+
+
+                            <!---
+                            <li id="li"><input type="submit" name="accepted_jobs" value="accepted_jobs">Accepted Jobs</input></li>
                             <li id="li"><a href="/pending_jobs_creator">Pending Jobs</a></li>
-                            <li id="li" style="padding-bottom: 10%"><a href="/past_jobs_creator">Past Jobs</a></li>
-                            <li id="li">
-                                <div class="form-group">    
+                            <li id="li" style="padding-bottom: 10%"><a id="PastJobs" href="#">Past Jobs</a></li>
+                            -->
+
+                            <li id="li" style="padding-top: 10%;">
+                                <div class="form-group">
                                       <label for="distance" id="distanceText">Distance</label>
                                       <input class="textInput" name="max_distance" type="number" id="distance" min="0" data-bind="value:replyNumber"/>
                                 </div>
@@ -113,7 +166,7 @@
 
 
                         </ul>
-                    </form>
+                    <
                 </div>
               </div>
         
@@ -121,23 +174,22 @@
           </div><!--/row-offcanvas -->
       </div>
     <div class="col-sm-10">
-      <div class="row d-flex justify-content-center">
-        <form name="search" id="search" method="POST">
+      <div class="row d-flex justify-content-center" style="width:100%;">
+        <!----<form name="search" id="search" action="#" method="GET">-->
           {% csrf_token %}
-          <div class="form-group">
-            <input type="search" class="form-control" id="searchInput" placeholder="Search Job">
+          <div class="form-group" style="width:100%;">
+            <input type="search" name="search" class="form-control" id="searchInput" placeholder="Search Job">
           </div>
-
-        </form>
+        <!--</form>-->
       </div>  
        
         {% for post in jobs %}
           
-
-        <a href="\one_job">
-        <div class="row d-flex justify-content-center">
-          <div class="well" id="job">
-              <div class="col-sm-2" style="">
+        <div class="row d-flex justify-content-center" style="padding-top: 0.5%;">
+          <div class = "col-sm-10">
+          <a href="\one_job">
+            <div class="well" id="job" style="height: 100%; width: 100%;">
+              <div class="col-sm-2" style="padding-bottom: 3%;">
                 {% if post.JobType == 'LM' %}
                   <img src="{% static 'images/Work Icons/lawn_care.PNG' %}" style="max-height:100%;max-width:100%;">
                 {% elif post.JobType == 'SS' %}
@@ -182,22 +234,24 @@
                   <p>Pay: {{ post.Pay }}</p>
               </div>
               <div class="col-sm-1" style="">
-                  <!--<p>Date: {{ post.Date }}</p>-->
-              </div>
-              <div class="col-sm-2" style="">
                   <p>{{ request.user.username }}</p>
               </div>
+          </div>
+          </a>
+        </div>
+          <div class="col-sm-2" style="width:100%;">
+              <!--<form name="filter" id="filter" method="GET">-->
+                <button type="submit" name="delete_jobs" value="delete_jobs" style="width: 100%;">Delete Job</button>
               
           </div>
       </div>
-    </a>
+    
         {% endfor %}
-          
 
     
     </div>
 </div>
-
+</form>
 
 
   
