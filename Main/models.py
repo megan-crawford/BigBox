@@ -89,17 +89,20 @@ class Profile(models.Model):
     Contacts = models.ManyToManyField("self", blank=True)
     ZipCode = models.IntegerField(blank=True, null=True)
             
-class Review(models.Model):
+class SeekerReview(models.Model):
     Rating = models.SmallIntegerField() #Precision undecided
+    User = models.ForeignKey(User, on_delete=models.CASCADE)
+
+class CreatorReview(models.Model):
+    Rating = models.SmallIntegerField() #Precision undecided
+    User = models.ForeignKey(User, on_delete=models.CASCADE)
 
 class Seeker(models.Model):     #Job Seeker, subclass to User
     User = models.OneToOneField(User, on_delete=models.CASCADE)
     PrefType = models.CharField(max_length=2, choices=Post.TYPE_CHOICES, blank=True, null=True)
     IntJob = models.ManyToManyField(Post, blank=True)
-    Reviews = models.ManyToManyField(Review, blank=True)
     Location = models.TextField(blank=True, null=True)
 
 class Creator(models.Model):    #Job Creator
     User = models.OneToOneField(User, on_delete=models.CASCADE)
     Posts = models.ManyToManyField(Post, blank=True)
-    Reviews = models.ManyToManyField(Review, blank=True)

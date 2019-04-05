@@ -2,10 +2,10 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout
 from django.contrib.auth import authenticate
 from django.http import HttpResponse
-from . forms import CreateAccountForm, UpdateAccountForm, CreateJobForm, ListJobsForm, GenerateReportForm, ListJobsCreator
+from . forms import CreateAccountForm, UpdateAccountForm, CreateJobForm, ListJobsForm, GenerateReportForm, ListJobsCreator, GenerateReviewForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
-from . models import Profile, Post, Seeker, Creator, Report
+from . models import Profile, Post, Seeker, Creator, Report, SeekerReview, CreatorReview
 from django.core.mail import EmailMessage, send_mail
 from django.core.exceptions import ValidationError
 from django.template import loader #?
@@ -475,9 +475,23 @@ def generate_report(request):
 
     return render(request, 'generate_report.html', {'form':form, 'user_info':user})
 
-	
-def generate_review(request):
-	return render(request, 'generate_review.html')
+def generate_review(request, user, is_seeker):
+    #if is_seeker is false the user is being reviewed as a creator
+
+    if request.method == "POST":
+        form = GenerateReviewForm(request)
+
+        if form.is_valid():
+            rating = form.changed_data['rating']
+
+            if is_seeker:
+                SeekerReview.obejcts.create(Rating=rating, User=user)
+            else:
+                CreatorReview.obejcts.create(Rating=rating, User=user)
+    else:
+        form = GenerateReviewForm()
+
+    return render(request, 'generate_review.html')
 	
 def past_jobs_seeker(request):
     return render(request, 'Seeker/pastJobsSeeker.html')
