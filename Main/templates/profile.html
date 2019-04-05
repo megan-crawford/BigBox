@@ -82,16 +82,21 @@
 
 	<div class="row">
 	
+	<div class="col-md-7">
+	
 	{% if num_reports == 0 %}
-		<div class="col-md-7"><img src="{% static 'images/rategood.png' %}" title="User has No Reports!" width="20" height="20"></div>
+		<div class="col-md-7"><img src="{% static 'images/rategood.png' %}" title="User has No Reports!" width="20" height="20">
 		
 	{% elif num_reports < 3 %}
-		<div class="col-md-7"><img src="{% static 'images/ratemedium.png' %}" title="User has some reports." width="20" height="20"></div>
+		<div class="col-md-7"><img src="{% static 'images/ratemedium.png' %}" title="User has some reports." width="20" height="20">
 	
 	{% else %}
-		<div class="col-md-7"><img src="{% static 'images/ratebad.png' %}" title="User has many reports..." width="20" height="20"></div>
+		<img src="{% static 'images/ratebad.png' %}" title="User has many reports..." width="20" height="20">
 
 	{% endif %}
+	
+	</div>
+	
 		<div class="col-md-3">
 		<div class="button">
 				<button type="button" class="btn btn-primary btn-lg btn-block">View my Job Listings</button>
