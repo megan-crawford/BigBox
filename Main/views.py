@@ -465,6 +465,10 @@ def generate_report(request):
 
     return render(request, 'generate_report.html', {'form':form, 'user_info':user})
 
+	
+def generate_review(request):
+	return render(request, 'generate_review.html')
+	
 def past_jobs_seeker(request):
     return render(request, 'Seeker/pastJobsSeeker.html')
 
