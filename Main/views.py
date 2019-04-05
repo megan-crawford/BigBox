@@ -172,9 +172,9 @@ def create_job(request):
             date = form.cleaned_data['date_time']
             description = form.cleaned_data['description']
             job_type = form.cleaned_data['job_type']
-
+            userid = request.user.id
             #create new job
-            post = Post.objects.create(Pay=pay, DateTime=date, Description=description, JobType=job_type)
+            post = Post.objects.create(Pay=pay, DateTime=date, Description=description, JobType=job_type, userID=userid)
             request.user.creator.Posts.add(post)
 
             return redirect('/add_job/')
@@ -468,6 +468,11 @@ def sendEmail(subject, message, emailTo):
 #compose a generic message lol
 def show_interest(request, jobID, seekerID):
     job = Post.objects.filter(id=jobID).first()
-    #do error checking !!!!!!!! yip yap
+    #do error checking !!!!!!!! yip yap like check if record already in Interested
+    seeker = User.objects.filter(id=seekerID).first()
     job.Interested.add(seekerID)
+    content = seeker.first_name + " is interested in this job: " + job.Description + ". Please visit BigBox to accept or decline this seeker."
+    creator = User.objects.filter(id=job.userID).first()
+    email = creator.email
+    val = sendEmail("Congrats, a seeker is interested in your job", content, email)
     return render(request, 'Jobs/showInterest.html')    
