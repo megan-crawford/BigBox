@@ -72,11 +72,11 @@ def update_account(request):
     #TODO: check if user is logged in
 
     if request.method == 'POST':
-        #print('update account post')
+        print('update account post')
         form = UpdateAccountForm(request.POST)
 
         if form.is_valid():
-            #print('update account valid')
+            print('update account valid')
             update_all = 'update_all_button' in request.POST
 
             if form.cleaned_data['profile_picture'] and ('profile_picture_button' in request.POST or update_all):
@@ -102,6 +102,9 @@ def update_account(request):
             
             if (form.cleaned_data['pref_job_type'] != '') and ('pref_job_type_button' in request.POST or update_all):
                 request.user.seeker.PrefType = form.cleaned_data['pref_job_type']
+
+            if (form.cleaned_data['zip_code']) and ('zip_code_button' in request.POST or update_all):
+                request.user.profile.ZipCode = form.cleaned_data['zip_code']
 
             if (form.cleaned_data['password'] and form.cleaned_data['password_confirmation']) and ('password_button' in request.POST or update_all):
                 request.user.set_password(form.cleaned_data['password'])
@@ -174,9 +177,10 @@ def create_job(request):
             date = form.cleaned_data['date_time']
             description = form.cleaned_data['description']
             job_type = form.cleaned_data['job_type']
+            zip_code = form.cleaned_data['zip_code']
 
             #create new job
-            post = Post.objects.create(Pay=pay, DateTime=date, Description=description, JobType=job_type)
+            post = Post.objects.create(Pay=pay, DateTime=date, Description=description, JobType=job_type, ZipCode=zip_code)
             request.user.creator.Posts.add(post)
 
             return redirect('/add_job/')
@@ -188,12 +192,11 @@ def create_job(request):
 def list_job(request):
     #TODO: check if user is logged in
     if request.method == "GET":
-        #print('list job get')
+        print('list job get')
         form = ListJobsForm(request.GET)
 
         if form.is_valid():
-            #print('list job valid')
-            #max_distance = form.cleaned_data['max_distance']
+            print('list job valid')
             job_type = form.cleaned_data['job_type']
             min_wage = form.cleaned_data['min_wage']
             max_wage = form.cleaned_data['max_wage']
@@ -214,8 +217,13 @@ def list_job(request):
     else:
         jobs = Post.objects.all()
         form = ListJobsForm()
+
+    #sort by distance, then pay, then date
     jobs = jobs.filter(Active=0)
     jobs = jobs.order_by('Pay', 'DateTime')
+    if (request.user.profile.ZipCode != None):
+        jobs = sorted(jobs, key = lambda job : distBetween(job.ZipCode, request.user.profile.ZipCode))
+
     return render(request, 'Jobs/listJobs.html', {'form':form, 'jobs':jobs})
 
 def new_job(request):

@@ -39,7 +39,7 @@ class Post(models.Model):
     )
 
     Pay = models.FloatField()
-    Location = models.TextField()
+    ZipCode = models.IntegerField()
     DateTime = models.DateTimeField()
     Interested = models.ManyToManyField('Seeker', related_name='seekers', blank=True)
     Description = models.TextField()
@@ -85,6 +85,7 @@ class Profile(models.Model):
     Age = models.SmallIntegerField()
     Portrait = models.ImageField(upload_to=get_image_path, blank=True, null=True)
     Contacts = models.ManyToManyField("self", blank=True)
+    ZipCode = models.IntegerField(blank=True, null=True)
             
 class Review(models.Model):
     Rating = models.SmallIntegerField() #Precision undecided

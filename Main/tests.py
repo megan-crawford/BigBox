@@ -6,6 +6,7 @@ from django.test import Client
 from .views import sendEmail, distBetween
 from django.core import mail
 from django.conf import settings
+from django.db.models.fields import BLANK_CHOICE_DASH
 
 import os
 
@@ -240,22 +241,23 @@ class ListJob(TestCase):
                         'username': 'user1', 'password': 'vf83g9f7fg', 'password_confirmation': 'vf83g9f7fg',
                         'email': 'email@email.com', 'first_name': 'John', 'last_name': 'Smith', 'age': 20                    
         })
+        self.client.post('/update_account/', {'zip_code': 52403, 'zip_code_button': ''}) 
 
         self.client.post('/create_job/', {
-                        'pay': 15.00, 'date_time': '2020-10-25',
-                        'description': 'work involves ...', 'job_type': Post.DOGWALKING,
+                        'pay': 15.00, 'date_time': '2020-10-25', 'zip_code': 94803, #far
+                        'description': 'job1', 'job_type': Post.DOGWALKING,
         })
         self.client.post('/create_job/', {
-                        'pay': 20.00, 'date_time': '2021-10-25',
-                        'description': 'work involves ...', 'job_type': Post.BABYSITTING,
+                        'pay': 20.00, 'date_time': '2021-10-25', 'zip_code': 99811, #far
+                        'description': 'job2', 'job_type': Post.BABYSITTING,
         })
         self.client.post('/create_job/', {
-                        'pay': 25.00, 'date_time': '2020-10-25',
-                        'description': 'work involves ...', 'job_type': Post.SNOWSHOVELING,
+                        'pay': 25.00, 'date_time': '2020-10-25', 'zip_code': 52404, #close
+                        'description': 'job3', 'job_type': Post.SNOWSHOVELING,
         })
         self.client.post('/create_job/', {
-                        'pay': 30.00, 'date_time': '2021-10-25',
-                        'description': 'work involves ...', 'job_type': Post.DOGWALKING,
+                        'pay': 30.00, 'date_time': '2021-10-25', 'zip_code': 52403, #closest
+                        'description': 'job4', 'job_type': Post.DOGWALKING,
         })
 
     def test_form_valid(self):
@@ -272,23 +274,28 @@ class ListJob(TestCase):
 
     def test_view_correct_jobs_wage(self):
         response = self.client.get('/list_job/', {'min_wage': 15.00, 'max_wage': 25.00})
-        self.assertEqual(response.context['jobs'].count(), 3)
+        self.assertEqual(len(response.context['jobs']), 3)
 
     def test_view_correct_jobs_max_wage(self):
         response = self.client.get('/list_job/', {'max_wage': 20.00})
-        self.assertEqual(response.context['jobs'].count(), 2)
+        self.assertEqual(len(response.context['jobs']), 2)
 
     def test_view_correct_jobs_min_wage(self):
         response = self.client.get('/list_job/', {'min_wage': 20.00})
-        self.assertEqual(response.context['jobs'].count(), 3)
+        self.assertEqual(len(response.context['jobs']), 3)
 
     def test_view_correct_jobs_type(self):
         response = self.client.get('/list_job/', {'job_type': Post.DOGWALKING})
-        self.assertEqual(response.context['jobs'].count(), 2)
+        self.assertEqual(len(response.context['jobs']), 2)
 
     def test_view_correct_jobs_type_and_wage(self):
         response = self.client.get('/list_job/', {'job_type': Post.DOGWALKING, 'min_wage': 15.00, 'max_wage': 25.00})
-        self.assertEqual(response.context['jobs'].count(), 1)
+        self.assertEqual(len(response.context['jobs']), 1)
+
+    def test_view_sort_by_zip_code(self):
+        response = self.client.get('/list_job/', {'job_type': BLANK_CHOICE_DASH})
+        self.assertEqual(response.context['jobs'][0].Description, 'job4')
+        self.assertEqual(response.context['jobs'][1].Description, 'job3')
 
 class AllJobsCreator(TestCase):
     def setUp(self):
