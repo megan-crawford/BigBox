@@ -5,9 +5,9 @@ from . models import Post, Report
 from re import search #regex
 import datetime, pytz
 from django.db.models.fields import BLANK_CHOICE_DASH
+from . models import locations
 
 class CreateAccountForm(forms.Form):
-    print("here")
     username = forms.CharField(label='Username', max_length=50, required=True)
     password = forms.CharField(label='Password', max_length=128, required=True, widget=forms.PasswordInput)
     password_confirmation = forms.CharField(label='Password Confirmation', max_length=128, required=True, widget=forms.PasswordInput,)
@@ -64,6 +64,7 @@ class UpdateAccountForm(forms.Form):
     email = forms.EmailField(label='Update Email', max_length=60, required=False)
     description = forms.CharField(label='Update Description', required=False)
     pref_job_type = forms.ChoiceField(label='Update Perferred Job Type', choices=BLANK_CHOICE_DASH+list(Post.TYPE_CHOICES), required=False)
+    zip_code = forms.IntegerField(label='Update Zip Code', required=False)
 
     #TODO: add password strength checks
     password = forms.CharField(label='Update Password', max_length=128, required=False, widget=forms.PasswordInput)
@@ -74,7 +75,8 @@ class UpdateAccountForm(forms.Form):
         'passwords_not_match' : 'Passwords do not match',
         'preexisting_username' : 'Username already exists',
         'preexisting_email' : 'Email already exists',
-        'invalid_name' : 'Name can only contain letters'
+        'invalid_name' : 'Name can only contain letters',
+        'invalid_zip_code' : 'That zip code does not exist',
     }
 
     def clean_email(self):
@@ -105,16 +107,27 @@ class UpdateAccountForm(forms.Form):
             if password != password_confirmation:
                 raise ValidationError(message=self.error_messages['passwords_not_match'], code='passwords_not_match')
         return password_confirmation
+
+    def clean_zip_code(self):
+        zip_code = self.cleaned_data['zip_code']
+
+        try:
+            locations.loc[int(zip_code)]
+        except (KeyError, ValueError): #unknown zip codes and zip codes with non numeric characters
+            raise ValidationError(message=self.error_messages['invalid_zip_code'], code='invalid_zip_code')
+
+        return zip_code
         
 class CreateJobForm(forms.Form):
     pay = forms.DecimalField(min_value=0, max_value=1000, decimal_places=2, required=True)
     date_time = forms.DateTimeField(required=True)
     description = forms.CharField(required=True)
     job_type = forms.ChoiceField(choices=Post.TYPE_CHOICES, required=True)
-    #TODO: create location field after geodjango is implemented
+    zip_code = forms.IntegerField(required=True)
 
     error_messages = {
-        'invalid_date' : 'You cannot go back in time to get a job done'
+        'invalid_date' : 'You cannot go back in time to get a job done',
+        'invalid_zip_code' : 'That zip code does not exist',
     }
 
     def clean_date_time(self):
@@ -126,12 +139,21 @@ class CreateJobForm(forms.Form):
 
         return date_time
 
+    def clean_zip_code(self):
+        zip_code = self.cleaned_data['zip_code']
+
+        try:
+            locations.loc[int(zip_code)]
+        except (KeyError, ValueError): #unknown zip codes and zip codes with non numeric characters
+            raise ValidationError(message=self.error_messages['invalid_zip_code'], code='invalid_zip_code')
+
+        return zip_code
+
 class GenerateReportForm(forms.Form):
     classification = forms.ChoiceField(choices=Report.REPORT_CHOICES, required=True)
     details = forms.CharField(required=True)
     
 class ListJobsForm(forms.Form):
-    max_distance = forms.IntegerField(min_value=1, max_value=10000, required = False) #in ___ units?
     job_type = forms.ChoiceField(choices= BLANK_CHOICE_DASH + list(Post.TYPE_CHOICES), required=False)
     min_wage = forms.DecimalField(min_value=0, max_value=1000, decimal_places=2, required=False)
     max_wage = forms.DecimalField(min_value=0, max_value=1000, decimal_places=2, required=False)
@@ -153,10 +175,16 @@ class ListJobsCreator(forms.Form):
     job_type = forms.ChoiceField(choices= BLANK_CHOICE_DASH + list(Post.TYPE_CHOICES), required=False)
     min_wage = forms.DecimalField(min_value=0, max_value=1000, decimal_places=2, required=False)
     max_wage = forms.DecimalField(min_value=0, max_value=1000, decimal_places=2, required=False)
+    search = forms.CharField(label='search', max_length=50, required=True)
 
     error_messages = {
         'invalid_wage' : 'Max wage cannot be less than min wage'
     }
+
+    def clean_search(self):
+        search = self.cleaned_data['search']
+        print("search", search)
+        return search
 
     def clean(self):
         cleaned_data = super().clean()
@@ -166,3 +194,5 @@ class ListJobsCreator(forms.Form):
         if min_wage and max_wage and max_wage < min_wage:
             raise ValidationError(message=self.error_messages['invalid_wage'], code='invalid_wage')
 
+class GenerateReviewForm(forms.Form):
+    rating = forms.IntegerField(min_value=1, max_value=5, required=True)

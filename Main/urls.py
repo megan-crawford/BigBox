@@ -30,6 +30,7 @@ urlpatterns = [
     path('update_account/', views.update_account, name='update_account'),
     path('profile/', views.profile, name='profile'),
     path('generate_report/', views.generate_report, name='generate_report'),
+	path('generate_review/', views.generate_review, name='generate_review'),
 	path('reset_password/', views.reset_password, name='reset_password'),
 
     #creator
@@ -38,6 +39,7 @@ urlpatterns = [
     path('add_job/', views.new_job, name='add_job'),
     path('one_job/', views.one_job, name='one_job'),
     path('all_jobs_creator/', views.all_jobs_creator, name='all_jobs_creator'),
+    path('all_jobs_creator/<deletedJobID>/', views.delete_job, name='delete_job'),
     path('accepted_jobs_creator/', views.accepted_jobs_creator, name='accepted_jobs_creator'),
     path('pending_jobs_creator/', views.pending_jobs_creator, name='pending_jobs_creator'),
     path('past_jobs_creator/', views.past_jobs_creator, name='past_jobs_creator'),

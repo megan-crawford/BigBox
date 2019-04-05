@@ -2,6 +2,9 @@ from django.contrib.auth.models import User
 from enum import Enum
 from django.db import models
 import os
+import pandas
+
+locations = pandas.read_csv('zip_code_database.csv', index_col=['zip'], usecols=['zip', 'state', 'latitude', 'longitude'])
 
 # Create your models here.
 
@@ -37,7 +40,7 @@ class Post(models.Model):
 
     userID = models.IntegerField(default=0)
     Pay = models.FloatField()
-    Location = models.TextField()
+    ZipCode = models.IntegerField()
     DateTime = models.DateTimeField()
     Interested = models.ManyToManyField('Seeker', related_name='seekers', blank=True)
     Description = models.TextField()
@@ -84,6 +87,7 @@ class Profile(models.Model):
     Age = models.SmallIntegerField()
     Portrait = models.ImageField(upload_to=get_image_path, blank=True, null=True)
     Contacts = models.ManyToManyField("self", blank=True)
+    ZipCode = models.IntegerField(blank=True, null=True)
             
 class Review(models.Model):
     Rating = models.SmallIntegerField() #Precision undecided

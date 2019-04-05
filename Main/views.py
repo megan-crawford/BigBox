@@ -11,6 +11,8 @@ from django.core.exceptions import ValidationError
 from django.template import loader #?
 from django.db.models import Q #for Django OR filters
 from django.db.models.fields import BLANK_CHOICE_DASH
+from . models import locations
+from math import sin, cos, sqrt, atan2, radians
 
 def create_account(request):
     if request.method == "POST": #user clicks register button
@@ -70,11 +72,11 @@ def update_account(request):
     #TODO: check if user is logged in
 
     if request.method == 'POST':
-        #print('update account post')
+        print('update account post')
         form = UpdateAccountForm(request.POST)
 
         if form.is_valid():
-            #print('update account valid')
+            print('update account valid')
             update_all = 'update_all_button' in request.POST
 
             if form.cleaned_data['profile_picture'] and ('profile_picture_button' in request.POST or update_all):
@@ -100,6 +102,9 @@ def update_account(request):
             
             if (form.cleaned_data['pref_job_type'] != '') and ('pref_job_type_button' in request.POST or update_all):
                 request.user.seeker.PrefType = form.cleaned_data['pref_job_type']
+
+            if (form.cleaned_data['zip_code']) and ('zip_code_button' in request.POST or update_all):
+                request.user.profile.ZipCode = form.cleaned_data['zip_code']
 
             if (form.cleaned_data['password'] and form.cleaned_data['password_confirmation']) and ('password_button' in request.POST or update_all):
                 request.user.set_password(form.cleaned_data['password'])
@@ -172,9 +177,10 @@ def create_job(request):
             date = form.cleaned_data['date_time']
             description = form.cleaned_data['description']
             job_type = form.cleaned_data['job_type']
-            userid = request.user.id
+            zip_code = form.cleaned_data['zip_code']
+
             #create new job
-            post = Post.objects.create(Pay=pay, DateTime=date, Description=description, JobType=job_type, userID=userid)
+            post = Post.objects.create(Pay=pay, DateTime=date, Description=description, JobType=job_type, ZipCode=zip_code)
             request.user.creator.Posts.add(post)
 
             return redirect('/add_job/')
@@ -186,12 +192,11 @@ def create_job(request):
 def list_job(request):
     #TODO: check if user is logged in
     if request.method == "GET":
-        #print('list job get')
+        print('list job get')
         form = ListJobsForm(request.GET)
 
         if form.is_valid():
-            #print('list job valid')
-            #max_distance = form.cleaned_data['max_distance']
+            print('list job valid')
             job_type = form.cleaned_data['job_type']
             min_wage = form.cleaned_data['min_wage']
             max_wage = form.cleaned_data['max_wage']
@@ -212,8 +217,13 @@ def list_job(request):
     else:
         jobs = Post.objects.all()
         form = ListJobsForm()
+
+    #sort by distance, then pay, then date
     jobs = jobs.filter(Active=0)
     jobs = jobs.order_by('Pay', 'DateTime')
+    if (request.user.profile.ZipCode != None):
+        jobs = sorted(jobs, key = lambda job : distBetween(job.ZipCode, request.user.profile.ZipCode))
+
     return render(request, 'Jobs/listJobs.html', {'form':form, 'jobs':jobs})
 
 def new_job(request): #need to change this so it shows that job info !!!
@@ -238,10 +248,12 @@ def reopen_job(request, post_id):
 
 def all_jobs_creator(request):
 
-    if(request.GET.get('delete_jobs')):
-        print("delete job")
+    if (request.GET.get('all_jobs')):
+        print("Request.get:", request.GET.get('all_jobs'))
 
-        #Insert stuff to delete a job
+
+    if(request.GET.get('search')):
+        print("search")
 
         typeOfJob = "all_jobs"
     elif(request.GET.get('all_jobs')):
@@ -273,10 +285,17 @@ def all_jobs_creator(request):
                 job_type = form.cleaned_data['job_type']
                 min_wage = form.cleaned_data['min_wage']
                 max_wage = form.cleaned_data['max_wage']
+                search = form.cleaned_data['search']
+                print("search:", search)
 
                 if (job_type != '' and min_wage and max_wage): #all inputs filled in
                     jobs = request.user.creator.Posts.filter(JobType=job_type, Pay__range=[min_wage, max_wage])
                 elif (job_type == '' and not min_wage and not max_wage): #no inputs filled in
+                    #array = ['dog']
+                    #regex = '^.*(%s).*$' % '|'.join(array)
+                    #print(regex)
+                    #Profile.objects.filter(full_name__iregex=regex)
+                    #jobs = request.user.creator.Posts.filter(Description=regex)
                     jobs = request.user.creator.Posts.all()
                 else: #mixed inputs filled in
                     if min_wage and not max_wage:
@@ -323,6 +342,12 @@ def all_jobs_creator(request):
     print(request.user.creator.Posts.all())
     jobs = jobs.order_by('Pay', 'DateTime')
     return render(request, 'Creator/allJobsCreator.html', {'form':form, 'jobs':jobs, 'typeOfJob':typeOfJob})
+
+def delete_job(request, deletedJobID):
+    #print("delete job")
+    job = Post.objects.filter(id=deletedJobID).first()
+    job.delete()
+    return redirect('/all_jobs_creator/')
 
 def accepted_jobs_creator(request):
     return render(request, 'Creator/acceptedJobsCreator.html')
@@ -450,6 +475,10 @@ def generate_report(request):
 
     return render(request, 'generate_report.html', {'form':form, 'user_info':user})
 
+	
+def generate_review(request):
+	return render(request, 'generate_review.html')
+	
 def past_jobs_seeker(request):
     return render(request, 'Seeker/pastJobsSeeker.html')
 
@@ -476,3 +505,23 @@ def show_interest(request, jobID, seekerID):
     email = creator.email
     val = sendEmail("Congrats, a seeker is interested in your job", content, email)
     return render(request, 'Jobs/showInterest.html')    
+  
+#distance between 2 zip codes in miles
+def distBetween(zip1, zip2):
+    try:
+        radius = 3958.8 #radius of the Earth in miles
+
+        lat1 = radians(locations.loc[int(zip1)].latitude)
+        long1 = radians(locations.loc[int(zip1)].longitude)
+        lat2 = radians(locations.loc[int(zip2)].latitude)
+        long2 = radians(locations.loc[int(zip2)].longitude)
+
+        dlon = long2 - long1
+        dlat = lat2 - lat1
+
+        a = sin(dlat / 2)**2 + cos(lat1) * cos(lat2) * sin(dlon / 2)**2
+        c = 2 * atan2(sqrt(a), sqrt(1 - a))
+
+        return radius * c
+    except (KeyError, ValueError): #unknown zip codes and zip codes with non numeric characters
+        return -1
