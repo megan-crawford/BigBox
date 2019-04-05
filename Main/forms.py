@@ -194,3 +194,5 @@ class ListJobsCreator(forms.Form):
         if min_wage and max_wage and max_wage < min_wage:
             raise ValidationError(message=self.error_messages['invalid_wage'], code='invalid_wage')
 
+class GenerateReviewForm(forms.Form):
+    rating = forms.IntegerField(min_value=1, max_value=5, required=True)
