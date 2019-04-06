@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
-from . models import Profile, Post, Review, Report, Review, Seeker, Creator
+from . models import Profile, Post, Report, SeekerReview, CreatorReview, Seeker, Creator
 from . forms import ListJobsForm, GenerateReportForm, CreateJobForm
 from django.test import Client
 from .views import sendEmail, distBetween
@@ -20,8 +20,8 @@ class DatabaseClassCreation(TestCase):
         Profile.objects.create(User=user, Age="23")
         post = Post.objects.create(Pay=12.50, Location="Kentucky", DateTime="2018-11-20T15:58:44.767594-06:00", Description="I love Winky", JobType="Snow Shoveling")
         Report.objects.create(User=user, Classification="No show", Details="Winky was here")
-        review1 = Review.objects.create(Rating = 5)
-        review2 = Review.objects.create(Rating = 1)
+        review1 = SeekerReview.objects.create(Rating = 5)
+        review2 = CreatorReview.objects.create(Rating = 1)
         seeker = Seeker.objects.create(User=user, Location="Delaware")
         seeker.save()
         seeker.IntJob.add(post)
@@ -423,3 +423,34 @@ class ZipCodeDist(TestCase):
 
     def test_invalid(self):
         self.assertEqual(distBetween(99811, 48384), -1)
+
+class GenerateReview(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.client.post('/create_account/', {
+                        'username': 'user', 'password': '83c9bqo87n', 'password_confirmation': '83c9bqo87n',
+                        'email': 'jack@email.com', 'first_name': 'John', 'last_name': 'Doe', 'age': 27
+        })
+        self.client.post('/create_account/', {
+                        'username': 'user2', 'password': '83c9bqo87n', 'password_confirmation': '83c9bqo87n',
+                        'email': 'jack2@email.com', 'first_name': 'John', 'last_name': 'Doe', 'age': 37
+        })
+        self.user = User.objects.get(username="user")
+
+    def test_view_valid_seeker(self):
+        self.client.post(f'/generate_review/{self.user.id}/1/', {'rating': 5})
+        
+        self.assertEqual(SeekerReview.objects.count(), 1)
+        self.assertEqual(CreatorReview.objects.count(), 0)
+        
+        rating = self.user.seeker_reviews.first().Rating
+        self.assertEqual(rating, 5)
+
+    def test_view_valid_creator(self):
+        self.client.post(f'/generate_review/{self.user.id}/0/', {'rating': 3})
+        
+        self.assertEqual(SeekerReview.objects.count(), 0)
+        self.assertEqual(CreatorReview.objects.count(), 1)
+
+        rating = self.user.creator_reviews.first().Rating
+        self.assertEqual(rating, 3)

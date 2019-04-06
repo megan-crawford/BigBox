@@ -30,7 +30,7 @@ urlpatterns = [
     path('update_account/', views.update_account, name='update_account'),
     path('profile/', views.profile, name='profile'),
     path('generate_report/', views.generate_report, name='generate_report'),
-	path('generate_review/<user>/<is_seeker>/', views.generate_review, name='generate_review'),
+	path('generate_review/<int:user_id>/<int:is_seeker>/', views.generate_review, name='generate_review'),
 	path('reset_password/', views.reset_password, name='reset_password'),
 
     #creator

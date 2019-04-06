@@ -91,11 +91,11 @@ class Profile(models.Model):
             
 class SeekerReview(models.Model):
     Rating = models.SmallIntegerField() #Precision undecided
-    User = models.ForeignKey(User, on_delete=models.CASCADE)
+    User = models.ForeignKey(User, on_delete=models.CASCADE, related_name='seeker_reviews')
 
 class CreatorReview(models.Model):
     Rating = models.SmallIntegerField() #Precision undecided
-    User = models.ForeignKey(User, on_delete=models.CASCADE)
+    User = models.ForeignKey(User, on_delete=models.CASCADE, related_name='creator_reviews')
 
 class Seeker(models.Model):     #Job Seeker, subclass to User
     User = models.OneToOneField(User, on_delete=models.CASCADE)

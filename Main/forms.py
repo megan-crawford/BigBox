@@ -26,7 +26,6 @@ class CreateAccountForm(forms.Form):
 
     def clean_username(self):
         username = self.cleaned_data['username']
-        print("username", username)
         if User.objects.filter(username=username).exists():
             raise ValidationError(message=self.error_messages['preexisting_username'], code='preexisting_username')
         return username

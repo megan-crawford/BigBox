@@ -17,16 +17,10 @@ from math import sin, cos, sqrt, atan2, radians
 def create_account(request):
     if request.method == "POST": #user clicks register button
         #print('create account post')
-
-        print("Attempt CreateAccount")
-        try:
-            form = CreateAccountForm(request.POST)
-        except:
-            print("oh no")
-            #print(e)
+        form = CreateAccountForm(request.POST)
 
         if form.is_valid():
-            print('Create Account Valid')
+            #print('Create Account Valid')
 
             #get form data
             username = form.cleaned_data['username']
@@ -49,10 +43,11 @@ def create_account(request):
             return redirect('/home_seeker/')
 
         else:
-            print("Create Account not Valid")
+            pass
+            #print("Create Account not Valid")
 
     else: #user is viewing the create account page
-        print("Load Create Account")
+        #print("Load Create Account")
         form = CreateAccountForm()
 
     return render(request, 'createAccount.html', {'form':form})
@@ -475,23 +470,37 @@ def generate_report(request):
 
     return render(request, 'generate_report.html', {'form':form, 'user_info':user})
 
-def generate_review(request, user, is_seeker):
+def generate_review(request, user_id, is_seeker):
     #if is_seeker is false the user is being reviewed as a creator
 
     if request.method == "POST":
-        form = GenerateReviewForm(request)
+        #print('generate review post')
+        form = GenerateReviewForm(request.POST)
+
+        #process params
+        user = User.objects.filter(id=user_id).first()
+        if user == None or is_seeker == None:
+            form.add_error(None, 'url information is incorrect')
+            return render(request, 'generate_review.html', {'form':form})
+
+        is_seeker = False if is_seeker == 0 else True
 
         if form.is_valid():
-            rating = form.changed_data['rating']
+            #print('generate review valid')
+            rating = form.cleaned_data['rating']
 
             if is_seeker:
-                SeekerReview.obejcts.create(Rating=rating, User=user)
+                SeekerReview.objects.create(Rating=rating, User=user)
             else:
-                CreatorReview.obejcts.create(Rating=rating, User=user)
+                CreatorReview.objects.create(Rating=rating, User=user)
+
+            redirect('/one_job/')
+        else:
+            print(form.errors)
     else:
         form = GenerateReviewForm()
 
-    return render(request, 'generate_review.html')
+    return render(request, 'generate_review.html', {'form':form})
 	
 def past_jobs_seeker(request):
     return render(request, 'Seeker/pastJobsSeeker.html')
