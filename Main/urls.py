@@ -20,8 +20,7 @@ app_name='Main'
 
 urlpatterns = [
     #home
-	path('', views.home, name='home'),
-	path('home/', views.home, name='home'),
+	path('', views.login_request, name='login'),
 	
     #account
     path('login/', views.login_request, name='login'),
