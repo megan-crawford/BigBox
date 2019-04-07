@@ -418,7 +418,7 @@ def one_job_creator(request, job_id):
 
     interested_seekers = post.Interested.all()
 
-    return render(request, 'Jobs/oneJob.html', {'post_info':post, 'interested_seekers':interested_seekers})
+    return render(request, 'Jobs/creatorOneJob.html', {'post_info':post, 'interested_seekers':interested_seekers})
 
 def seeker_one_job(request):
     return render(request, 'Jobs/oneJob.html')
