@@ -1,0 +1,18 @@
+=== Weekly Individual Report (Team 01: sturgeons++) ===
+Name: Kyle Kovacik
+
+Week 9 (Summary)
+4/2/19		3	f84db11	Add delete job functionality to creator jobs page
+4/2/19		2	NA	Redirect jobs to one job pages
+4/5/19		3	b2a247c	Implented Search Filtering
+4/6/19		2	b2a247c	Fixed Search Filtering and expanded new filters to both seeker and creator pages
+4/7/19		2	a7c4966	Added filtering by zipcode
+...
+
+Week 10 (Plan)
+4/9/19		1	NA	Add notify element in navbar
+4/9/19		2	NA	Filter seeker pages by attributes
+4/12/19		3	NA	Add search filtering for listJobs
+4/13/19		4	NA	Add Rating fields to profile (Both seeker and creator
+
+Goal: Add notifiying to the user, and finish all filtering for both searching and viewing current jobs.
