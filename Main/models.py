@@ -42,7 +42,7 @@ class Post(models.Model):
     Pay = models.FloatField()
     ZipCode = models.IntegerField()
     DateTime = models.DateTimeField()
-    Interested = models.ManyToManyField('Seeker', related_name='seekers', blank=True)
+    Interested = models.ManyToManyField(User, related_name='interested_seekers', blank=True)
     Description = models.TextField()
     JobType = models.CharField(
             max_length=100,
