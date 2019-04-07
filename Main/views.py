@@ -223,7 +223,7 @@ def list_job(request):
 def new_job(request): #need to change this so it shows that job info !!!
     return render(request, 'Jobs/viewNewJob.html')
 
-def view_one_job(request, jobID): #yeehaw im making progress
+def one_job_seeker(request, jobID): #yeehaw im making progress
     jobs = Post.objects.filter(id=jobID)
     return render(request, 'Jobs/oneJob.html', {'jobs':jobs})
 
@@ -419,6 +419,9 @@ def one_job_creator(request, job_id):
     interested_seekers = post.Interested.all()
 
     return render(request, 'Jobs/oneJob.html', {'post_info':post, 'interested_seekers':interested_seekers})
+
+def seeker_one_job(request):
+    return render(request, 'Jobs/oneJob.html')
 
 #Jobs Seeker Pages
 def all_jobs_seeker(request, job):
@@ -634,7 +637,7 @@ def show_interest(request, jobID, seekerID):
     job = Post.objects.filter(id=jobID).first()
     #do error checking !!!!!!!! yip yap like check if record already in Interested
     seeker = User.objects.filter(id=seekerID).first()
-    job.Interested.add(seekerID)
+    job.Interested.add(seeker)
     content = seeker.first_name + " is interested in this job: " + job.Description + ". Please visit BigBox to accept or decline this seeker."
     creator = User.objects.filter(id=job.userID).first()
     email = creator.email
