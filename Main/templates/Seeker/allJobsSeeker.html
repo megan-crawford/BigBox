@@ -7,10 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="{% static 'css/jobsCreator.css' %}">
+    <link rel="stylesheet" href="{% static 'css/jobsSeeker.css' %}">
 
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-  <script src="{% static 'js/allJobsCreator.js' %}"></script>
+  <script src="{% static 'js/allJobsSeeker.js' %}"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -51,7 +51,7 @@
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item active" style="font-size:16px">
-          <a class="nav-link" style="font-size: 200%; padding-left: 20%" href="/home_creator">Home<span class="sr-only">(current)</span></a>
+          <a class="nav-link" style="font-size: 200%; padding-left: 20%" href="/home_seeker">Home<span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item active">
                 <a class="nav-link" style="font-size: 300%; padding-left: 280%" href="#">Seeker<span class="sr-only">(current)</span></a> 
@@ -69,18 +69,19 @@
     </div>
   </nav>
 
-
+  <form name="filter" id="filter" method="GET">
+  
   
   <div class="padding" style="padding-top: 9%"></div>
 
   <div id="main">
-  
     <div class="col-sm-2">
           <div class="row-offcanvas row-offcanvas-left" id="sidebar">
             <div id="sidebar" class="sidebar-offcanvas">
                 <div class="col-md-12">
-                    <form name="filter" id="filter" method="GET">
+                      
                         <ul class="nav nav-pills nav-stacked">
+                            <li id="li"><button class="hidden" type="submit" name="apply" value="apply" style="display:none">Hidden</button></li>
                             {% if typeOfJob == 'all_jobs' %}
                             <li id="li"><button class="chosen" type="submit" name="all_jobs" value="all_jobs" style="font-size: 15px">All</button></li>
                             <li id="li"><button class="typeOfJob" type="submit" name="accepted_jobs" value="accepted_jobs">Accepted</button></li>
@@ -103,13 +104,6 @@
                             <li id="li"><button class="chosen" type="submit" name="past_jobs" value="past_jobs" style="font-size: 15px">Past</button></li>
                             {% endif %}
 
-
-                            <!---
-                            <li id="li"><input type="submit" name="accepted_jobs" value="accepted_jobs">Accepted Jobs</input></li>
-                            <li id="li"><a href="/pending_jobs_creator">Pending Jobs</a></li>
-                            <li id="li" style="padding-bottom: 10%"><a id="PastJobs" href="#">Past Jobs</a></li>
-                            -->
-
                             <li id="li" style="padding-top: 10%;">
                                 <div class="form-group">
                                       <label for="distance" id="distanceText">Distance</label>
@@ -119,19 +113,6 @@
                             <li id="li">
                               <div class="form-group">
                                 {{ form.job_type }}
-                                <!---<label for="jobType" id="jobTypeText">Job Type</label>
-                                <div class="input-group">
-                                  <select class="custom-select" id="inputGroupSelect04">
-                                    <option selected>Choose...</option>
-                                    <option value="Lawn Care">Lawn Care</option>
-                                    <option value="Dog Walking">Dog Walking</option>
-                                    <option value="Babysitting">Babysitting</option>
-                                    <option value="Pet Care">Pet Care</option>
-                                    <option value="Manual Labor">Manual Labor</option>
-                                    <option value="Other">Other</option>
-                                  </select>
-                                </div>
-                              -->
                               </div>
                             </li>
                             <li id="li">
@@ -149,14 +130,14 @@
                           <li id="li">
                             <div style="float: left; padding-top: 5%; padding-left: 5%">
                               <a>
-                                <button style="height: 200%">
+                                <button type="submit" value="apply" name="apply" style="height: 200%">
                                   Apply
                                 </button>
                               </a>
                             </div>
                             <div style="float: right; padding-top: 5%; padding-right: 5%">
                               <a>
-                                <button style="height: 200%">
+                                <button type="reset" value="Reset" style="height: 200%">
                                   Reset
                                 </button>
                               </a>
@@ -165,90 +146,85 @@
 
 
                         </ul>
-                    </form>
+                      
                 </div>
               </div>
         
               
-          </div><!--/row-offcanvas -->
+          </div>
       </div>
     <div class="col-sm-10">
-      <div class="row d-flex justify-content-center">
-        <form name="search" id="search" action="#" method="GET">
-          {% csrf_token %}
-          <div class="form-group">
-            <input type="search" name="search" class="form-control" id="searchInput" placeholder="Search Job">
-          </div>
-        </form>
+      <div class="row d-flex justify-content-center" style="width:100%;">
+            <div class="form-group" style="width:100%;">
+              <input type="text" name="search" id="search" placeholder="Search Description">
+            </div>
       </div>  
        
-      {% for post in jobs %}
+        {% for post in jobs %}
           
-
-      <a href="\one_job">
-      <div class="row d-flex justify-content-center">
-        <div class="well" id="job">
-            <div class="col-sm-2" style="">
+        <div class="row d-flex justify-content-center" style="padding-top: 0.5%;">
+          <div class = "col-sm-12">
+          <a href="/view_one_job/{{post.id}}/">
+            <div class="well" id="job" style="height: 95%; width: 100%;">
+              <div class="col-sm-2" style="padding-bottom: 3%;">
+                {% if post.JobType == 'LM' %}
+                  <img src="{% static 'images/Work Icons/lawn_care.PNG' %}" style="max-height:100%;max-width:100%;">
+                {% elif post.JobType == 'SS' %}
+                  <img src="{% static 'images/Work Icons/snow_shoveling.PNG' %}" style="max-height:100%;max-width:100%;">
+                {% elif post.JobType == 'DW' %}
+                  <img src="{% static 'images/Work Icons/dog_walking.PNG' %}" style="max-height:100%;max-width:100%;">
+                {% elif post.JobType == 'PS' %}
+                  <img src="{% static 'images/Work Icons/pet_care.PNG' %}" style="max-height:100%;max-width:100%;">
+                {% elif post.JobType == 'BS' %}
+                  <img src="{% static 'images/Work Icons/baby_sitting.PNG' %}" style="max-height:100%;max-width:100%;">
+                {% elif post.JobType == 'C' %}
+                  <img src="{% static 'images/Work Icons/cleaning.PNG' %}" style="max-height:100%;max-width:100%;">
+                {% elif post.JobType == 'M' %}
+                  <img src="{% static 'images/Work Icons/manual_labor.PNG' %}" style="max-height:100%;max-width:100%;">
+                {% elif post.JobType == 'O' %}
+                  <img src="{% static 'images/Work Icons/other.PNG' %}" style="max-height:100%;max-width:100%;">
+                {% endif %}
+              </div>
+              <div class="col-sm-2" style="">
               {% if post.JobType == 'LM' %}
-                <img src="{% static 'images/Work Icons/lawn_care.PNG' %}" style="max-height:100%;max-width:100%;">
+                <p>Lawn-Mowing</p>  
               {% elif post.JobType == 'SS' %}
-                <img src="{% static 'images/Work Icons/snow_shoveling.PNG' %}" style="max-height:100%;max-width:100%;">
+                <p>Snow-Shoveling</p>  
               {% elif post.JobType == 'DW' %}
-                <img src="{% static 'images/Work Icons/dog_walking.PNG' %}" style="max-height:100%;max-width:100%;">
+                <p>Dog-Walking</p>  
               {% elif post.JobType == 'PS' %}
-                <img src="{% static 'images/Work Icons/pet_care.PNG' %}" style="max-height:100%;max-width:100%;">
+                <p>Pet-Sitting</p>  
               {% elif post.JobType == 'BS' %}
-                <img src="{% static 'images/Work Icons/baby_sitting.PNG' %}" style="max-height:100%;max-width:100%;">
+                <p>Baby-Sitting</p>  
               {% elif post.JobType == 'C' %}
-                <img src="{% static 'images/Work Icons/cleaning.PNG' %}" style="max-height:100%;max-width:100%;">
+                <p>Cleaning</p>  
               {% elif post.JobType == 'M' %}
-                <img src="{% static 'images/Work Icons/manual_labor.PNG' %}" style="max-height:100%;max-width:100%;">
+                <p>Moving</p>  
               {% elif post.JobType == 'O' %}
-                <img src="{% static 'images/Work Icons/other.PNG' %}" style="max-height:100%;max-width:100%;">
+                <p>Other</p>  
               {% endif %}
-            </div>
-            <div class="col-sm-2" style="">
-            {% if post.JobType == 'LM' %}
-              <p>Lawn-Mowing</p>  
-            {% elif post.JobType == 'SS' %}
-              <p>Snow-Shoveling</p>  
-            {% elif post.JobType == 'DW' %}
-              <p>Dog-Walking</p>  
-            {% elif post.JobType == 'PS' %}
-              <p>Pet-Sitting</p>  
-            {% elif post.JobType == 'BS' %}
-              <p>Baby-Sitting</p>  
-            {% elif post.JobType == 'C' %}
-              <p>Cleaning</p>  
-            {% elif post.JobType == 'M' %}
-              <p>Moving</p>  
-            {% elif post.JobType == 'O' %}
-              <p>Other</p>  
-            {% endif %}
-            </div>
-            <div class="col-sm-4" style="">
-                <p>{{ post.Description }}</p>
-            </div>              
-            <div class="col-sm-1" style="">
-                <p>Pay: {{ post.Pay }}</p>
-            </div>
-            <div class="col-sm-1" style="">
-                <!--<p>Date: {{ post.Date }}</p>-->
-            </div>
-            <div class="col-sm-2" style="">
-                <p>{{ request.user.username }}</p>
-            </div>
-            
+              </div>
+              <div class="col-sm-4" style="">
+                  <p>{{ post.Description }}</p>
+              </div>              
+              <div class="col-sm-1" style="">
+                  <p>Pay: {{ post.Pay }}</p>
+              </div>
+              <div class="col-sm-1" style="">
+                  <p>{{ request.user.username }}</p>
+              </div>
+          </div>
+          </a>
         </div>
-    </div>
-  </a>
-      {% endfor %}
-    <p>{{ typeOfJob }}</p>
+          
+      </div>
+    
+        {% endfor %}
 
     
     </div>
 </div>
-
+</form>
 
 
   
@@ -267,3 +243,4 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
   </body>
 </html>
+  

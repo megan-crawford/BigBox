@@ -236,64 +236,97 @@ def reopen_job(request, post_id):
 
     return redirect('/past_jobs_creator/')
 
-def all_jobs_creator(request):
+def all_jobs_creator(request, job):
 
-    if (request.GET.get('all_jobs')):
-        print("Request.get:", request.GET.get('all_jobs'))
+    if(request.GET.get('all_jobs')):
+        print("all_jobs button")
+        form = ListJobsCreator(request.GET)
 
-
-    if(request.GET.get('search')):
-        print("search")
-
+        if (job != "all_jobs"):
+            return redirect('/all_jobs_creator/all_jobs/?all_jobs=all_jobs&max_distance=&job_type=&min_wage=&max_wage=&search=&')
+            
         typeOfJob = "all_jobs"
-    elif(request.GET.get('all_jobs')):
-        typeOfJob = "all_jobs"
+        job="all_jobs"
         active = -1
     elif(request.GET.get("accepted_jobs")):
+        print("accepted_jobs button")
+
+        if (job != "accepted_jobs"):
+            return redirect('/all_jobs_creator/accepted_jobs/?accepted_jobs=accepted_jobs&max_distance=&job_type=&min_wage=&max_wage=&search=&')
+
         typeOfJob = "accepted_jobs"
+        job="accepted_jobs"
         active = 1
     elif(request.GET.get("pending_jobs")):
+        print("pending_jobs button")
+        
+        if (job != "pending_jobs"):
+            return redirect('/all_jobs_creator/pending_jobs/?pending_jobs=pending_jobs&max_distance=&job_type=&min_wage=&max_wage=&search=&')
+
         typeOfJob = "pending_jobs"
+        job="pending_jobs"
         active = 0
+
     elif(request.GET.get("past_jobs")):
+        print("past_jobs button")
+        
+        if (job != "past_jobs"):
+            return redirect('/all_jobs_creator/past_jobs/?past_jobs=past_jobs&max_distance=&job_type=&min_wage=&max_wage=&search=&')
+
         typeOfJob = "past_jobs"
+        job="past_jobs"
         active = 2
+    elif(request.GET.get("apply")):
+        print("Apply")
+        
+        typeOfJob = job
+        if (job=="all_jobs"):
+            active = -1
+        elif (job=="accepted_jobs"):
+            active = 1
+        elif (job=="pending_jobs"):
+            active = 0
+        else:
+            active = 2
+    elif(request.GET.get("reset")):
+        print("Reset")
+
+        typeOfJob = job
+        if (job=="all_jobs"):
+            return redirect('/all_jobs_creator/all_jobs/?all_jobs=all_jobs&max_distance=&job_type=&min_wage=&max_wage=&search=&')
+        elif (job=="accepted_jobs"):
+            return redirect('/all_jobs_creator/accepted_jobs/?accepted=accepted_jobs&max_distance=&job_type=&min_wage=&max_wage=&search=&')
+        elif (job=="pending_jobs"):
+            return redirect('/all_jobs_creator/pending_jobs/?pending_jobs=pending_jobs&max_distance=&job_type=&min_wage=&max_wage=&search=&')
+        else:
+            return redirect('/all_jobs_creator/past_jobs/?past_jobs=past_jobs&max_distance=&job_type=&min_wage=&max_wage=&search=&')
     else:
-        typeOfJob = "all_jobs"
+        print("else")
+        typeOfJob = job
+        job = "all_jobs"
         active = -1
-
-    print(typeOfJob)
-
+    
     if (typeOfJob == "all_jobs"):
         if request.method == "GET":
-            print('creator job get')
             form = ListJobsCreator(request.GET)
             if form.is_valid():
-                print('creator job valid')
 
-                #max_distance = form.cleaned_data['max_distance']
                 job_type = form.cleaned_data['job_type']
                 min_wage = form.cleaned_data['min_wage']
                 max_wage = form.cleaned_data['max_wage']
                 search = form.cleaned_data['search']
-                print("search:", search)
-
+                
                 if (job_type != '' and min_wage and max_wage): #all inputs filled in
-                    jobs = request.user.creator.Posts.filter(JobType=job_type, Pay__range=[min_wage, max_wage])
+                    jobs = request.user.creator.Posts.filter(Description__icontains=search, JobType=job_type, Pay__range=[min_wage, max_wage])
                 elif (job_type == '' and not min_wage and not max_wage): #no inputs filled in
-                    #array = ['dog']
-                    #regex = '^.*(%s).*$' % '|'.join(array)
-                    #print(regex)
-                    #Profile.objects.filter(full_name__iregex=regex)
-                    #jobs = request.user.creator.Posts.filter(Description=regex)
-                    jobs = request.user.creator.Posts.all()
+                    jobs = request.user.creator.Posts.filter(Description__icontains=search)             
                 else: #mixed inputs filled in
                     if min_wage and not max_wage:
-                        jobs = request.user.creator.Posts.filter(Q(JobType=job_type) | Q(Pay__gte=min_wage))
+                        jobs = request.user.creator.Posts.filter(Q(Description__icontains=search), Q(JobType=job_type) | Q(Pay__gte=min_wage))
                     elif not min_wage and max_wage:
-                        jobs = request.user.creator.Posts.filter(Q(JobType=job_type) | Q(Pay__lte=max_wage))
+                        jobs = request.user.creator.Posts.filter(Q(Description__icontains=search),  Q(JobType=job_type) | Q(Pay__lte=max_wage))
                     else:
-                        jobs = request.user.creator.Posts.filter(Q(JobType=job_type) | Q(Pay__range=[min_wage, max_wage]))
+                        jobs = request.user.creator.Posts.filter(Q(Description__icontains=search),  Q(JobType=job_type) | Q(Pay__range=[min_wage, max_wage]))
             else:
                 jobs = request.user.creator.Posts.all()
         else:
@@ -301,43 +334,40 @@ def all_jobs_creator(request):
             form = ListJobsCreator()
     else: #get filter by other type of job
         if request.method == "GET":
-            print('get accepted jobs')
             form = ListJobsCreator(request.GET)
             if form.is_valid():
-                print('form valid')
-
-                #max_distance = form.cleaned_data['max_distance']
+                
                 job_type = form.cleaned_data['job_type']
                 min_wage = form.cleaned_data['min_wage']
                 max_wage = form.cleaned_data['max_wage']
+                search = form.cleaned_data['search']
 
                 if (job_type != '' and min_wage and max_wage): #all inputs filled in
-                    jobs = request.user.creator.Posts.filter(JobType=job_type, Pay__range=[min_wage, max_wage], Active=active)
+                    jobs = request.user.creator.Posts.filter(Description__icontains=search, JobType=job_type, Pay__range=[min_wage, max_wage], Active=active)
                 elif (job_type == '' and not min_wage and not max_wage): #no inputs filled in
-                    jobs = request.user.creator.Posts.filter(Active=active)
+                    jobs = request.user.creator.Posts.filter(Description__icontains=search, Active=active)
                 else: #mixed inputs filled in
                     if min_wage and not max_wage:
-                        jobs = request.user.creator.Posts.filter((Q(JobType=job_type) | Q(Pay__gte=min_wage)) & Q(Active=active)) 
+                        jobs = request.user.creator.Posts.filter(Q(Description__icontains=search) & (Q(JobType=job_type) | Q(Pay__gte=min_wage)) & Q(Active=active)) 
                     elif not min_wage and max_wage:
-                        jobs = request.user.creator.Posts.filter((Q(JobType=job_type) | Q(Pay__lte=max_wage)) & Q(Active=active))
+                        jobs = request.user.creator.Posts.filter(Q(Description__icontains=search) & (Q(JobType=job_type) | Q(Pay__lte=max_wage)) & Q(Active=active))
                     else:
-                        jobs = request.user.creator.Posts.filter((Q(JobType=job_type) | Q(Pay__range=[min_wage, max_wage])) & Q(Active=active))
+                        jobs = request.user.creator.Posts.filter(Q(Description__icontains=search) & (Q(JobType=job_type) | Q(Pay__range=[min_wage, max_wage])) & Q(Active=active))
             else:
                 jobs = request.user.creator.Posts.filter(Active=active)
         else:
-            print("here")
             jobs = request.user.creator.Posts.filter(Active=active)
             form = ListJobsCreator()
     
-    print(request.user.creator.Posts.all())
     jobs = jobs.order_by('Pay', 'DateTime')
-    return render(request, 'Creator/allJobsCreator.html', {'form':form, 'jobs':jobs, 'typeOfJob':typeOfJob})
+
+    return render(request, 'Creator/allJobsCreator.html', {'form':form, 'jobs':jobs, 'typeOfJob':typeOfJob}, job)
 
 def delete_job(request, deletedJobID):
     #print("delete job")
     job = Post.objects.filter(id=deletedJobID).first()
     job.delete()
-    return redirect('/all_jobs_creator/')
+    return redirect('/all_jobs_creator/all_jobs/')
 
 def accepted_jobs_creator(request):
     return render(request, 'Creator/acceptedJobsCreator.html')
@@ -373,7 +403,7 @@ def pending_jobs_creator(request):
         form = ListJobsForm()
 
     jobs = jobs.order_by('Pay', 'DateTime')
-    return render(request, 'Creator/pendingJobsCreator.html', {'form':form, 'jobs':jobs})
+    return render(request, 'Creator/pendingJobsCreator.html', {'form':form, 'jobs':jobs, 'typeOfJob':typeOfJob})
 
 def past_jobs_creator(request):
     return render(request, 'Creator/pastJobsCreator.html')
@@ -382,54 +412,132 @@ def one_job(request):
     return render(request, 'Jobs/oneJob.html')
 
 #Jobs Seeker Pages
-def all_jobs_seeker(request):
-
+def all_jobs_seeker(request, job):
 
     if(request.GET.get('all_jobs')):
-        typeOfJob = "all_jobs"
-    elif(request.GET.get("accepted_jobs")):
-        typeOfJob = "accepted_jobs"
-    elif(request.GET.get("interested_jobs")):
-        typeOfJob = "interested_jobs"
-    elif(request.GET.get("past_jobs")):
-        typeOfJob = "past_jobs"
-    else:
-        typeOfJob = "all_jobs"
-
-    print(typeOfJob)
-
-    if request.method == "GET":
-        print('seeker job get')
+        print("all_jobs button")
         form = ListJobsCreator(request.GET)
 
-        if form.is_valid():
-            print('seeker job valid')
+        if (job != "all_jobs"):
+            return redirect('/all_jobs_seeker/all_jobs/?all_jobs=all_jobs&max_distance=&job_type=&min_wage=&max_wage=&search=&')
+            
+        typeOfJob = "all_jobs"
+        job="all_jobs"
+        active = -1
+    elif(request.GET.get("accepted_jobs")):
+        print("accepted_jobs button")
 
-            #max_distance = form.cleaned_data['max_distance']
-            job_type = form.cleaned_data['job_type']
-            min_wage = form.cleaned_data['min_wage']
-            max_wage = form.cleaned_data['max_wage']
+        if (job != "accepted_jobs"):
+            return redirect('/all_jobs_seeker/accepted_jobs/?accepted_jobs=accepted_jobs&max_distance=&job_type=&min_wage=&max_wage=&search=&')
 
-            #Needs to be changed to seeker stuff, when accepting jobs gets added
-            if (job_type != '' and min_wage and max_wage): #all inputs filled in
-                jobs = request.user.creator.Posts.filter(JobType=job_type, Pay__range=[min_wage, max_wage])
-            elif (job_type == '' and not min_wage and not max_wage): #no inputs filled in
+        typeOfJob = "accepted_jobs"
+        job="accepted_jobs"
+        active = 1
+    elif(request.GET.get("interested_jobs")):
+        print("interested_jobs button")
+        
+        if (job != "interested_jobs"):
+            return redirect('/all_jobs_seeker/interested_jobs/?interested_jobs=interested_jobs&max_distance=&job_type=&min_wage=&max_wage=&search=&')
+
+        typeOfJob = "interested_jobs"
+        job="interested_jobs"
+        active = 0
+
+    elif(request.GET.get("past_jobs")):
+        print("past_jobs button")
+        
+        if (job != "past_jobs"):
+            return redirect('/all_jobs_seeker/past_jobs/?past_jobs=past_jobs&max_distance=&job_type=&min_wage=&max_wage=&search=&')
+
+        typeOfJob = "past_jobs"
+        job="past_jobs"
+        active = 2
+    elif(request.GET.get("apply")):
+        print("Apply")
+        
+        typeOfJob = job
+        if (job=="all_jobs"):
+            active = -1
+        elif (job=="accepted_jobs"):
+            active = 1
+        elif (job=="interested_jobs"):
+            active = 0
+        else:
+            active = 2
+    elif(request.GET.get("reset")):
+        print("Reset")
+
+        typeOfJob = job
+        if (job=="all_jobs"):
+            return redirect('/all_jobs_seeker/all_jobs/?all_jobs=all_jobs&max_distance=&job_type=&min_wage=&max_wage=&search=&')
+        elif (job=="accepted_jobs"):
+            return redirect('/all_jobs_seeker/accepted_jobs/?accepted=accepted_jobs&max_distance=&job_type=&min_wage=&max_wage=&search=&')
+        elif (job=="interested_jobs"):
+            return redirect('/all_jobs_seeker/interested_jobs/?interested_jobs=interested_jobs&max_distance=&job_type=&min_wage=&max_wage=&search=&')
+        else:
+            return redirect('/all_jobs_seeker/past_jobs/?past_jobs=past_jobs&max_distance=&job_type=&min_wage=&max_wage=&search=&')
+    else:
+        print("else")
+        typeOfJob = job
+        job = "all_jobs"
+        active = -1
+    
+    if (typeOfJob == "all_jobs"):
+        if request.method == "GET":
+            form = ListJobsCreator(request.GET)
+            if form.is_valid():
+
+                job_type = form.cleaned_data['job_type']
+                min_wage = form.cleaned_data['min_wage']
+                max_wage = form.cleaned_data['max_wage']
+                search = form.cleaned_data['search']
+                
+                if (job_type != '' and min_wage and max_wage): #all inputs filled in
+                    jobs = request.user.creator.Posts.filter(Description__icontains=search, JobType=job_type, Pay__range=[min_wage, max_wage])
+                elif (job_type == '' and not min_wage and not max_wage): #no inputs filled in
+                    jobs = request.user.creator.Posts.filter(Description__icontains=search)             
+                else: #mixed inputs filled in
+                    if min_wage and not max_wage:
+                        jobs = request.user.creator.Posts.filter(Q(Description__icontains=search), Q(JobType=job_type) | Q(Pay__gte=min_wage))
+                    elif not min_wage and max_wage:
+                        jobs = request.user.creator.Posts.filter(Q(Description__icontains=search),  Q(JobType=job_type) | Q(Pay__lte=max_wage))
+                    else:
+                        jobs = request.user.creator.Posts.filter(Q(Description__icontains=search),  Q(JobType=job_type) | Q(Pay__range=[min_wage, max_wage]))
+            else:
                 jobs = request.user.creator.Posts.all()
-            else: #mixed inputs filled in
-                if min_wage and not max_wage:
-                    jobs = request.user.creator.Posts.filter(Q(JobType=job_type) | Q(Pay__gte=min_wage))
-                elif not min_wage and max_wage:
-                    jobs = request.user.creator.Posts.filter(Q(JobType=job_type) | Q(Pay__lte=max_wage))
-                else:
-                    jobs = request.user.creator.Posts.filter(Q(JobType=job_type) | Q(Pay__range=[min_wage, max_wage]))
         else:
             jobs = request.user.creator.Posts.all()
-    else:
-        jobs = request.user.creator.Posts.all()
-        form = ListJobsForm()
+            form = ListJobsCreator()
+    else: #get filter by other type of job
+        if request.method == "GET":
+            form = ListJobsCreator(request.GET)
+            if form.is_valid():
+                
+                job_type = form.cleaned_data['job_type']
+                min_wage = form.cleaned_data['min_wage']
+                max_wage = form.cleaned_data['max_wage']
+                search = form.cleaned_data['search']
 
+                if (job_type != '' and min_wage and max_wage): #all inputs filled in
+                    jobs = request.user.creator.Posts.filter(Description__icontains=search, JobType=job_type, Pay__range=[min_wage, max_wage], Active=active)
+                elif (job_type == '' and not min_wage and not max_wage): #no inputs filled in
+                    jobs = request.user.creator.Posts.filter(Description__icontains=search, Active=active)
+                else: #mixed inputs filled in
+                    if min_wage and not max_wage:
+                        jobs = request.user.creator.Posts.filter(Q(Description__icontains=search) & (Q(JobType=job_type) | Q(Pay__gte=min_wage)) & Q(Active=active)) 
+                    elif not min_wage and max_wage:
+                        jobs = request.user.creator.Posts.filter(Q(Description__icontains=search) & (Q(JobType=job_type) | Q(Pay__lte=max_wage)) & Q(Active=active))
+                    else:
+                        jobs = request.user.creator.Posts.filter(Q(Description__icontains=search) & (Q(JobType=job_type) | Q(Pay__range=[min_wage, max_wage])) & Q(Active=active))
+            else:
+                jobs = request.user.creator.Posts.filter(Active=active)
+        else:
+            jobs = request.user.creator.Posts.filter(Active=active)
+            form = ListJobsCreator()
+    
     jobs = jobs.order_by('Pay', 'DateTime')
-    return render(request, 'Seeker/allJobsSeeker.html', {'form':form, 'jobs':jobs, 'typeOfJob':typeOfJob})
+
+    return render(request, 'Seeker/allJobsSeeker.html', {'form':form, 'jobs':jobs, 'typeOfJob':typeOfJob}, job)
 
 def accepted_jobs_seeker(request):
     return render(request, 'Seeker/acceptedJobsSeeker.html')
