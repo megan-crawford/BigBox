@@ -1,0 +1,14 @@
+=== Weekly Individual Report (Team 1: sturgeons++) ===
+Name: Megan Crawford
+
+Week 9 (Summary)
+4/2 3 hr 56afd73 show_interest view function, showInterest html page
+4/5	4 hr a1cccac view function to notify creator when seeker shows interest
+4/7  1 hr ad1eb53 renamed seeker one job, and new page for creator one job
+
+Week 10 (Plan)
+4/9    3 hr	show interested seekers on creator one job
+4/11	   3 hr	make both one job pages look better
+4/12    3 hr job accepting 
+
+Individual Goal: job accepting functionality

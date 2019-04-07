@@ -454,3 +454,34 @@ class GenerateReview(TestCase):
 
         rating = self.user.creator_reviews.first().Rating
         self.assertEqual(rating, 3)
+
+class OneJobCreator(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.client.post('/create_account/', {
+                        'username': 'user', 'password': '83c9bqo87n', 'password_confirmation': '83c9bqo87n',
+                        'email': 'jack@email.com', 'first_name': 'John', 'last_name': 'Doe', 'age': 27
+        })
+        self.client.post('/create_account/', {
+                        'username': 'user2', 'password': '83c9bqo87n', 'password_confirmation': '83c9bqo87n',
+                        'email': 'jack2@email.com', 'first_name': 'Jackson', 'last_name': 'Doe', 'age': 37
+        })
+        self.client.post('/create_account/', { #logged in as user3
+                        'username': 'user3', 'password': '83c9bqo87n', 'password_confirmation': '83c9bqo87n',
+                        'email': 'jack3@email.com', 'first_name': 'Jack', 'last_name': 'Doe', 'age': 47
+        })
+        self.user1 = User.objects.get(username="user")
+        self.user2 = User.objects.get(username="user2")
+        self.user3 = User.objects.get(username="user3")
+
+        self.client.post('/create_job/', {
+                        'pay': 10.00, 'date_time': '2020-05-25', 'zip_code': 44328,
+                        'description': 'work involves ...', 'job_type': Post.PETSITTING,
+        })
+        self.post = Post.objects.first()
+        self.post.Interested.add(self.user1)
+        self.post.Interested.add(self.user2)
+
+    def test_view_valid(self):
+        response = self.client.post(f'/one_job_creator/{self.post.id}/')
+        self.assertEqual(response.context['interested_seekers'].count(), 2)

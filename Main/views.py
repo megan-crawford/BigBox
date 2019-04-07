@@ -127,7 +127,6 @@ def home_creator(request):
     return render(request, 'home_creator.html')
 	
 def home_seeker(request):
-    
     return render(request, 'home_seeker.html')
 
 def login_request(request):
@@ -224,10 +223,9 @@ def list_job(request):
 def new_job(request): #need to change this so it shows that job info !!!
     return render(request, 'Jobs/viewNewJob.html')
 
-def view_one_job(request, jobID): #yeehaw im making progress
+def one_job_seeker(request, jobID): #yeehaw im making progress
     jobs = Post.objects.filter(id=jobID)
     return render(request, 'Jobs/oneJob.html', {'jobs':jobs})
-
 
 #Job Creator Pages
 def reopen_job(request, post_id):
@@ -437,7 +435,16 @@ def pending_jobs_creator(request):
 def past_jobs_creator(request):
     return render(request, 'Creator/pastJobsCreator.html')
 
-def one_job(request):
+def one_job_creator(request, job_id):
+    post = Post.objects.filter(id=job_id).first()
+    if post == None:
+        return render(request, 'Jobs/oneJob.html')
+
+    interested_seekers = post.Interested.all()
+
+    return render(request, 'Jobs/creatorOneJob.html', {'post_info':post, 'interested_seekers':interested_seekers})
+
+def seeker_one_job(request):
     return render(request, 'Jobs/oneJob.html')
 
 #Jobs Seeker Pages
@@ -676,7 +683,7 @@ def show_interest(request, jobID, seekerID):
     job = Post.objects.filter(id=jobID).first()
     #do error checking !!!!!!!! yip yap like check if record already in Interested
     seeker = User.objects.filter(id=seekerID).first()
-    job.Interested.add(seekerID)
+    job.Interested.add(seeker)
     content = seeker.first_name + " is interested in this job: " + job.Description + ". Please visit BigBox to accept or decline this seeker."
     creator = User.objects.filter(id=job.userID).first()
     email = creator.email
