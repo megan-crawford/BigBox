@@ -85,16 +85,17 @@
 	<div class="col-md-7">
 	
 	{% if num_reports == 0 %}
-		<div class="col-md-7"><img src="{% static 'images/rategood.png' %}" title="User has No Reports!" width="20" height="20">
+		<img src="{% static 'images/rategood.png' %}" title="User has No Reports!" width="20" height="20">
 		
 	{% elif num_reports < 3 %}
-		<div class="col-md-7"><img src="{% static 'images/ratemedium.png' %}" title="User has some reports." width="20" height="20">
+		<img src="{% static 'images/ratemedium.png' %}" title="User has some reports." width="20" height="20">
 	
 	{% else %}
 		<img src="{% static 'images/ratebad.png' %}" title="User has many reports..." width="20" height="20">
 
 	{% endif %}
-	
+		<img src="{% static 'images/schoolverified.png' %}" title="User has a verified school email!" width="20" height="20">
+
 	</div>
 	
 		<div class="col-md-3">
@@ -125,11 +126,11 @@
 			<p>Reviews of {{user_info.username}} (as Worker): </p>
 			<div class="well well-lg">
 					<div class="col-md-11">
-						<img src="{% static 'images/fullstar.png' %}" width="70" height="70">
-						<img src="{% static 'images/fullstar.png' %}" width="70" height="70">
-						<img src="{% static 'images/fullstar.png' %}" width="70" height="70">
-						<img src="{% static 'images/fullstar.png' %}" width="70" height="70">
-						<img src="{% static 'images/fullstar.png' %}" width="70" height="70">
+						<img src="{% static 'images/star.png' %}" width="70" height="70">
+						<img src="{% static 'images/star.png' %}" width="70" height="70">
+						<img src="{% static 'images/star.png' %}" width="70" height="70">
+						<img src="{% static 'images/star.png' %}" width="70" height="70">
+						<img src="{% static 'images/star.png' %}" width="70" height="70">
 					</div>
 
 					<div class="padding" style="padding-top: 9.5%"></div>
@@ -140,18 +141,17 @@
 			<p>Reviews of {{user_info.username}} (as Creator): </p>
 			<div class="well well-lg">
 					<div class="col-md-11">
-						<img src="{% static 'images/fullstar.png' %}" width="70" height="70">
-						<img src="{% static 'images/fullstar.png' %}" width="70" height="70">
-						<img src="{% static 'images/fullstar.png' %}" width="70" height="70">
-						<img src="{% static 'images/fullstar.png' %}" width="70" height="70">
-						<img src="{% static 'images/fullstar.png' %}" width="70" height="70">
-					</div>
+						<img src="{% static 'images/star.png' %}" width="70" height="70">
+						<img src="{% static 'images/star.png' %}" width="70" height="70">
+						<img src="{% static 'images/star.png' %}" width="70" height="70">
+						<img src="{% static 'images/star.png' %}" width="70" height="70">
+						<img src="{% static 'images/star.png' %}" width="70" height="70">
+						</div>
 					<div class="padding" style="padding-top: 9.5%"></div>
+				</div>
 			</div>
 		</div>
-		
 	</div>
-</div>
 	
 
     <!-- Optional JavaScript -->
