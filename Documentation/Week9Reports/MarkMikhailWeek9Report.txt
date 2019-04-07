@@ -1,0 +1,17 @@
+=== Weekly Individual Report (Team 1: <sturgeon++>) ===
+Name: Mark Mikhail
+
+Week 9 Continued to work on change password
+
+4/2	3	working on setting up urls, views, and html files
+4/5	3	worked on figuring out problems related to django versions
+4/7	4	working on fixing errors			
+
+Week 9 Finish work on change password ans start work on automated email notifications
+
+4/9	3	Finish Figuring errors
+4/12 	3	Finish Figuring out errors
+4/14	4	develop email notifications
+
+Individual Goal: Finish work on reset password functionality and start working on email notifications
+	
