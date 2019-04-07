@@ -127,7 +127,6 @@ def home_creator(request):
     return render(request, 'home_creator.html')
 	
 def home_seeker(request):
-    
     return render(request, 'home_seeker.html')
 
 def login_request(request):
@@ -411,6 +410,15 @@ def pending_jobs_creator(request):
 
 def past_jobs_creator(request):
     return render(request, 'Creator/pastJobsCreator.html')
+
+def one_job_creator(request, job_id):
+    post = Post.objects.filter(id=job_id).first()
+    if post == None:
+        return render(request, 'Jobs/oneJob.html')
+
+    interested_seekers = post.Interested.all()
+
+    return render(request, 'Jobs/oneJob.html', {'post_info':post, 'interested_seekers':interested_seekers})
 
 def seeker_one_job(request):
     return render(request, 'Jobs/oneJob.html')
