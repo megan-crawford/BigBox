@@ -170,14 +170,15 @@ class ListJobsForm(forms.Form):
             raise ValidationError(message=self.error_messages['invalid_wage'], code='invalid_wage')
 
 class ListJobsCreator(forms.Form):
-    max_distance = forms.IntegerField(min_value=1, max_value=10000, required = False) #in ___ units?
+    zip_code = forms.IntegerField(min_value=0, required=False)
     job_type = forms.ChoiceField(choices= BLANK_CHOICE_DASH + list(Post.TYPE_CHOICES), required=False)
     min_wage = forms.DecimalField(min_value=0, max_value=1000, decimal_places=2, required=False)
     max_wage = forms.DecimalField(min_value=0, max_value=1000, decimal_places=2, required=False)
     search = forms.CharField(label='search', max_length=50, required=False)
 
     error_messages = {
-        'invalid_wage' : 'Max wage cannot be less than min wage'
+        'invalid_wage' : 'Max wage cannot be less than min wage',
+        'invalid_zip_code' : 'That zip code does not exist',
     }
 
     def clean_search(self):
@@ -189,9 +190,15 @@ class ListJobsCreator(forms.Form):
         cleaned_data = super().clean()
         min_wage = cleaned_data['min_wage']
         max_wage = cleaned_data['max_wage']
+        zip_code = cleaned_data['zip_code']
 
         if min_wage and max_wage and max_wage < min_wage:
             raise ValidationError(message=self.error_messages['invalid_wage'], code='invalid_wage')
+
+    def clean_zip_code(self):
+        zip_code = self.cleaned_data['zip_code']
+        return zip_code
+        
 
 class GenerateReviewForm(forms.Form):
     rating = forms.IntegerField(min_value=1, max_value=5, required=True)
