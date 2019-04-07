@@ -224,10 +224,9 @@ def list_job(request):
 def new_job(request): #need to change this so it shows that job info !!!
     return render(request, 'Jobs/viewNewJob.html')
 
-def view_one_job(request, jobID): #yeehaw im making progress
+def one_job_seeker(request, jobID): #yeehaw im making progress
     jobs = Post.objects.filter(id=jobID)
     return render(request, 'Jobs/oneJob.html', {'jobs':jobs})
-
 
 #Job Creator Pages
 def reopen_job(request, post_id):
@@ -413,7 +412,7 @@ def pending_jobs_creator(request):
 def past_jobs_creator(request):
     return render(request, 'Creator/pastJobsCreator.html')
 
-def one_job(request):
+def seeker_one_job(request):
     return render(request, 'Jobs/oneJob.html')
 
 #Jobs Seeker Pages

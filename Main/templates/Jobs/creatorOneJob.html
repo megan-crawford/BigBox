@@ -1,0 +1,73 @@
+{% load staticfiles %}
+<!doctype html>
+<html lang="en">
+<style>
+div.job{
+  background-color:#21CE2D;
+  height:2000px;
+  width:2000px;
+  border:5px solid #07680D;
+  float:left;
+  margin:10px;
+}
+.button{
+
+}
+</style>
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <title>Big Box      Seeker</title>
+
+</head>
+<body>
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" content="width=device-width" style="height:8vw;">
+                <img src="{% static 'images/logo2.PNG' %}" style="max-height:100%;max-width:100%;">
+              
+                <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+                  <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                      <a class="nav-link" style="font-size: 200%; padding-left: 20%" href="../home_seeker/">Home<span class="sr-only">(current)</span></a> 
+                    </li>
+                    <li class="nav-item active">
+                      <a class="nav-link" style="font-size: 200%; padding-left: 310%" href="#">Seeker<span class="sr-only">(current)</span></a> 
+                    </li>
+                  </ul>
+                  <div class="dropdown">
+                      <button class="btn btn-secondary dropdown-toggle" style="max-height:200%;max-width:200; font-size:16px" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {{ request.user.username }}
+                      </button> 
+                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="font-size:16px">
+                        <a class="dropdown-item" href="/profile/?username={{ request.user.username }}">Account</a>
+                        <a class="dropdown-item" href="/login">Sign Out</a>
+                      </div>
+                    </div>
+                </div>
+          </nav>
+          <div class="padding" style="padding-top: 9%"></div>
+          <div id="container">
+            <div id="content" style="job">
+              <!--<div class="grid-container" style="background-color:lightblue; height:1000px;width:700px; align-content: center"> -->
+              <div class="main_text">You are at this page because you clicked on YOUR Job.</div></div>
+              {%for job in jobs%}
+              <p></p> 
+                {{job.id}}
+                
+              {%endfor%}
+              <button onclick="window.location.href = '/list_job';">Back to all jobby jobs</button>
+              
+              <!-- </div> -->
+            </div>
+            
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -37,7 +37,7 @@ urlpatterns = [
     path('home_creator/', views.home_creator, name='home_creator'),
     path('create_job/', views.create_job, name='create_job'),
     path('add_job/', views.new_job, name='add_job'),
-    path('one_job/', views.one_job, name='one_job'),
+    #path('one_job/', views.one_job, name='one_job'),
     path('all_jobs_creator/<job>/', views.all_jobs_creator, name='all_jobs_creator'),
     path('delete_job/<deletedJobID>/', views.delete_job, name='delete_job'),
     path('accepted_jobs_creator/', views.accepted_jobs_creator, name='accepted_jobs_creator'),
@@ -52,6 +52,6 @@ urlpatterns = [
     path('accepted_jobs_seeker/', views.accepted_jobs_seeker, name="accepted_jobs_seeker"),
     path('interested_jobs_seeker/', views.interested_jobs_seeker, name='interested_jobs_seeker'),
 	path('past_jobs_seeker/', views.past_jobs_seeker, name='past_jobs_seeker'),
-    path('view_one_job/<jobID>/', views.view_one_job, name='view_one_job'),
+    path('one_job_seeker/<jobID>/', views.one_job_seeker, name='seeker_one_job'), #?
     path('show_interest/<jobID>/<seekerID>/', views.show_interest, name='show_interest'),
 ]
