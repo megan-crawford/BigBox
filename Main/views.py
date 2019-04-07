@@ -53,6 +53,9 @@ def create_account(request):
     return render(request, 'createAccount.html', {'form':form})
 
 def profile(request):
+    if not request.user.is_authenticated:
+        return redirect('/login/')
+        
     if request.GET.get('username'): #the .get() needs to be used to stop error if username is null
         username = request.GET['username']
         user = User.objects.filter(username=username).first() #assume there is only one object
@@ -62,9 +65,9 @@ def profile(request):
 
     return render(request, 'profile.html')
 
-#TODO: change to update profile
 def update_account(request):
-    #TODO: check if user is logged in
+    if not request.user.is_authenticated:
+        return redirect('/login/')
 
     if request.method == 'POST':
         print('update account post')
@@ -119,14 +122,16 @@ def reset_password(request):
 	return render(request, 'reset_password.html')
 	
 #home pages
-def home(request):
-    return render(request, 'home.html')
-    #return HttpResponse("home.")
-	
 def home_creator(request):
+    if not request.user.is_authenticated:
+        return redirect('/login/')
+        
     return render(request, 'home_creator.html')
 	
 def home_seeker(request):
+    if not request.user.is_authenticated:
+        return redirect('/login/')
+        
     return render(request, 'home_seeker.html')
 
 def login_request(request):
@@ -153,11 +158,12 @@ def login_request(request):
 #redirect to home    
 def logout_request(request):
     logout(request)
-    return redirect('/home/')
+    return redirect('/login/')
 
 #create_job page
 def create_job(request):
-    #TODO: check if user is logged in
+    if not request.user.is_authenticated:
+        return redirect('/login/')
 
     if request.method == 'POST':
         #print('create job post')
@@ -184,7 +190,9 @@ def create_job(request):
     return render(request, 'Jobs/bigBoxJob.html', {'form':form})
 
 def list_job(request):
-    #TODO: check if user is logged in
+    if not request.user.is_authenticated:
+        return redirect('/login/')
+        
     if request.method == "GET":
         print('list job get')
         form = ListJobsForm(request.GET)
@@ -221,14 +229,23 @@ def list_job(request):
     return render(request, 'Jobs/listJobs.html', {'form':form, 'jobs':jobs})
 
 def new_job(request): #need to change this so it shows that job info !!!
+    if not request.user.is_authenticated:
+        return redirect('/login/')
+        
     return render(request, 'Jobs/viewNewJob.html')
 
 def one_job_seeker(request, jobID): #yeehaw im making progress
+    if not request.user.is_authenticated:
+        return redirect('/login/')
+        
     jobs = Post.objects.filter(id=jobID)
     return render(request, 'Jobs/oneJob.html', {'jobs':jobs})
 
 #Job Creator Pages
 def reopen_job(request, post_id):
+    if not request.user.is_authenticated:
+        return redirect('/login/')
+        
     if post_id is not None:
         post = Post.objects.filter(id=post_id).first()
         if post is not None:
@@ -240,7 +257,9 @@ def reopen_job(request, post_id):
     return redirect('/past_jobs_creator/')
 
 def all_jobs_creator(request, job):
-
+    if not request.user.is_authenticated:
+        return redirect('/login/')
+        
     if(request.GET.get('all_jobs')):
         print("all_jobs button")
         form = ListJobsCreator(request.GET)
@@ -367,15 +386,23 @@ def all_jobs_creator(request, job):
     return render(request, 'Creator/allJobsCreator.html', {'form':form, 'jobs':jobs, 'typeOfJob':typeOfJob}, job)
 
 def delete_job(request, deletedJobID):
-    #print("delete job")
+    if not request.user.is_authenticated:
+        return redirect('/login/')
+        
     job = Post.objects.filter(id=deletedJobID).first()
     job.delete()
     return redirect('/all_jobs_creator/all_jobs/')
 
 def accepted_jobs_creator(request):
+    if not request.user.is_authenticated:
+        return redirect('/login/')
+        
     return render(request, 'Creator/acceptedJobsCreator.html')
 
 def pending_jobs_creator(request):
+    if not request.user.is_authenticated:
+        return redirect('/login/')
+        
     if request.method == "GET":
         print('creator job get')
         form = ListJobsForm(request.GET)
@@ -409,9 +436,15 @@ def pending_jobs_creator(request):
     return render(request, 'Creator/pendingJobsCreator.html', {'form':form, 'jobs':jobs, 'typeOfJob':typeOfJob})
 
 def past_jobs_creator(request):
+    if not request.user.is_authenticated:
+        return redirect('/login/')
+        
     return render(request, 'Creator/pastJobsCreator.html')
 
 def one_job_creator(request, job_id):
+    if not request.user.is_authenticated:
+        return redirect('/login/')
+        
     post = Post.objects.filter(id=job_id).first()
     if post == None:
         return render(request, 'Jobs/oneJob.html')
@@ -421,11 +454,16 @@ def one_job_creator(request, job_id):
     return render(request, 'Jobs/oneJob.html', {'post_info':post, 'interested_seekers':interested_seekers})
 
 def seeker_one_job(request):
+    if not request.user.is_authenticated:
+        return redirect('/login/')
+        
     return render(request, 'Jobs/oneJob.html')
 
 #Jobs Seeker Pages
 def all_jobs_seeker(request, job):
-
+    if not request.user.is_authenticated:
+        return redirect('/login/')
+        
     if(request.GET.get('all_jobs')):
         print("all_jobs button")
         form = ListJobsCreator(request.GET)
@@ -552,13 +590,22 @@ def all_jobs_seeker(request, job):
     return render(request, 'Seeker/allJobsSeeker.html', {'form':form, 'jobs':jobs, 'typeOfJob':typeOfJob}, job)
 
 def accepted_jobs_seeker(request):
+    if not request.user.is_authenticated:
+        return redirect('/login/')
+        
     return render(request, 'Seeker/acceptedJobsSeeker.html')
 
 def interested_jobs_seeker(request):
+    if not request.user.is_authenticated:
+        return redirect('/login/')
+
     return render(request, 'Seeker/interestedJobsSeeker.html')
 	
 #User Report Page
 def generate_report(request):
+    if not request.user.is_authenticated:
+        return redirect('/login/')
+
     #check get info
     if request.GET.get('username'):
         username = request.GET.get('username')
@@ -587,6 +634,9 @@ def generate_report(request):
 
 def generate_review(request, user_id, is_seeker):
     #if is_seeker is false the user is being reviewed as a creator
+
+    if not request.user.is_authenticated:
+        return redirect('/login/')
 
     if request.method == "POST":
         #print('generate review post')
@@ -618,6 +668,9 @@ def generate_review(request, user_id, is_seeker):
     return render(request, 'generate_review.html', {'form':form})
 	
 def past_jobs_seeker(request):
+    if not request.user.is_authenticated:
+        return redirect('/login/')
+
     return render(request, 'Seeker/pastJobsSeeker.html')
 
 def sendEmail(subject, message, emailTo):
