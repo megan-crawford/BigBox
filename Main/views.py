@@ -630,7 +630,7 @@ def show_interest(request, jobID, seekerID):
     job = Post.objects.filter(id=jobID).first()
     #do error checking !!!!!!!! yip yap like check if record already in Interested
     seeker = User.objects.filter(id=seekerID).first()
-    job.Interested.add(seekerID)
+    job.Interested.add(seeker)
     content = seeker.first_name + " is interested in this job: " + job.Description + ". Please visit BigBox to accept or decline this seeker."
     creator = User.objects.filter(id=job.userID).first()
     email = creator.email
