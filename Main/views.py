@@ -12,6 +12,8 @@ from django.template import loader #?
 from django.db.models import Q #for Django OR filters
 from django.db.models.fields import BLANK_CHOICE_DASH
 
+from django.utils.timezone import datetime
+
 def create_account(request):
     if request.method == "POST": #user clicks register button
         #print('create account post')
@@ -185,6 +187,13 @@ def create_job(request):
 
 def list_job(request):
     #TODO: check if user is logged in
+
+    
+    expired = Post.objects.filter(DateTime__lt=datetime.now(),)
+    print(expired)
+    expired.update(Active=1)
+    print(expired)
+
     if request.method == "GET":
         #print('list job get')
         form = ListJobsForm(request.GET)
@@ -237,6 +246,9 @@ def reopen_job(request, post_id):
     return redirect('/past_jobs_creator/')
 
 def all_jobs_creator(request):
+    
+    expired = request.user.creator.Posts.filter(DateTime__lt=datetime.now(),)
+    expired.update(Active=1)
 
     if (request.GET.get('all_jobs')):
         print("Request.get:", request.GET.get('all_jobs'))
@@ -330,6 +342,7 @@ def all_jobs_creator(request):
             form = ListJobsCreator()
     
     print(request.user.creator.Posts.all())
+    jobs = jobs.filter(Active=0)
     jobs = jobs.order_by('Pay', 'DateTime')
     return render(request, 'Creator/allJobsCreator.html', {'form':form, 'jobs':jobs, 'typeOfJob':typeOfJob})
 
@@ -384,6 +397,8 @@ def one_job(request):
 #Jobs Seeker Pages
 def all_jobs_seeker(request):
 
+    expired = request.user.creator.Posts.filter(DateTime__lt=datetime.now(),)
+    expired.update(Active=1)
 
     if(request.GET.get('all_jobs')):
         typeOfJob = "all_jobs"
@@ -428,6 +443,7 @@ def all_jobs_seeker(request):
         jobs = request.user.creator.Posts.all()
         form = ListJobsForm()
 
+    jobs = jobs.filter(Active=0)
     jobs = jobs.order_by('Pay', 'DateTime')
     return render(request, 'Seeker/allJobsSeeker.html', {'form':form, 'jobs':jobs, 'typeOfJob':typeOfJob})
 
