@@ -1,0 +1,18 @@
+=== Weekly Individual reports (Team 1: BigBox) ===
+Name: Kurtis Dressel
+
+Week 8 (Summary)
+4/2     1 hr    a36bf4d Added zip code distance function
+4/2     2 hr    N/A     worked on sorting for list jobs by distance
+4/5     0.5 hr  d393eef fixed bugs for sorting jobs by distance
+4/5     0.5 hr  ddf9146 added generate report form
+4/5     2 hr    e871a07 added review form and view function
+4/7     1.5 hr  3ae0232 added one job create view function
+4/7     0.5 hr  259897b checked if user is logged in on most pages
+
+Week 9 (Plan)
+4/9     3 hr    Work on creating testcases on new functionality and debugging
+4/12    3 hr    Work on creating testcases on new functionality and debugging
+4/13    3 hr    Add Seeker recommaned jobs functionality
+
+Individual Goal: Work on making sure that every part of the website works correctly
