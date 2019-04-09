@@ -11,9 +11,15 @@ div.job{
   margin:10px;
 }
 .button{
-
 }
-
+.grid-container {
+  display: grid;
+  grid-template-columns: auto;
+  grid-template-rows: 300px 300px 300px;
+  grid-gap: 10px;
+  background-color: lightblue;
+  padding: 10px;
+}
 </style>
 <head>
     <!-- Required meta tags -->
@@ -51,24 +57,76 @@ div.job{
                 </div>
           </nav>
           <div class="padding" style="padding-top: 9%"></div>
-          <div id="container">
+          <div id="grid-container">
             <div id="content" style="job">
-              <!--<div class="grid-container" style="background-color:lightblue; height:1000px;width:700px; align-content: center"> -->
-              <div class="main_text">You are at this page because you clicked on a Job.</div></div>
-              {%for job in jobs%}
-              <div class=job >
-                <a class="button" href = '/show_interest/{{job.id}}/{{request.user.id}}'>
-                {{job.id}}
-              </a>
-              </div>
-                
-                
+              {%for post in jobs%}
+                <a class="button" href = '/show_interest/{{post.id}}/{{request.user.id}}'>
+                  I am interested in this jobby job yeehaw
                 </a>
-              {%endfor%}
-              <button onclick="window.location.href = '/list_job';">Back to all jobby jobs</button>
+        <div class="row d-flex justify-content-center">
+          <div class="well" id="job">
+              <div class="col-sm-2" style="">
+                {% if post.JobType == 'LM' %}
+                  <img src="{% static 'images/Work Icons/lawn_care.PNG' %}" style="max-height:100%;max-width:100%;">
+                {% elif post.JobType == 'SS' %}
+                  <img src="{% static 'images/Work Icons/snow_shoveling.PNG' %}" style="max-height:100%;max-width:100%;">
+                {% elif post.JobType == 'DW' %}
+                  <img src="{% static 'images/Work Icons/dog_walking.PNG' %}" style="max-height:100%;max-width:100%;">
+                {% elif post.JobType == 'PS' %}
+                  <img src="{% static 'images/Work Icons/pet_care.PNG' %}" style="max-height:100%;max-width:100%;">
+                {% elif post.JobType == 'BS' %}
+                  <img src="{% static 'images/Work Icons/baby_sitting.PNG' %}" style="max-height:100%;max-width:100%;">
+                {% elif post.JobType == 'C' %}
+                  <img src="{% static 'images/Work Icons/cleaning.PNG' %}" style="max-height:100%;max-width:100%;">
+                {% elif post.JobType == 'M' %}
+                  <img src="{% static 'images/Work Icons/manual_labor.PNG' %}" style="max-height:100%;max-width:100%;">
+                {% elif post.JobType == 'O' %}
+                  <img src="{% static 'images/Work Icons/other.PNG' %}" style="max-height:100%;max-width:100%;">
+                {% endif %}
+              </div>
+              <div class="col-sm-2" style="">
+              {% if post.JobType == 'LM' %}
+                <p>Lawn-Mowing</p>  
+              {% elif post.JobType == 'SS' %}
+                <p>Snow-Shoveling</p>  
+              {% elif post.JobType == 'DW' %}
+                <p>Dog-Walking</p>  
+              {% elif post.JobType == 'PS' %}
+                <p>Pet-Sitting</p>  
+              {% elif post.JobType == 'BS' %}
+                <p>Baby-Sitting</p>  
+              {% elif post.JobType == 'C' %}
+                <p>Cleaning</p>  
+              {% elif post.JobType == 'M' %}
+                <p>Moving</p>  
+              {% elif post.JobType == 'O' %}
+                <p>Other</p>  
+              {% endif %}
+              </div>
+              <div class="col-sm-4" style="">
+                  <p>{{ post.Description }}</p>
+              </div>              
+              <div class="col-sm-1" style="">
+                  <p>Pay: {{ post.Pay }}</p>
+              </div>
+              <div class="col-sm-1" style="">
+                  <!--<p>Date: {{ post.Date }}</p>-->
+              </div>
+              <div class="col-sm-2" style="">
+                  <!--<p>{{ request.user.username }} </p> -->
+              </div>
+              <div class="col-sm-2" style="">
+                <p> {{post.id}}</p>  
+              </div>
               
-              <!-- </div> -->
-            </div>
+          </div>
+      </div>
+              {%endfor%}
+              <p>
+              </p>
+              <button onclick="window.location.href = '/list_job';">Back to all jobby jobs</button>
+            </div> 
+          </div>
             
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
