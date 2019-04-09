@@ -45,7 +45,7 @@
                     </div>
                 </div>
           </nav>
-          <div class="padding" style="padding-top: 9%"></div>
+          <div class="padding" style="padding-top: 8.2%"></div>
   
  
 <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
@@ -57,7 +57,11 @@
 	<div class="row">
 		<div class="col-md-4">
 			<div class="container">
-				<img src="{% static 'images/profilepic.png' %}" class="img-circle"  width="304" height="304">
+				{% if user_info.profile.Portrait %}
+					<img src="{{ user_info.profile.Portrait.url }}" class="img-circle"  width="304" height="304">
+				{% else %}
+					<img src="{% static 'images/profilepic.png' %}" class="img-circle"  width="304" height="304">
+				{% endif %}
 			</div>
 		</div>
 		
@@ -108,15 +112,14 @@
 		<div class="col-md-2">
 			<div class="button">
 			{% if user_info.username == request.user.username %}
-							<a href="/update_account">
-							<button type="button" class="btn btn-primary btn-lg btn-block">Edit Account Info</button>
-							</a>
-				{% else %}
-								<a href="/generate_report/?username={{user_info.username}}">
-								<button type="button" class="btn btn-danger btn-sm btn-block">Report User</button>
-								</a>
-
-				{% endif %}
+				<a href="/update_account">
+				<button type="button" class="btn btn-primary btn-lg btn-block">Edit Account Info</button>
+				</a>
+			{% else %}
+				<a href="/generate_report/?username={{user_info.username}}">
+				<button type="button" class="btn btn-danger btn-sm btn-block">Report User</button>
+				</a>
+			{% endif %}
 			</div>
 		</div>
 	</div>
