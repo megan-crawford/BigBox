@@ -80,8 +80,7 @@ def update_account(request):
             update_all = 'update_all_button' in request.POST
 
             if form.cleaned_data['profile_picture'] and ('profile_picture_button' in request.POST or update_all):
-                print('update account profile picture')
-                request.user.profile.Portrait = form.cleaned_data['profile_picture'] 
+                request.user.profile.Portrait = form.cleaned_data['profile_picture']  
 
             if form.cleaned_data['first_name'] and ('first_name_button' in request.POST or update_all):
                 request.user.first_name = form.cleaned_data['first_name']
@@ -473,8 +472,8 @@ def one_job_creator(request, job_id):
         return render(request, 'Jobs/oneJob.html')
 
     interested_seekers = post.Interested.all()
-
-    return render(request, 'Jobs/creatorOneJob.html', {'post_info':post, 'interested_seekers':interested_seekers})
+    print("job id:::")
+    return render(request, 'Jobs/creatorOneJob.html', {'post':post, 'interested_seekers':interested_seekers})
 
 def seeker_one_job(request):
     if not request.user.is_authenticated:
