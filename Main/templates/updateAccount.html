@@ -44,9 +44,16 @@
         {% csrf_token %}
 
        <label for="profiePicInput" id="profilePicText">Update Profile Picture</label>
-       <div id="inputs">
-           <input name="profile_picture" type="file" name="profilepic">
-       </div>
+       <div class="btn1 col-xs-6">
+		<div id="inputs">
+			<input name="profile_picture" type="file" name="profilepic">
+		</div>
+		
+		<div class="btn1 col-xs-6">
+            <button name="profile_picture_button" type="submit" class="btn btn-secondary" id="updateProfilePictureButton">Update Profile Picture</button>
+         </div>
+		 
+	   </div>
 
 		 <br>
 		 
