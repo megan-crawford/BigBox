@@ -475,7 +475,6 @@ def one_job_creator(request, job_id):
         return render(request, 'Jobs/oneJob.html')
 
     interested_seekers = post.Interested.all()
-    print("job id:::")
     return render(request, 'Jobs/creatorOneJob.html', {'post':post, 'interested_seekers':interested_seekers})
 
 def seeker_one_job(request):
@@ -759,3 +758,15 @@ def distBetween(zip1, zip2):
         return radius * c
     except (KeyError, ValueError): #unknown zip codes and zip codes with non numeric characters
         return -1
+
+#in Post, set chosen id to id of seeker
+#in Post, set Active to some value im not sure
+#in Interested, delete record with job id and seeker(user) id
+def hire_seeker(request, jobID, seekerID):
+    seeker = User.objects.filter(id=seekerID).first()
+    job = Post.objects.filter(id = jobID).first()
+    job.Interested.remove(seeker)
+    job.Chosen = seeker;
+    job.Active = 2; 
+    job.save()
+    return render(request, 'Jobs/hireSeeker.html') 

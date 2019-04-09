@@ -21,6 +21,7 @@ div.job{
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
 
     <title>Big Box      Seeker</title>
 
@@ -112,7 +113,17 @@ div.job{
               
           </div>
       </div>
-      
+      <div>
+        {%for seeker in interested_seekers%}
+        <div>
+        <a class="button" href= '/hire_seeker/{{post.id}}/{{seeker.id}}'>
+          Hire this seeker:
+        </a>
+        {{seeker.first_name}}
+        {{seeker.last_name}}
+        </div>
+        {%endfor%}
+      </div>
               <p></p>
               <button onclick="window.location.href = '/all_jobs_creator/all_jobs/';">Back to all jobby jobs</button>
               
