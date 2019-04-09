@@ -82,7 +82,6 @@ def update_account(request):
             print('data:', form.cleaned_data['profile_picture'])
             print('profile_picture_button' in request.POST or update_all)
             if form.cleaned_data['profile_picture'] and ('profile_picture_button' in request.POST or update_all):
-                print('update account profile picture')
                 request.user.profile.ProfilePicture = form.cleaned_data['profile_picture'] 
 
             if form.cleaned_data['first_name'] and ('first_name_button' in request.POST or update_all):
