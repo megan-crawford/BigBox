@@ -69,7 +69,6 @@ class UpdateAccountForm(forms.Form):
     password = forms.CharField(label='Update Password', max_length=128, required=False, widget=forms.PasswordInput)
     password_confirmation = forms.CharField(label='Confirm new Password', max_length=128, required=False, widget=forms.PasswordInput)
 
-
     error_messages = {
         'passwords_not_match' : 'Passwords do not match',
         'preexisting_username' : 'Username already exists',
@@ -78,10 +77,16 @@ class UpdateAccountForm(forms.Form):
         'invalid_zip_code' : 'That zip code does not exist',
     }
 
+    def __init__(self, user, *args, **kwargs):
+        self.user = user
+        super(UpdateAccountForm, self).__init__(*args, **kwargs)
+
     def clean_email(self):
+        print('email')
         email = self.cleaned_data['email']
         if email: #skip validation if user didn't put anything
-            if User.objects.filter(email=email).exists():
+            if User.objects.filter(email=email).exists() and self.user.email != email:
+                print('error email')
                 raise ValidationError(message=self.error_messages['preexisting_email'], code='preexisting_email')
         return email
 
@@ -113,6 +118,7 @@ class UpdateAccountForm(forms.Form):
         try:
             locations.loc[int(zip_code)]
         except (KeyError, ValueError): #unknown zip codes and zip codes with non numeric characters
+            print('zip code error')
             raise ValidationError(message=self.error_messages['invalid_zip_code'], code='invalid_zip_code')
 
         return zip_code

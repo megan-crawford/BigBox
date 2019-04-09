@@ -71,7 +71,7 @@ def update_account(request):
 
     if request.method == 'POST':
         print('update account post')
-        form = UpdateAccountForm(request.POST)
+        form = UpdateAccountForm(request.user, request.POST)
 
         if form.is_valid():
             print('update account valid')
@@ -94,14 +94,12 @@ def update_account(request):
 
             if form.cleaned_data['description'] and ('description_button' in request.POST or update_all):
                 request.user.profile.Description = form.cleaned_data['description']
-
-            if form.cleaned_data['description'] and ('description_button' in request.POST or update_all):
-                request.user.profile.Description = form.cleaned_data['description']
             
             if (form.cleaned_data['pref_job_type'] != '') and ('pref_job_type_button' in request.POST or update_all):
                 request.user.seeker.PrefType = form.cleaned_data['pref_job_type']
 
             if (form.cleaned_data['zip_code']) and ('zip_code_button' in request.POST or update_all):
+                print('update account zip code')
                 request.user.profile.ZipCode = form.cleaned_data['zip_code']
 
             if (form.cleaned_data['password'] and form.cleaned_data['password_confirmation']) and ('password_button' in request.POST or update_all):
@@ -457,7 +455,7 @@ def pending_jobs_creator(request):
         form = ListJobsForm()
 
     jobs = jobs.order_by('Pay', 'DateTime')
-    return render(request, 'Creator/pendingJobsCreator.html', {'form':form, 'jobs':jobs, 'typeOfJob':typeOfJob})
+    return render(request, 'Creator/pendingJobsCreator.html', {'form':form, 'jobs':jobs}) #'typeOfJob':typeOfJob})
 
 def past_jobs_creator(request):
     if not request.user.is_authenticated:
