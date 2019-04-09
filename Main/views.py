@@ -545,7 +545,54 @@ def all_jobs_seeker(request, job):
         typeOfJob = job
         job = "all_jobs"
         active = -1
+    #jobs.request.user
+    #.InterestedSeeker.a;
+    #jobs = request.user.interested_seekers
+    #jobs = Post.objects.filter(Interested=request.user)
+    #print("jobs", jobs)
     
+    if (typeOfJob == "all_jobs"):
+        jobs = request.user.interested_seekers
+    elif (typeOfJob == "accepted_jobs"):
+        jobs = request.user.interested_seekers.filter(Chosen=request.user, Active=1)
+    elif (typeOfJob == "interested_jobs"):
+        jobs = request.user.interested_seekers.filter(Active=0)
+    else:
+        jobs = request.user.interested_seekers.filter(Active=2)
+
+    if request.method == "GET":
+        form = ListJobsCreator(request.GET)
+        if form.is_valid():
+            zip_code = form.cleaned_data['zip_code']
+            job_type = form.cleaned_data['job_type']
+            min_wage = form.cleaned_data['min_wage']
+            max_wage = form.cleaned_data['max_wage']
+            search = form.cleaned_data['search']
+            
+            if (job_type != '' and min_wage and max_wage): #all inputs filled in
+                jobs = jobs.filter(Description__icontains=search, JobType=job_type, Pay__range=[min_wage, max_wage])
+            elif (job_type == '' and not min_wage and not max_wage): #no inputs filled in
+                jobs = jobs.filter(Description__icontains=search)             
+            else: #mixed inputs filled in
+                if min_wage and not max_wage:
+                    jobs = jobs.filter(Q(Description__icontains=search), Q(JobType=job_type) | Q(Pay__gte=min_wage))
+                elif not min_wage and max_wage:
+                    jobs = jobs.filter(Q(Description__icontains=search),  Q(JobType=job_type) | Q(Pay__lte=max_wage))
+                else:
+                    jobs = jobs.filter(Q(Description__icontains=search),  Q(JobType=job_type) | Q(Pay__range=[min_wage, max_wage]))
+                
+            if (zip_code): #ZipCode Exists
+                    for job in jobs:
+                        distance = distBetween(job.ZipCode, request.user.profile.ZipCode)
+                        if (distance > zip_code):
+                            jobs = jobs.exclude(id = job.id)
+            
+        else:
+            jobs = jobs.all()
+    else:
+        jobs = jobs.all()
+        form = ListJobsCreator()
+    """
     if (typeOfJob == "all_jobs"):
         if request.method == "GET":
             form = ListJobsCreator(request.GET)
@@ -557,16 +604,16 @@ def all_jobs_seeker(request, job):
                 search = form.cleaned_data['search']
                 
                 if (job_type != '' and min_wage and max_wage): #all inputs filled in
-                    jobs = request.user.creator.Posts.filter(Description__icontains=search, JobType=job_type, Pay__range=[min_wage, max_wage])
+                    jobs = jobs.filter(Description__icontains=search, JobType=job_type, Pay__range=[min_wage, max_wage])
                 elif (job_type == '' and not min_wage and not max_wage): #no inputs filled in
-                    jobs = request.user.creator.Posts.filter(Description__icontains=search)             
+                    jobs = jobs.filter(Description__icontains=search)             
                 else: #mixed inputs filled in
                     if min_wage and not max_wage:
-                        jobs = request.user.creator.Posts.filter(Q(Description__icontains=search), Q(JobType=job_type) | Q(Pay__gte=min_wage))
+                        jobs = jobs.filter(Q(Description__icontains=search), Q(JobType=job_type) | Q(Pay__gte=min_wage))
                     elif not min_wage and max_wage:
-                        jobs = request.user.creator.Posts.filter(Q(Description__icontains=search),  Q(JobType=job_type) | Q(Pay__lte=max_wage))
+                        jobs = jobs.filter(Q(Description__icontains=search),  Q(JobType=job_type) | Q(Pay__lte=max_wage))
                     else:
-                        jobs = request.user.creator.Posts.filter(Q(Description__icontains=search),  Q(JobType=job_type) | Q(Pay__range=[min_wage, max_wage]))
+                        jobs = jobs.filter(Q(Description__icontains=search),  Q(JobType=job_type) | Q(Pay__range=[min_wage, max_wage]))
                 
                 if (zip_code): #ZipCode Exists
                         for job in jobs:
@@ -575,11 +622,11 @@ def all_jobs_seeker(request, job):
                                 jobs = jobs.exclude(id = job.id)
             
             else:
-                jobs = request.user.creator.Posts.all()
+                jobs = jobs.all()
         else:
-            jobs = request.user.creator.Posts.all()
+            jobs = jobs.all()
             form = ListJobsCreator()
-    else: #get filter by other type of job
+    elif (typeOfJob == "accepted_jobs"): #get filter by other type of job
         if request.method == "GET":
             form = ListJobsCreator(request.GET)
             if form.is_valid():
@@ -590,16 +637,16 @@ def all_jobs_seeker(request, job):
                 search = form.cleaned_data['search']
 
                 if (job_type != '' and min_wage and max_wage): #all inputs filled in
-                    jobs = request.user.creator.Posts.filter(Description__icontains=search, JobType=job_type, Pay__range=[min_wage, max_wage], Active=active)
+                    jobs = jobs.filter(Description__icontains=search, JobType=job_type, Pay__range=[min_wage, max_wage], Active=active)
                 elif (job_type == '' and not min_wage and not max_wage): #no inputs filled in
-                    jobs = request.user.creator.Posts.filter(Description__icontains=search, Active=active)
+                    jobs = jobs.filter(Description__icontains=search, Active=active)
                 else: #mixed inputs filled in
                     if min_wage and not max_wage:
-                        jobs = request.user.creator.Posts.filter(Q(Description__icontains=search), Q(JobType=job_type) | Q(Pay__gte=min_wage), Active=active)
+                        jobs = jobs.filter(Q(Description__icontains=search), Q(JobType=job_type) | Q(Pay__gte=min_wage), Active=active)
                     elif not min_wage and max_wage:
-                        jobs = request.user.creator.Posts.filter(Q(Description__icontains=search),  Q(JobType=job_type) | Q(Pay__lte=max_wage), Active=active)
+                        jobs = jobs.filter(Q(Description__icontains=search),  Q(JobType=job_type) | Q(Pay__lte=max_wage), Active=active)
                     else:
-                        jobs = request.user.creator.Posts.filter(Q(Description__icontains=search),  Q(JobType=job_type) | Q(Pay__range=[min_wage, max_wage]), Active=active)
+                        jobs = jobs.filter(Q(Description__icontains=search),  Q(JobType=job_type) | Q(Pay__range=[min_wage, max_wage]), Active=active)
                 
                 if (zip_code): #ZipCode Exists
                         for job in jobs:
@@ -607,13 +654,16 @@ def all_jobs_seeker(request, job):
                             if (distance > zip_code):
                                 jobs = jobs.exclude(id = job.id)
             else:
-                jobs = request.user.creator.Posts.filter(Active=active)
+                jobs = jobs.filter(Active=active)
         else:
-            jobs = request.user.creator.Posts.filter(Active=active)
+            jobs = jobs.filter(Active=active)
             form = ListJobsCreator()
-    
-    jobs = jobs.order_by('Pay', 'DateTime')
+    elif (typeOfJob == "interested_jobs"):
+        #
+    else:
+    """ 
 
+    jobs = jobs.order_by('Pay', 'DateTime')
     return render(request, 'Seeker/allJobsSeeker.html', {'form':form, 'jobs':jobs, 'typeOfJob':typeOfJob}, job)
 
 def accepted_jobs_seeker(request):
