@@ -85,7 +85,7 @@ class Profile(models.Model):
     #LastName = models.CharField(max_length = 50)
     Description = models.TextField()
     Age = models.SmallIntegerField()
-    Portrait = models.ImageField(upload_to=get_image_path, blank=True, null=True)
+    Portrait = models.ImageField(upload_to='Main/static/images/profile_pictures/', blank=True, null=True)
     Contacts = models.ManyToManyField("self", blank=True)
     ZipCode = models.IntegerField(blank=True, null=True)
             
