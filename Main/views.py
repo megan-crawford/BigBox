@@ -73,7 +73,7 @@ def update_account(request):
 
     if request.method == 'POST':
         print('update account post')
-        form = UpdateAccountForm(request.user, request.POST)
+        form = UpdateAccountForm(request.user, request.POST, request.FILES)
 
         if form.is_valid():
             print('update account valid')
