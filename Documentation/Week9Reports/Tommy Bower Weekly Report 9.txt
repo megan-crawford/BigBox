@@ -1,0 +1,16 @@
+=== Weekly Individual Report (Team 2: sturgeons++) ===
+Name: Thomas Bower
+
+Week 9 (Summary)
+4/2	1 hrs	3236dc9 Added rating stars to profile page
+4/2	2 hr	0731d8b	Added search bar in list job seeker page
+4/5	3 hr	eb08d60	Created generate review page
+4/7	1 hr	334bc66	Made login page the default home page
+4/7	1 hr	7d085cd	Fixed onejob homepage bug
+
+Week 10 (Plan)
+4/9	3 hrs	N/A	Fix "show interest in job" bug on backend side	
+4/12	3 hrs	N/A	Get frontend profile picture uploading working
+4/13	3 hrs	N/A	Get profile pages to display the correct review star rating
+
+Individual goal: Help backend fix existing bugs relating to accepting jobs
