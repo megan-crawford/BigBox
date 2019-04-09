@@ -472,8 +472,8 @@ def one_job_creator(request, job_id):
         return render(request, 'Jobs/oneJob.html')
 
     interested_seekers = post.Interested.all()
-
-    return render(request, 'Jobs/creatorOneJob.html', {'post_info':post, 'interested_seekers':interested_seekers})
+    print("job id:::")
+    return render(request, 'Jobs/creatorOneJob.html', {'post':post, 'interested_seekers':interested_seekers})
 
 def seeker_one_job(request):
     if not request.user.is_authenticated:
