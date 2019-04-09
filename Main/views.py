@@ -182,7 +182,7 @@ def create_job(request):
             zip_code = form.cleaned_data['zip_code']
 
             #create new job
-            post = Post.objects.create(Pay=pay, DateTime=date, Description=description, JobType=job_type, ZipCode=zip_code)
+            post = Post.objects.create(Pay=pay, DateTime=date, Description=description, JobType=job_type, ZipCode=zip_code, userID=request.user.id)
             request.user.creator.Posts.add(post)
 
             return redirect('/add_job/')
@@ -730,7 +730,12 @@ def show_interest(request, jobID, seekerID):
     job.Interested.add(seeker)
     content = seeker.first_name + " is interested in this job: " + job.Description + ". Please visit BigBox to accept or decline this seeker."
     creator = User.objects.filter(id=job.userID).first()
+    print("seekerID:")
+    print(seekerID)
+    print(jobID)
+    print(creator)
     email = creator.email
+    print(email)
     val = sendEmail("Congrats, a seeker is interested in your job", content, email)
     return render(request, 'Jobs/showInterest.html')    
   

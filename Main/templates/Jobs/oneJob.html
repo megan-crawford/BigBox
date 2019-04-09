@@ -13,6 +13,7 @@ div.job{
 .button{
 
 }
+
 </style>
 <head>
     <!-- Required meta tags -->
@@ -55,9 +56,14 @@ div.job{
               <!--<div class="grid-container" style="background-color:lightblue; height:1000px;width:700px; align-content: center"> -->
               <div class="main_text">You are at this page because you clicked on a Job.</div></div>
               {%for job in jobs%}
-              <p>yip</p> 
+              <div class=job >
+                <a class="button" href = '/show_interest/{{job.id}}/{{request.user.id}}'>
                 {{job.id}}
-                <a class="button" href = '/show_interest/{{job.id}}/{{request.user.id}}'>Click Here to show interest in this jobby job</a>
+              </a>
+              </div>
+                
+                
+                </a>
               {%endfor%}
               <button onclick="window.location.href = '/list_job';">Back to all jobby jobs</button>
               
