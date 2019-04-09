@@ -192,16 +192,13 @@ def create_job(request):
     return render(request, 'Jobs/bigBoxJob.html', {'form':form})
 
 def list_job(request):
-    #TODO: check if user is logged in
 
-    
     expired = Post.objects.filter(DateTime__lt=datetime.now(),)
-    print(expired)
     expired.update(Active=1)
-    print(expired)
 
     if not request.user.is_authenticated:
         return redirect('/login/')
+        
     if request.method == "GET":
         print('list job get')
         form = ListJobsForm(request.GET)
@@ -265,18 +262,11 @@ def reopen_job(request, post_id):
 
     return redirect('/past_jobs_creator/')
 
-def all_jobs_creator(request):
-    
-    expired = request.user.creator.Posts.filter(DateTime__lt=datetime.now(),)
+def all_jobs_creator(request, job):
+
+    expired = request.user.creator.Posts.filter(DateTime__lt=datetime.now())
     expired.update(Active=1)
 
-    if (request.GET.get('all_jobs')):
-        print("Request.get:", request.GET.get('all_jobs'))
-
-
-    if(request.GET.get('search')):
-        print("search")
-def all_jobs_creator(request, job):
     if not request.user.is_authenticated:
         return redirect('/login/')
         
@@ -414,8 +404,7 @@ def all_jobs_creator(request, job):
             jobs = request.user.creator.Posts.filter(Active=active)
             form = ListJobsCreator()
     
-    print(request.user.creator.Posts.all())
-    jobs = jobs.filter(Active=0)
+    jobs = jobs.filter(Active=0) 
     jobs = jobs.order_by('Pay', 'DateTime')
 
     return render(request, 'Creator/allJobsCreator.html', {'form':form, 'jobs':jobs, 'typeOfJob':typeOfJob}, job)
@@ -486,8 +475,6 @@ def one_job_creator(request, job_id):
 
     interested_seekers = post.Interested.all()
 
-    expired = request.user.creator.Posts.filter(DateTime__lt=datetime.now(),)
-    expired.update(Active=1)
     return render(request, 'Jobs/creatorOneJob.html', {'post_info':post, 'interested_seekers':interested_seekers})
 
 def seeker_one_job(request):
@@ -612,10 +599,6 @@ def all_jobs_seeker(request, job):
                 max_wage = form.cleaned_data['max_wage']
                 search = form.cleaned_data['search']
 
-    jobs = jobs.filter(Active=0)
-                if (job_type != '' and min_wage and max_wage and zip_code): #all inputs filled in
-                    jobs = request.user.creator.Posts.filter(Description__icontains=search, JobType=job_type, Pay__range=[min_wage, max_wage], ZipCode=zip_code, Active=active)
-                elif (job_type == '' and not min_wage and not max_wage and not zip_code): #no inputs filled in
                 if (job_type != '' and min_wage and max_wage): #all inputs filled in
                     jobs = request.user.creator.Posts.filter(Description__icontains=search, JobType=job_type, Pay__range=[min_wage, max_wage], Active=active)
                 elif (job_type == '' and not min_wage and not max_wage): #no inputs filled in
@@ -639,7 +622,6 @@ def all_jobs_seeker(request, job):
             jobs = request.user.creator.Posts.filter(Active=active)
             form = ListJobsCreator()
     
->>>>>>> 73d9bb90ea7665ca11fee430cfc2772d270f0d51
     jobs = jobs.order_by('Pay', 'DateTime')
 
     return render(request, 'Seeker/allJobsSeeker.html', {'form':form, 'jobs':jobs, 'typeOfJob':typeOfJob}, job)
