@@ -113,7 +113,7 @@ def update_account(request):
 
             return render(request, 'updateAccount.html')
     else:
-        form = UpdateAccountForm()
+        form = UpdateAccountForm(request.user)
 
     return render(request, 'updateAccount.html', {'form': form, 'user_info':request.user})
 

@@ -114,6 +114,9 @@ class UpdateAccountForm(forms.Form):
 
     def clean_zip_code(self):
         zip_code = self.cleaned_data['zip_code']
+		
+        if zip_code == None:
+            return zip_code
 
         try:
             locations.loc[int(zip_code)]
