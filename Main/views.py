@@ -14,6 +14,8 @@ from django.db.models.fields import BLANK_CHOICE_DASH
 from . models import locations
 from math import sin, cos, sqrt, atan2, radians
 
+from django.utils.timezone import datetime
+
 def create_account(request):
     if request.method == "POST": #user clicks register button
         #print('create account post')
@@ -71,7 +73,7 @@ def update_account(request):
 
     if request.method == 'POST':
         print('update account post')
-        form = UpdateAccountForm(request.POST)
+        form = UpdateAccountForm(request.user, request.POST)
 
         if form.is_valid():
             print('update account valid')
@@ -94,14 +96,12 @@ def update_account(request):
 
             if form.cleaned_data['description'] and ('description_button' in request.POST or update_all):
                 request.user.profile.Description = form.cleaned_data['description']
-
-            if form.cleaned_data['description'] and ('description_button' in request.POST or update_all):
-                request.user.profile.Description = form.cleaned_data['description']
             
             if (form.cleaned_data['pref_job_type'] != '') and ('pref_job_type_button' in request.POST or update_all):
                 request.user.seeker.PrefType = form.cleaned_data['pref_job_type']
 
             if (form.cleaned_data['zip_code']) and ('zip_code_button' in request.POST or update_all):
+                print('update account zip code')
                 request.user.profile.ZipCode = form.cleaned_data['zip_code']
 
             if (form.cleaned_data['password'] and form.cleaned_data['password_confirmation']) and ('password_button' in request.POST or update_all):
@@ -180,7 +180,7 @@ def create_job(request):
             zip_code = form.cleaned_data['zip_code']
 
             #create new job
-            post = Post.objects.create(Pay=pay, DateTime=date, Description=description, JobType=job_type, ZipCode=zip_code)
+            post = Post.objects.create(Pay=pay, DateTime=date, Description=description, JobType=job_type, ZipCode=zip_code, userID=request.user.id)
             request.user.creator.Posts.add(post)
 
             return redirect('/add_job/')
@@ -190,6 +190,10 @@ def create_job(request):
     return render(request, 'Jobs/bigBoxJob.html', {'form':form})
 
 def list_job(request):
+
+    expired = Post.objects.filter(DateTime__lt=datetime.now(),)
+    expired.update(Active=1)
+
     if not request.user.is_authenticated:
         return redirect('/login/')
         
@@ -257,6 +261,10 @@ def reopen_job(request, post_id):
     return redirect('/past_jobs_creator/')
 
 def all_jobs_creator(request, job):
+
+    expired = request.user.creator.Posts.filter(DateTime__lt=datetime.now())
+    expired.update(Active=1)
+
     if not request.user.is_authenticated:
         return redirect('/login/')
         
@@ -394,7 +402,7 @@ def all_jobs_creator(request, job):
             jobs = request.user.creator.Posts.filter(Active=active)
             form = ListJobsCreator()
     
-    
+    jobs = jobs.filter(Active=0) 
     jobs = jobs.order_by('Pay', 'DateTime')
 
     return render(request, 'Creator/allJobsCreator.html', {'form':form, 'jobs':jobs, 'typeOfJob':typeOfJob}, job)
@@ -447,7 +455,7 @@ def pending_jobs_creator(request):
         form = ListJobsForm()
 
     jobs = jobs.order_by('Pay', 'DateTime')
-    return render(request, 'Creator/pendingJobsCreator.html', {'form':form, 'jobs':jobs, 'typeOfJob':typeOfJob})
+    return render(request, 'Creator/pendingJobsCreator.html', {'form':form, 'jobs':jobs}) #'typeOfJob':typeOfJob})
 
 def past_jobs_creator(request):
     if not request.user.is_authenticated:
@@ -770,7 +778,12 @@ def show_interest(request, jobID, seekerID):
     job.Interested.add(seeker)
     content = seeker.first_name + " is interested in this job: " + job.Description + ". Please visit BigBox to accept or decline this seeker."
     creator = User.objects.filter(id=job.userID).first()
+    print("seekerID:")
+    print(seekerID)
+    print(jobID)
+    print(creator)
     email = creator.email
+    print(email)
     val = sendEmail("Congrats, a seeker is interested in your job", content, email)
     return render(request, 'Jobs/showInterest.html')    
   

@@ -64,12 +64,12 @@
 
         <label for="lastNameInput" id="lastNameText">Update Last Name</label>
         <div class="row">
-            <div id="inputs" class="form-group col-xs-6">
+          <div id="inputs" class="form-group col-xs-6">
             <input name="last_name" type="lastName" value={{user_info.last_name}} class="form-control" id="lastNameInput">
-            </div>
+          </div>
 
           <div class="btn1 col-xs-6">
-           <button name="last_name_button" type="submit" class="btn btn-secondary" id="updateLastNameButton">Update Last Name</button>
+            <button name="last_name_button" type="submit" class="btn btn-secondary" id="updateLastNameButton">Update Last Name</button>
           </div>
         </div>
 
@@ -140,7 +140,22 @@
                               <div class="btn1 col-xs-6">
             <button name="description_button" type="submit" class="btn btn-secondary" id="updateFirstNameButton">Update Preferred Job Type</button>
          </div>
-							</div>
+              </div>
+              
+          <label for="zipCodeInput" id="zipCodeText">Update Zip Code</label>
+          <div class="row">
+            <div id="inputs" class="form-group col-xs-6">
+              {% if user_info.profile.ZipCode is not None %}
+                <input name="zip_code" type="zip_code" value={{user_info.profile.ZipCode}} class="form-control" id="zipCodeInput">
+              {% else %}
+                <input name="zip_code" type="zip_code" class="form-control" id="zipCodeInput">
+              {% endif %}
+            </div>
+  
+            <div class="btn1 col-xs-6">
+              <button name="zip_code_button" type="submit" class="btn btn-secondary" id="updateZipCodeButton">Update Zip Code</button>
+            </div>
+          </div>
 
         <label for="passwordInput" id="passwordText">Update Password</label>
         <div id="inputs" class="form-group">
