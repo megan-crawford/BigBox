@@ -53,7 +53,7 @@
         <label for="firstNameInput" id="firstNameText">Update First Name</label>
         <div class="row">
            <div id="inputs" class="form-group col-xs-6">
-            <input name="first_name" type="firstName" value={{user_info.first_name}} class="form-control" id="firstNameInput" placeholder="Ex: John">
+            <input name="first_name" type="firstName" value="{{user_info.first_name}}" class="form-control" id="firstNameInput" placeholder="Ex: John">
          </div>
           
 
@@ -65,7 +65,7 @@
         <label for="lastNameInput" id="lastNameText">Update Last Name</label>
         <div class="row">
           <div id="inputs" class="form-group col-xs-6">
-            <input name="last_name" type="lastName" value={{user_info.last_name}} class="form-control" id="lastNameInput">
+            <input name="last_name" type="lastName" value="{{user_info.last_name}}" class="form-control" id="lastNameInput">
           </div>
 
           <div class="btn1 col-xs-6">
@@ -78,7 +78,7 @@
         <label for="ageInput" id="ageText">Update Age</label>
         <div class="row">
            <div id="inputs" class="form-group col-xs-6">
-            <input name="age" type="age" value={{user_info.profile.Age}} class="form-control" id="ageInput">
+            <input name="age" type="age" value="{{user_info.profile.Age}}" class="form-control" id="ageInput">
            </div>
 
            <div class="btn1 col-xs-6">
@@ -91,7 +91,7 @@
         <label for="emailInput" id="emailText">Update Email</label>
         <div class="row">
            <div id="inputs" class="form-group col-xs-6">
-            <input name="email" type="email" value={{user_info.email}} class="form-control" name="emailInput" id="emailInput">
+            <input name="email" type="email" value="{{user_info.email}}" class="form-control" name="emailInput" id="emailInput">
            </div>
 
            <div class="btn1 col-xs-6">
@@ -146,7 +146,7 @@
           <div class="row">
             <div id="inputs" class="form-group col-xs-6">
               {% if user_info.profile.ZipCode is not None %}
-                <input name="zip_code" type="zip_code" value={{user_info.profile.ZipCode}} class="form-control" id="zipCodeInput">
+                <input name="zip_code" type="zip_code" value="{{user_info.profile.ZipCode}}" class="form-control" id="zipCodeInput">
               {% else %}
                 <input name="zip_code" type="zip_code" class="form-control" id="zipCodeInput">
               {% endif %}

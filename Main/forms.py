@@ -81,12 +81,15 @@ class UpdateAccountForm(forms.Form):
         self.user = user
         super(UpdateAccountForm, self).__init__(*args, **kwargs)
 
+    def clean_profile_picture(self):
+        profile_picture = self.cleaned_data['profile_picture']
+        print('form profile picture:', profile_picture)
+        return profile_picture
+
     def clean_email(self):
-        print('email')
         email = self.cleaned_data['email']
         if email: #skip validation if user didn't put anything
             if User.objects.filter(email=email).exists() and self.user.email != email:
-                print('error email')
                 raise ValidationError(message=self.error_messages['preexisting_email'], code='preexisting_email')
         return email
 
@@ -115,10 +118,13 @@ class UpdateAccountForm(forms.Form):
     def clean_zip_code(self):
         zip_code = self.cleaned_data['zip_code']
 
+        if zip_code == None:
+            print('zip code is None')
+            return zip_code
+
         try:
             locations.loc[int(zip_code)]
         except (KeyError, ValueError): #unknown zip codes and zip codes with non numeric characters
-            print('zip code error')
             raise ValidationError(message=self.error_messages['invalid_zip_code'], code='invalid_zip_code')
 
         return zip_code
