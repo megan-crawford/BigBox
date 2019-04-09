@@ -1,0 +1,14 @@
+=== Weekly Team Report (Team 1: sturgeons++) ===
+Name: Jason Bagnara
+
+Week 9
+4/2	3 hr	6ceec7a Add active status to a job and interested seeker field
+4/2	.5 hr	22bd8d8	Add fields to post model	
+4/5	3 hr	N/A	Deactivate job when job date has passed
+
+Week 10 (plan)
+4/9	3 hr	N/A	Create test cases for active status
+4/12	3 hr	N/A	Create test cases for other view functions
+4/13	2 hr	N/A	Implement function to update seeker
+
+Goal:	Write test cases for the features created in the previous sprint
