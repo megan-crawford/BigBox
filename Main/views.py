@@ -180,7 +180,7 @@ def create_job(request):
             zip_code = form.cleaned_data['zip_code']
 
             #create new job
-            post = Post.objects.create(Pay=pay, DateTime=date, Description=description, JobType=job_type, ZipCode=zip_code, userID=request.user.id)
+            post = Post.objects.create(Pay=pay, DateTime=date, Description=description, JobType=job_type, ZipCode=zip_code, userID=request.user.id, userName=request.user.username)
             request.user.creator.Posts.add(post)
 
             return redirect('/add_job/')
