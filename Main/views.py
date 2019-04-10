@@ -197,6 +197,8 @@ def list_job(request):
     if not request.user.is_authenticated:
         return redirect('/login/')
         
+    
+
     if request.method == "GET":
         print('list job get')
         form = ListJobsForm(request.GET)
@@ -223,6 +225,11 @@ def list_job(request):
     else:
         jobs = Post.objects.all()
         form = ListJobsForm()
+
+    #Exclude Users Own Jobs
+    for job in jobs:
+        if (job.userID == request.user.id):
+            jobs = jobs.exclude(id = job.id)
 
     #sort by distance, then pay, then date
     jobs = jobs.filter(Active=0)
