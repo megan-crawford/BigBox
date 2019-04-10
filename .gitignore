@@ -12,3 +12,4 @@ settings.py
 *.csv
 
 */profile_pictures/*
+Main/static/images/profile_pictures/*

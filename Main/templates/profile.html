@@ -58,7 +58,8 @@
 		<div class="col-md-4">
 			<div class="container">
 				{% if user_info.profile.Portrait %}
-					<img src="{{ user_info.profile.Portrait.url }}" class="img-circle"  width="304" height="304">
+					<!--removes the Main part of the url to make this work-->
+					<img src="{{ user_info.profile.Portrait.url|slice:"4:" }}" class="img-circle"  width="304" height="304">
 				{% else %}
 					<img src="{% static 'images/profilepic.png' %}" class="img-circle"  width="304" height="304">
 				{% endif %}
