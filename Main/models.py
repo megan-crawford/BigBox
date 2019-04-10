@@ -35,7 +35,7 @@ class Post(models.Model):
     ACTIVE_CHOICES = (
             (0, 'OPEN'),
             (1, 'CLOSED'),
-            (2, 'COMPLETED'),
+            (2, 'CHOSEN'),
     )
 
     userID = models.IntegerField(default=0)
