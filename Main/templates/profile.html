@@ -133,11 +133,75 @@
 			<p>Reviews of {{user_info.username}} (as Worker): </p>
 			<div class="well well-lg">
 					<div class="col-md-11">
+						{% if seekerScore == -1 %}
+						<p>No Reviews</p>
+						{% elif seekerScore >= 5 %}
 						<img src="{% static 'images/star.png' %}" width="70" height="70">
 						<img src="{% static 'images/star.png' %}" width="70" height="70">
 						<img src="{% static 'images/star.png' %}" width="70" height="70">
 						<img src="{% static 'images/star.png' %}" width="70" height="70">
 						<img src="{% static 'images/star.png' %}" width="70" height="70">
+						{% elif seekerScore >= 4.5 %}
+						<img src="{% static 'images/star.png' %}" width="70" height="70">
+						<img src="{% static 'images/star.png' %}" width="70" height="70">
+						<img src="{% static 'images/star.png' %}" width="70" height="70">
+						<img src="{% static 'images/star.png' %}" width="70" height="70">
+						<img src="{% static 'images/halfstar.png' %}" width="70" height="70">
+						{% elif seekerScore >= 4 %}
+						<img src="{% static 'images/star.png' %}" width="70" height="70">
+						<img src="{% static 'images/star.png' %}" width="70" height="70">
+						<img src="{% static 'images/star.png' %}" width="70" height="70">
+						<img src="{% static 'images/star.png' %}" width="70" height="70">
+						<img src="{% static 'images/nostar.png' %}" width="70" height="70">
+						{% elif seekerScore >= 3.5 %}
+						<img src="{% static 'images/star.png' %}" width="70" height="70">
+						<img src="{% static 'images/star.png' %}" width="70" height="70">
+						<img src="{% static 'images/star.png' %}" width="70" height="70">
+						<img src="{% static 'images/halfstar.png' %}" width="70" height="70">
+						<img src="{% static 'images/nostar.png' %}" width="70" height="70">
+						{% elif seekerScore >= 3 %}
+						<img src="{% static 'images/star.png' %}" width="70" height="70">
+						<img src="{% static 'images/star.png' %}" width="70" height="70">
+						<img src="{% static 'images/star.png' %}" width="70" height="70">
+						<img src="{% static 'images/nostar.png' %}" width="70" height="70">
+						<img src="{% static 'images/nostar.png' %}" width="70" height="70">
+						{% elif seekerScore >= 2.5 %}
+						<img src="{% static 'images/star.png' %}" width="70" height="70">
+						<img src="{% static 'images/star.png' %}" width="70" height="70">
+						<img src="{% static 'images/halfstar.png' %}" width="70" height="70">
+						<img src="{% static 'images/nostar.png' %}" width="70" height="70">
+						<img src="{% static 'images/nostar.png' %}" width="70" height="70">
+						{% elif seekerScore >= 2 %}
+						<img src="{% static 'images/star.png' %}" width="70" height="70">
+						<img src="{% static 'images/star.png' %}" width="70" height="70">
+						<img src="{% static 'images/nostar.png' %}" width="70" height="70">
+						<img src="{% static 'images/nostar.png' %}" width="70" height="70">
+						<img src="{% static 'images/nostar.png' %}" width="70" height="70">
+						{% elif seekerScore >= 1.5 %}
+						<img src="{% static 'images/star.png' %}" width="70" height="70">
+						<img src="{% static 'images/halfstar.png' %}" width="70" height="70">
+						<img src="{% static 'images/nostar.png' %}" width="70" height="70">
+						<img src="{% static 'images/nostar.png' %}" width="70" height="70">
+						<img src="{% static 'images/nostar.png' %}" width="70" height="70">
+						{% elif seekerScore >= 1 %}
+						<img src="{% static 'images/star.png' %}" width="70" height="70">
+						<img src="{% static 'images/nostar.png' %}" width="70" height="70">
+						<img src="{% static 'images/nostar.png' %}" width="70" height="70">
+						<img src="{% static 'images/nostar.png' %}" width="70" height="70">
+						<img src="{% static 'images/nostar.png' %}" width="70" height="70">
+						{% elif seekerScore >= 0.5 %}
+						<img src="{% static 'images/halfstar.png' %}" width="70" height="70">
+						<img src="{% static 'images/nostar.png' %}" width="70" height="70">
+						<img src="{% static 'images/nostar.png' %}" width="70" height="70">
+						<img src="{% static 'images/nostar.png' %}" width="70" height="70">
+						<img src="{% static 'images/nostar.png' %}" width="70" height="70">
+						{% else %}
+						<img src="{% static 'images/nostar.png' %}" width="70" height="70">
+						<img src="{% static 'images/nostar.png' %}" width="70" height="70">
+						<img src="{% static 'images/nostar.png' %}" width="70" height="70">
+						<img src="{% static 'images/nostar.png' %}" width="70" height="70">
+						<img src="{% static 'images/nostar.png' %}" width="70" height="70">
+						{% endif %}
 					</div>
 
 					<div class="padding" style="padding-top: 9.5%"></div>
@@ -148,11 +212,75 @@
 			<p>Reviews of {{user_info.username}} (as Creator): </p>
 			<div class="well well-lg">
 					<div class="col-md-11">
+						{% if creatorScore == -1 %}
+						<p>No Reviews</p>
+						{% elif creatorScore >= 5 %}
 						<img src="{% static 'images/star.png' %}" width="70" height="70">
 						<img src="{% static 'images/star.png' %}" width="70" height="70">
 						<img src="{% static 'images/star.png' %}" width="70" height="70">
 						<img src="{% static 'images/star.png' %}" width="70" height="70">
 						<img src="{% static 'images/star.png' %}" width="70" height="70">
+						{% elif creatorScore >= 4.5 %}
+						<img src="{% static 'images/star.png' %}" width="70" height="70">
+						<img src="{% static 'images/star.png' %}" width="70" height="70">
+						<img src="{% static 'images/star.png' %}" width="70" height="70">
+						<img src="{% static 'images/star.png' %}" width="70" height="70">
+						<img src="{% static 'images/halfstar.png' %}" width="70" height="70">
+						{% elif creatorScore >= 4 %}
+						<img src="{% static 'images/star.png' %}" width="70" height="70">
+						<img src="{% static 'images/star.png' %}" width="70" height="70">
+						<img src="{% static 'images/star.png' %}" width="70" height="70">
+						<img src="{% static 'images/star.png' %}" width="70" height="70">
+						<img src="{% static 'images/nostar.png' %}" width="70" height="70">
+						{% elif creatorScore >= 3.5 %}
+						<img src="{% static 'images/star.png' %}" width="70" height="70">
+						<img src="{% static 'images/star.png' %}" width="70" height="70">
+						<img src="{% static 'images/star.png' %}" width="70" height="70">
+						<img src="{% static 'images/halfstar.png' %}" width="70" height="70">
+						<img src="{% static 'images/nostar.png' %}" width="70" height="70">
+						{% elif creatorScore >= 3 %}
+						<img src="{% static 'images/star.png' %}" width="70" height="70">
+						<img src="{% static 'images/star.png' %}" width="70" height="70">
+						<img src="{% static 'images/star.png' %}" width="70" height="70">
+						<img src="{% static 'images/nostar.png' %}" width="70" height="70">
+						<img src="{% static 'images/nostar.png' %}" width="70" height="70">
+						{% elif creatorScore >= 2.5 %}
+						<img src="{% static 'images/star.png' %}" width="70" height="70">
+						<img src="{% static 'images/star.png' %}" width="70" height="70">
+						<img src="{% static 'images/halfstar.png' %}" width="70" height="70">
+						<img src="{% static 'images/nostar.png' %}" width="70" height="70">
+						<img src="{% static 'images/nostar.png' %}" width="70" height="70">
+						{% elif creatorScore >= 2 %}
+						<img src="{% static 'images/star.png' %}" width="70" height="70">
+						<img src="{% static 'images/star.png' %}" width="70" height="70">
+						<img src="{% static 'images/nostar.png' %}" width="70" height="70">
+						<img src="{% static 'images/nostar.png' %}" width="70" height="70">
+						<img src="{% static 'images/nostar.png' %}" width="70" height="70">
+						{% elif creatorScore >= 1.5 %}
+						<img src="{% static 'images/star.png' %}" width="70" height="70">
+						<img src="{% static 'images/halfstar.png' %}" width="70" height="70">
+						<img src="{% static 'images/nostar.png' %}" width="70" height="70">
+						<img src="{% static 'images/nostar.png' %}" width="70" height="70">
+						<img src="{% static 'images/nostar.png' %}" width="70" height="70">
+						{% elif creatorScore >= 1 %}
+						<img src="{% static 'images/star.png' %}" width="70" height="70">
+						<img src="{% static 'images/nostar.png' %}" width="70" height="70">
+						<img src="{% static 'images/nostar.png' %}" width="70" height="70">
+						<img src="{% static 'images/nostar.png' %}" width="70" height="70">
+						<img src="{% static 'images/nostar.png' %}" width="70" height="70">
+						{% elif creatorScore >= 0.5 %}
+						<img src="{% static 'images/halfstar.png' %}" width="70" height="70">
+						<img src="{% static 'images/nostar.png' %}" width="70" height="70">
+						<img src="{% static 'images/nostar.png' %}" width="70" height="70">
+						<img src="{% static 'images/nostar.png' %}" width="70" height="70">
+						<img src="{% static 'images/nostar.png' %}" width="70" height="70">
+						{% else %}
+						<img src="{% static 'images/nostar.png' %}" width="70" height="70">
+						<img src="{% static 'images/nostar.png' %}" width="70" height="70">
+						<img src="{% static 'images/nostar.png' %}" width="70" height="70">
+						<img src="{% static 'images/nostar.png' %}" width="70" height="70">
+						<img src="{% static 'images/nostar.png' %}" width="70" height="70">
+						{% endif %}
 						</div>
 					<div class="padding" style="padding-top: 9.5%"></div>
 				</div>

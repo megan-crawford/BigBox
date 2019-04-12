@@ -61,9 +61,35 @@ def profile(request):
     if request.GET.get('username'): #the .get() needs to be used to stop error if username is null
         username = request.GET['username']
         user = User.objects.filter(username=username).first() #assume there is only one object
+        
+        createReview = CreatorReview.objects.filter(User=user)
+        creatorScore = 0
+        counterCreator = 0
+        for review in createReview:
+            creatorScore += review.Rating
+            counterCreator += 1
+        if (counterCreator == 0):
+            creatorScore = -1
+        else:
+            creatorScore = creatorScore / counterCreator
+
+        seekReview = SeekerReview.objects.filter(User=user)
+        seekerScore = 0
+        counterSeeker = 0
+        for review in seekReview:
+            seekerScore += review.Rating
+            counterSeeker += 1
+        if (counterSeeker == 0):
+            seekerScore = -1
+        else:
+            seekerScore = seekerScore / counterSeeker
+        
+        #print("creatorScore:", creatorScore)
+        #print("seekerScore:", seekerScore)
+
         if user:
             num_reports = Report.objects.filter(User=user).count()
-            return render(request, 'profile.html', {'user_info':user, 'num_reports':num_reports})
+            return render(request, 'profile.html', {'user_info':user, 'num_reports':num_reports, 'creatorScore':creatorScore, 'seekerScore':seekerScore})
 
     return render(request, 'profile.html')
 
@@ -122,6 +148,9 @@ def update_account(request):
 	#reset password
 def reset_password(request):
 	return render(request, 'reset_password.html')
+	
+def new_password(request):
+	return render(request, 'new_password.html')
 	
 #home pages
 def home_creator(request):
@@ -697,12 +726,12 @@ def show_interest(request, jobID, seekerID):
     job.Interested.add(seeker)
     content = seeker.first_name + " is interested in this job: " + job.Description + ". Please visit BigBox to accept or decline this seeker."
     creator = User.objects.filter(id=job.userID).first()
-    print("seekerID:")
-    print(seekerID)
-    print(jobID)
-    print(creator)
+    #print("seekerID:")
+    #print(seekerID)
+    #print(jobID)
+    #print(creator)
     email = creator.email
-    print(email)
+    #print(email)
     val = sendEmail("Congrats, a seeker is interested in your job", content, email)
     return render(request, 'Jobs/showInterest.html')    
   
@@ -729,11 +758,17 @@ def distBetween(zip1, zip2):
 #in Post, set chosen id to id of seeker
 #in Post, set Active to some value im not sure
 #in Interested, delete record with job id and seeker(user) id
-def hire_seeker(request, jobID, seekerID):
+#send email to seeker to notify them that they've been chosen
+def hire_seeker(request, jobID, seekerID, employerID):
     seeker = User.objects.filter(id=seekerID).first()
+    seekerEmail = seeker.email
+    employer = User.objects.filter(id =employerID).first()
+    employerEmail = employer.email
     job = Post.objects.filter(id = jobID).first()
     job.Interested.remove(seeker)
     job.Chosen = seeker;
     job.Active = 2; 
     job.save()
+    content = "You have been hired for this job: " + job.Description + ". Here is your employers contact information: \n" + employer.first_name + "\n" + employerEmail
+    val = sendEmail("Congrats, you have been hired!", content, seekerEmail)
     return render(request, 'Jobs/hireSeeker.html') 
