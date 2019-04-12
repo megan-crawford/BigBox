@@ -724,7 +724,7 @@ def distBetween(zip1, zip2):
         c = 2 * atan2(sqrt(a), sqrt(1 - a))
 
         return radius * c
-    except (KeyError, ValueError): #unknown zip codes and zip codes with non numeric characters
+    except (KeyError, ValueError, TypeError): #unknown zip codes and zip codes with non numeric characters
         return -1
 
 #in Post, set chosen id to id of seeker
