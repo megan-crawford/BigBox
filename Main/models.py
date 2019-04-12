@@ -104,6 +104,12 @@ class Seeker(models.Model):     #Job Seeker, subclass to User
     IntJob = models.ManyToManyField(Post, blank=True)
     Location = models.TextField(blank=True, null=True)
 
+    def get_pref_job_type(self):
+        if self.PrefType:
+            return dict(Post.TYPE_CHOICES)[self.PrefType]
+        else:
+            return None
+
 class Creator(models.Model):    #Job Creator
     User = models.OneToOneField(User, on_delete=models.CASCADE)
     Posts = models.ManyToManyField(Post, blank=True)
