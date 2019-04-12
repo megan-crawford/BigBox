@@ -18,7 +18,7 @@ class DatabaseClassCreation(TestCase):
         user.save()
 
         Profile.objects.create(User=user, Age="23")
-        post = Post.objects.create(Pay=12.50, Location="Kentucky", DateTime="2018-11-20T15:58:44.767594-06:00", Description="I love Winky", JobType="Snow Shoveling")
+        post = Post.objects.create(Pay=12.50, ZipCode=12345, DateTime="2018-11-20T15:58:44.767594-06:00", Description="I love Winky", JobType="Snow Shoveling")
         Report.objects.create(User=user, Classification="No show", Details="Winky was here")
         review1 = SeekerReview.objects.create(Rating = 5)
         review2 = CreatorReview.objects.create(Rating = 1)
@@ -37,7 +37,7 @@ class DatabaseClassCreation(TestCase):
     def test_post(self):
         post = Post.objects.get(Description="I love Winky")
         self.assertNotEqual(post, None)
-        self.assertEqual(post.Location, "Kentucky")
+        self.assertEqual(post.Zipcode, 12345)
         self.assertNotEqual(post.DateTime, "Wrongo")
 
     def test_user(self):
@@ -67,31 +67,31 @@ class UpdateProfile(TestCase):
                         'email': 'email2@email.com', 'first_name': 'Jack','last_name': 'Smith', 'age': 23            
         })
         self.client.post('/create_account/', { #currently logged in as user1
-                        'username': 'user1', 'password': 'vf83g9f7fg', 'password_confirmation': 'vf83g9f7fg',
+            'username': 'user1', 'password': 'vf83g9f7fg', 'password_confirmation': 'vf83g9f7fg', 'zip_code': '12345',
                         'email': 'email@email.com', 'first_name': 'John', 'last_name': 'Smith', 'age': 20              
         })
 
     def test_view_valid_age(self):
         #age_button to show that the update age button was pressed
-        self.client.post('/update_account/', {'age': 30, 'age_button': ''})
+        self.client.post('/update_account/', {'zip_code': '12345', 'age': 30, 'age_button': ''})
 
         user1 = User.objects.get(username='user1')
         self.assertEqual(user1.profile.Age, 30)
 
     def test_view_valid_email(self):
-        self.client.post('/update_account/', {'email': 'new@email.com', 'email_button': ''}) 
+        self.client.post('/update_account/', {'zip_code': '12345', 'email': 'new@email.com', 'email_button': ''}) 
 
         user1 = User.objects.get(username='user1')
         self.assertEqual(user1.email, 'new@email.com')
 
     def test_view_valid_pref_job_type(self):
-        self.client.post('/update_account/', {'pref_job_type': Post.BABYSITTING, 'pref_job_type_button': ''}) 
+        self.client.post('/update_account/', {'zip_code': '12345', 'pref_job_type': Post.BABYSITTING, 'pref_job_type_button': ''}) 
 
         user1 = User.objects.get(username='user1')
         self.assertEqual(user1.seeker.PrefType, Post.BABYSITTING)
 
     def test_view_valid_all(self):
-        self.client.post('/update_account/', {'password': 'oscusifwc', 'password_confirmation': 'oscusifwc', 
+        self.client.post('/update_account/', {'password': 'oscusifwc', 'password_confirmation': 'oscusifwc', 'zip_code': '12345',
                         'first_name': 'Jack', 'email': 'newer@email.com', 'age': 40, 'update_all_button': ''}) 
 
         user1 = User.objects.get(username='user1')
@@ -103,15 +103,15 @@ class UpdateProfile(TestCase):
 
     def test_view_invalid_email(self):
         #email already exists
-        response = self.client.post('/update_account/', {'email': 'email2@email.com', 'email_button': ''}) 
+        response = self.client.post('/update_account/', {'zip_code': '12345', 'email': 'email2@email.com', 'email_button': ''}) 
         self.assertFalse(response.context['form'].is_valid())
 
     def test_view_invalid_first_name(self):
-        response = self.client.post('/update_account/', {'first_name': 'jack5', 'first_name_button': ''}) 
+        response = self.client.post('/update_account/', {'zip_code': '12345', 'first_name': 'jack5', 'first_name_button': ''}) 
         self.assertFalse(response.context['form'].is_valid())
 
     def test_view_invalid_password_confirmation(self):
-        response = self.client.post('/update_account/', {'password': 'aaaaaaaa', 'password_confirmation': 'bbbbbbbb', 'password_button': ''}) 
+        response = self.client.post('/update_account/', {'zip_code': '12345', 'password': 'aaaaaaaa', 'password_confirmation': 'bbbbbbbb', 'password_button': ''}) 
         self.assertFalse(response.context['form'].is_valid())
 
 class CreateProfile(TestCase):
@@ -120,7 +120,7 @@ class CreateProfile(TestCase):
 
     def test_view_valid(self):
         self.client.post('/create_account/', {
-                        'username': 'user1', 'password': '83bc7493bc', 'password_confirmation': '83bc7493bc',
+            'username': 'user1', 'password': '83bc7493bc', 'password_confirmation': '83bc7493bc', 'zip_code': '12345',
                         'email': 'user@email.com', 'first_name': 'Sam', 'last_name': 'Samuel', 'age': 70
         })
 
@@ -132,7 +132,7 @@ class CreateProfile(TestCase):
 
     def test_view_invalid_username(self):
         self.client.post('/create_account/', {
-                        'username': 'user1', 'password': '83bc7493bc', 'password_confirmation': '83bc7493bc',
+            'username': 'user1', 'password': '83bc7493bc', 'password_confirmation': '83bc7493bc', 'zip_code': '12345', 
                         'email': 'email1@email.com', 'first_name': 'Sam', 'last_name': 'Samuel', 'age': 70
         })
         response = self.client.post('/create_account/', {
@@ -158,7 +158,7 @@ class CreateJob(TestCase):
     def setUp(self):
         self.client = Client()
         self.client.post('/create_account/', {
-                        'username': 'user', 'password': '84cn39cn93', 'password_confirmation': '84cn39cn93',
+            'username': 'user', 'password': '84cn39cn93', 'password_confirmation': '84cn39cn93', 'zip_code': '12345',
                         'email': 'jane@email.com', 'first_name': 'Jane', 'last_name': 'Keith', 'age': 16
         })
 
@@ -258,6 +258,9 @@ class ListJob(TestCase):
                         'pay': 30.00, 'date_time': '2021-10-25', 'zip_code': 52403, #closest
                         'description': 'job4', 'job_type': Post.DOGWALKING,
         })
+        self.client.post(Post.objects.create(Pay=998, DateTime="2000-10-10", Description="job5", JobType="Snow Shoveling", ZipCode=12345))
+
+        
 
         self.client.post('/create_account/', { #user requered to be logged in to create jobs
                         'username': 'user2', 'password': 'vf83g9f7fg', 'password_confirmation': 'vf83g9f7fg',
@@ -280,6 +283,10 @@ class ListJob(TestCase):
     def test_view_correct_jobs_wage(self):
         response = self.client.get('/list_job/', {'min_wage': 15.00, 'max_wage': 25.00})
         self.assertEqual(len(response.context['jobs']), 3)
+
+    def test_view_correct_jobs_status_closed(self):
+        response = self.client.get('/list_job/', {'min_wage': 500.00})
+        self.assertEqual(response.context['jobs'][0].Active, 1)
 
     def test_view_correct_jobs_max_wage(self):
         response = self.client.get('/list_job/', {'max_wage': 20.00})
@@ -408,15 +415,17 @@ class ReopenJob(TestCase):
         })
 
         self.client.post('/create_job/', {
-                        'pay': 45.00, 'date_time': '2020-09-25',
+            'pay': 45.00, 'date_time': '2020-09-25', 'zip_code': '12345',
                         'description': 'work involves ...', 'job_type': Post.DOGWALKING,
         })
 
         #TODO: add more actions for having a seeker accept the job and closing the job
 
     def test_view(self):
-        post = Post.objects.first()
-        self.client.post(f'/reopen_job/{post.id}')
+        #post = Post.objects.get(Pay=45.00)
+        post = self.client.get('/list_job/', {'min_wage': 15.00, 'max_wage': 50.00})
+        postid = post.context['jobs'][0].id
+        self.client.post("/reopen_job/%d"%(postid))
         post = Post.objects.first()
         self.assertEqual(post.Active, 0)
 
