@@ -90,6 +90,7 @@ class UpdateAccountForm(forms.Form):
         email = self.cleaned_data['email']
         if email: #skip validation if user didn't put anything
             if User.objects.filter(email=email).exists() and self.user.email != email:
+                print('error email')
                 raise ValidationError(message=self.error_messages['preexisting_email'], code='preexisting_email')
         return email
 
@@ -97,6 +98,7 @@ class UpdateAccountForm(forms.Form):
         first_name = self.cleaned_data['first_name']
         if first_name:
             if search('^[A-Za-z]+$', first_name) is None:
+                print('error first name')
                 raise ValidationError(message=self.error_messages['invalid_name'], code='invalid_name')
         return first_name
 
@@ -104,6 +106,7 @@ class UpdateAccountForm(forms.Form):
         last_name = self.cleaned_data['last_name']
         if last_name:
             if search('^[A-Za-z]+$', last_name) is None:
+                print('error last name')
                 raise ValidationError(message=self.error_messages['invalid_name'], code='invalid_name')
         return last_name
 
@@ -112,6 +115,7 @@ class UpdateAccountForm(forms.Form):
         password_confirmation = self.cleaned_data['password_confirmation']
         if password and password_confirmation:
             if password != password_confirmation:
+                print('error password')
                 raise ValidationError(message=self.error_messages['passwords_not_match'], code='passwords_not_match')
         return password_confirmation
 
@@ -128,6 +132,7 @@ class UpdateAccountForm(forms.Form):
         try:
             locations.loc[int(zip_code)]
         except (KeyError, ValueError): #unknown zip codes and zip codes with non numeric characters
+            print('error zip code')
             raise ValidationError(message=self.error_messages['invalid_zip_code'], code='invalid_zip_code')
 
         return zip_code

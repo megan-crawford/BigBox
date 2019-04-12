@@ -122,16 +122,15 @@
         <div class="errorMessage" id="errorPassword" style="display:none">
             <p>Passwords Do Not Match - You Suck</p>
         </div>
-		
 
 			<div class="row">
 
-			
 			<div id="inputs" class="form-group col-xs-6">
             <div class="form-group">    
                                 <label for="jobType" id="jobTypeText">Preferred Job Type</label>
                                 <div class="input-group">
-                                  <select class="custom-select" id="inputGroupSelect01">
+                                  {{form.pref_job_type}}
+                                  <!--<select name="pref_job_type" class="custom-select" id="inputGroupSelect01">
                                     <option selected>Choose...</option>
                                     <option value="Lawn Care">Lawn Care</option>
                                     <option value="Dog Walking">Dog Walking</option>
@@ -139,13 +138,13 @@
                                     <option value="Pet Care">Pet Care</option>
                                     <option value="Manual Labor">Manual Labor</option>
                                     <option value="Other">Other</option>
-                                  </select>
+                                  </select>-->
                                 </div>
                               </div>
 							  
          </div>
-                              <div class="btn1 col-xs-6">
-            <button name="description_button" type="submit" class="btn btn-secondary" id="updateFirstNameButton">Update Preferred Job Type</button>
+          <div class="btn1 col-xs-6">
+            <button name="pref_job_type_button" type="submit" class="btn btn-secondary" id="updatePrefJobButton">Update Preferred Job Type</button>
          </div>
               </div>
               

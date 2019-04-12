@@ -74,6 +74,7 @@ def update_account(request):
     if request.method == 'POST':
         print('update account post')
         form = UpdateAccountForm(request.user, request.POST, request.FILES)
+        print(form.errors)
 
         if form.is_valid():
             print('update account valid')
@@ -97,11 +98,12 @@ def update_account(request):
             if form.cleaned_data['description'] and ('description_button' in request.POST or update_all):
                 request.user.profile.Description = form.cleaned_data['description']
             
+            print(form.cleaned_data['pref_job_type'])
+            print('pref_job_type_button' in request.POST)
             if (form.cleaned_data['pref_job_type'] != '') and ('pref_job_type_button' in request.POST or update_all):
                 request.user.seeker.PrefType = form.cleaned_data['pref_job_type']
 
             if (form.cleaned_data['zip_code']) and ('zip_code_button' in request.POST or update_all):
-                print('update account zip code')
                 request.user.profile.ZipCode = form.cleaned_data['zip_code']
 
             if (form.cleaned_data['password'] and form.cleaned_data['password_confirmation']) and ('password_button' in request.POST or update_all):
@@ -721,7 +723,7 @@ def distBetween(zip1, zip2):
         c = 2 * atan2(sqrt(a), sqrt(1 - a))
 
         return radius * c
-    except (KeyError, ValueError): #unknown zip codes and zip codes with non numeric characters
+    except (KeyError, ValueError, TypeError): #for bad zip codes
         return -1
 
 #in Post, set chosen id to id of seeker
