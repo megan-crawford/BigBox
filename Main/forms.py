@@ -138,7 +138,7 @@ class UpdateAccountForm(forms.Form):
         return zip_code
         
 class CreateJobForm(forms.Form):
-    pay = forms.DecimalField(min_value=0, max_value=1000, decimal_places=2, required=True)
+    pay = forms.DecimalField(min_value=0, max_value=5000, decimal_places=2, required=True)
     date_time = forms.DateTimeField(required=True)
     description = forms.CharField(required=True)
     job_type = forms.ChoiceField(choices=Post.TYPE_CHOICES, required=True)
