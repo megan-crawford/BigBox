@@ -147,6 +147,9 @@ def update_account(request):
 def reset_password(request):
 	return render(request, 'reset_password.html')
 	
+def reset_instructions(request):
+	return render(request, 'reset_instructions.html')
+	
 def new_password(request):
 	return render(request, 'new_password.html')
 	
