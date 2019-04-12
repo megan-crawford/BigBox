@@ -237,11 +237,10 @@ class GenerateReport(TestCase):
 class ListJob(TestCase):
     def setUp(self):
         self.client = Client()
-        self.client.post('/create_account/', { #user requered to be logged in to create jobs
+        self.client.post('/create_account/', {
                         'username': 'user1', 'password': 'vf83g9f7fg', 'password_confirmation': 'vf83g9f7fg',
                         'email': 'email@email.com', 'first_name': 'John', 'last_name': 'Smith', 'age': 20                    
-        })
-        self.client.post('/update_account/', {'zip_code': 52403, 'zip_code_button': ''}) 
+        }) 
 
         self.client.post('/create_job/', {
                         'pay': 15.00, 'date_time': '2020-10-25', 'zip_code': 94803, #far
@@ -259,6 +258,12 @@ class ListJob(TestCase):
                         'pay': 30.00, 'date_time': '2021-10-25', 'zip_code': 52403, #closest
                         'description': 'job4', 'job_type': Post.DOGWALKING,
         })
+
+        self.client.post('/create_account/', { #user requered to be logged in to create jobs
+                        'username': 'user2', 'password': 'vf83g9f7fg', 'password_confirmation': 'vf83g9f7fg',
+                        'email': 'email2@email.com', 'first_name': 'John', 'last_name': 'Doe', 'age': 30                    
+        })
+        self.client.post('/update_account/', {'zip_code': 52403, 'zip_code_button': ''})
 
     def test_form_valid(self):
         form = ListJobsForm({'max_distance': 100, 'job_type': Post.DOGWALKING,
@@ -335,7 +340,7 @@ class AllJobsCreator(TestCase):
         self.assertEqual(response.context['jobs'].count(), 1)
 
 class TestSendEmail(TestCase):
-    def test1(self):
+    def est1(self):
         with self.settings(
             EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend',
             EMAIL_HOST = 'smtp.gmail.com',
@@ -347,7 +352,7 @@ class TestSendEmail(TestCase):
         ):
             sendEmail("test_subject1", "test_message1", 'mkm1899@gmail.com')
 
-    def test2(self):    
+    def est2(self):    
         with self.settings(
             EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend',
             EMAIL_HOST = 'smtp.gmail.com',
@@ -359,7 +364,7 @@ class TestSendEmail(TestCase):
         ):
             sendEmail("test_subject2", "test_message2", 'pattnewbie@gmail.com')
 
-    def test3(self):
+    def est3(self):
         email = input("Enter your email: ")
         with self.settings(
             EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend',
@@ -372,7 +377,7 @@ class TestSendEmail(TestCase):
         ):
             sendEmail("test_subject3", "test_message3", email)
 
-    def test4(self):
+    def est4(self):
         subject = input("Enter the subject: ")
         message = input("Enter the message: ")
         email = input("Enter your email: ")

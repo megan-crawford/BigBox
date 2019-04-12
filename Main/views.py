@@ -221,14 +221,14 @@ def create_job(request):
     return render(request, 'Jobs/bigBoxJob.html', {'form':form})
 
 def list_job(request):
+    print('list job')
 
     expired = Post.objects.filter(DateTime__lt=datetime.now(),)
     expired.update(Active=1)
 
     if not request.user.is_authenticated:
+        print('list job not authenticated')
         return redirect('/login/')
-        
-    
 
     if request.method == "GET":
         print('list job get')
@@ -241,16 +241,20 @@ def list_job(request):
             max_wage = form.cleaned_data['max_wage']
 
             if (job_type != '' and min_wage and max_wage): #all inputs filled in
+                print('all inputs')
                 jobs = Post.objects.filter(JobType=job_type, Pay__range=[min_wage, max_wage])
             elif (job_type == '' and not min_wage and not max_wage): #no inputs filled in
+                print('no inputs')
                 jobs = Post.objects.all()
             else: #mixed inputs filled in
+                print('mixed inputs')
                 if min_wage and not max_wage:
                     jobs = Post.objects.filter(Q(JobType=job_type) | Q(Pay__gte=min_wage))
                 elif not min_wage and max_wage:
                     jobs = Post.objects.filter(Q(JobType=job_type) | Q(Pay__lte=max_wage))
                 else:
                     jobs = Post.objects.filter(Q(JobType=job_type) | Q(Pay__range=[min_wage, max_wage]))
+
         else:
             jobs = Post.objects.all()
     else:
