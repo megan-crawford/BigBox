@@ -33,6 +33,7 @@ urlpatterns = [
     path('generate_report/', views.generate_report, name='generate_report'),
 	path('generate_review/<int:user_id>/<int:is_seeker>/', views.generate_review, name='generate_review'),
 	path('reset_password/', views.reset_password, name='reset_password'),
+	path('new_password/', views.new_password, name='new_password'),
 
     #creator
     path('home_creator/', views.home_creator, name='home_creator'),
