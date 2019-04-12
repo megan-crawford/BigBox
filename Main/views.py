@@ -121,6 +121,9 @@ def update_account(request):
 def reset_password(request):
 	return render(request, 'reset_password.html')
 	
+def new_password(request):
+	return render(request, 'new_password.html')
+	
 #home pages
 def home_creator(request):
     if not request.user.is_authenticated:
