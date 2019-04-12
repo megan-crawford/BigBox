@@ -695,12 +695,12 @@ def show_interest(request, jobID, seekerID):
     job.Interested.add(seeker)
     content = seeker.first_name + " is interested in this job: " + job.Description + ". Please visit BigBox to accept or decline this seeker."
     creator = User.objects.filter(id=job.userID).first()
-    print("seekerID:")
-    print(seekerID)
-    print(jobID)
-    print(creator)
+    #print("seekerID:")
+    #print(seekerID)
+    #print(jobID)
+    #print(creator)
     email = creator.email
-    print(email)
+    #print(email)
     val = sendEmail("Congrats, a seeker is interested in your job", content, email)
     return render(request, 'Jobs/showInterest.html')    
   
@@ -727,11 +727,17 @@ def distBetween(zip1, zip2):
 #in Post, set chosen id to id of seeker
 #in Post, set Active to some value im not sure
 #in Interested, delete record with job id and seeker(user) id
-def hire_seeker(request, jobID, seekerID):
+#send email to seeker to notify them that they've been chosen
+def hire_seeker(request, jobID, seekerID, employerID):
     seeker = User.objects.filter(id=seekerID).first()
+    seekerEmail = seeker.email
+    employer = User.objects.filter(id =employerID).first()
+    employerEmail = employer.email
     job = Post.objects.filter(id = jobID).first()
     job.Interested.remove(seeker)
     job.Chosen = seeker;
     job.Active = 2; 
     job.save()
+    content = "You have been hired for this job: " + job.Description + ". Here is your employers contact information: \n" + employer.first_name + "\n" + employerEmail
+    val = sendEmail("Congrats, you have been hired!", content, seekerEmail)
     return render(request, 'Jobs/hireSeeker.html') 

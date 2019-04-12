@@ -45,7 +45,7 @@ urlpatterns = [
     path('pending_jobs_creator/', views.pending_jobs_creator, name='pending_jobs_creator'),
     path('past_jobs_creator/', views.past_jobs_creator, name='past_jobs_creator'),
     path('reopen_job/<post_id>', views.reopen_job, name='reopen_job'),
-    path('hire_seeker/<jobID>/<seekerID>/', views.hire_seeker, name='hire_seeker'),
+    path('hire_seeker/<jobID>/<seekerID>/<employerID>', views.hire_seeker, name='hire_seeker'),
 
     #seeker
     path('home_seeker/', views.home_seeker, name='home_seeker'),

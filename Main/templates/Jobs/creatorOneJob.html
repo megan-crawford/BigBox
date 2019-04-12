@@ -116,7 +116,7 @@ div.job{
       <div>
         {%for seeker in interested_seekers%}
         <div>
-        <a class="button" href= '/hire_seeker/{{post.id}}/{{seeker.id}}'>
+        <a class="button" href= '/hire_seeker/{{post.id}}/{{seeker.id}}/{{request.user.id}}'>
           Hire this seeker:
         </a>
         {{seeker.first_name}}
