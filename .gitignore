@@ -10,3 +10,6 @@ settings.py
 */migrations/*
 
 *.csv
+
+*/profile_pictures/*
+Main/static/images/profile_pictures/*

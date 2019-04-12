@@ -40,20 +40,27 @@
       <br>
       <br>
 
-      <form action="/update_account/" method="POST" name="inputs">
+      <form action="/update_account/" method="POST" name="inputs" enctype="multipart/form-data">
         {% csrf_token %}
 
        <label for="profiePicInput" id="profilePicText">Update Profile Picture</label>
-       <div id="inputs">
-           <input name="profile_picture" type="file" name="profilepic">
-       </div>
+       <div class="btn1 col-xs-6">
+		<div id="inputs">
+			<input name="profile_picture" type="file" name="profilepic">
+		</div>
+		
+		<div class="btn1 col-xs-6">
+            <button name="profile_picture_button" type="submit" class="btn btn-secondary" id="updateProfilePictureButton">Update Profile Picture</button>
+         </div>
+		 
+	   </div>
 
 		 <br>
 		 
         <label for="firstNameInput" id="firstNameText">Update First Name</label>
         <div class="row">
            <div id="inputs" class="form-group col-xs-6">
-            <input name="first_name" type="firstName" value={{user_info.first_name}} class="form-control" id="firstNameInput" placeholder="Ex: John">
+            <input name="first_name" type="firstName" value="{{user_info.first_name}}" class="form-control" id="firstNameInput" placeholder="Ex: John">
          </div>
           
 
@@ -65,7 +72,7 @@
         <label for="lastNameInput" id="lastNameText">Update Last Name</label>
         <div class="row">
           <div id="inputs" class="form-group col-xs-6">
-            <input name="last_name" type="lastName" value={{user_info.last_name}} class="form-control" id="lastNameInput">
+            <input name="last_name" type="lastName" value="{{user_info.last_name}}" class="form-control" id="lastNameInput">
           </div>
 
           <div class="btn1 col-xs-6">
@@ -78,7 +85,7 @@
         <label for="ageInput" id="ageText">Update Age</label>
         <div class="row">
            <div id="inputs" class="form-group col-xs-6">
-            <input name="age" type="age" value={{user_info.profile.Age}} class="form-control" id="ageInput">
+            <input name="age" type="age" value="{{user_info.profile.Age}}" class="form-control" id="ageInput">
            </div>
 
            <div class="btn1 col-xs-6">
@@ -91,7 +98,7 @@
         <label for="emailInput" id="emailText">Update Email</label>
         <div class="row">
            <div id="inputs" class="form-group col-xs-6">
-            <input name="email" type="email" value={{user_info.email}} class="form-control" name="emailInput" id="emailInput">
+            <input name="email" type="email" value="{{user_info.email}}" class="form-control" name="emailInput" id="emailInput">
            </div>
 
            <div class="btn1 col-xs-6">
@@ -115,16 +122,15 @@
         <div class="errorMessage" id="errorPassword" style="display:none">
             <p>Passwords Do Not Match - You Suck</p>
         </div>
-		
 
 			<div class="row">
 
-			
 			<div id="inputs" class="form-group col-xs-6">
             <div class="form-group">    
                                 <label for="jobType" id="jobTypeText">Preferred Job Type</label>
                                 <div class="input-group">
-                                  <select class="custom-select" id="inputGroupSelect01">
+                                  {{form.pref_job_type}}
+                                  <!--<select name="pref_job_type" class="custom-select" id="inputGroupSelect01">
                                     <option selected>Choose...</option>
                                     <option value="Lawn Care">Lawn Care</option>
                                     <option value="Dog Walking">Dog Walking</option>
@@ -132,13 +138,13 @@
                                     <option value="Pet Care">Pet Care</option>
                                     <option value="Manual Labor">Manual Labor</option>
                                     <option value="Other">Other</option>
-                                  </select>
+                                  </select>-->
                                 </div>
                               </div>
 							  
          </div>
-                              <div class="btn1 col-xs-6">
-            <button name="description_button" type="submit" class="btn btn-secondary" id="updateFirstNameButton">Update Preferred Job Type</button>
+          <div class="btn1 col-xs-6">
+            <button name="pref_job_type_button" type="submit" class="btn btn-secondary" id="updatePrefJobButton">Update Preferred Job Type</button>
          </div>
               </div>
               
@@ -146,7 +152,7 @@
           <div class="row">
             <div id="inputs" class="form-group col-xs-6">
               {% if user_info.profile.ZipCode is not None %}
-                <input name="zip_code" type="zip_code" value={{user_info.profile.ZipCode}} class="form-control" id="zipCodeInput">
+                <input name="zip_code" type="zip_code" value="{{user_info.profile.ZipCode}}" class="form-control" id="zipCodeInput">
               {% else %}
                 <input name="zip_code" type="zip_code" class="form-control" id="zipCodeInput">
               {% endif %}

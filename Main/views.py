@@ -61,9 +61,35 @@ def profile(request):
     if request.GET.get('username'): #the .get() needs to be used to stop error if username is null
         username = request.GET['username']
         user = User.objects.filter(username=username).first() #assume there is only one object
+        
+        createReview = CreatorReview.objects.filter(User=user)
+        creatorScore = 0
+        counterCreator = 0
+        for review in createReview:
+            creatorScore += review.Rating
+            counterCreator += 1
+        if (counterCreator == 0):
+            creatorScore = -1
+        else:
+            creatorScore = creatorScore / counterCreator
+
+        seekReview = SeekerReview.objects.filter(User=user)
+        seekerScore = 0
+        counterSeeker = 0
+        for review in seekReview:
+            seekerScore += review.Rating
+            counterSeeker += 1
+        if (counterSeeker == 0):
+            seekerScore = -1
+        else:
+            seekerScore = seekerScore / counterSeeker
+        
+        #print("creatorScore:", creatorScore)
+        #print("seekerScore:", seekerScore)
+
         if user:
             num_reports = Report.objects.filter(User=user).count()
-            return render(request, 'profile.html', {'user_info':user, 'num_reports':num_reports})
+            return render(request, 'profile.html', {'user_info':user, 'num_reports':num_reports, 'creatorScore':creatorScore, 'seekerScore':seekerScore})
 
     return render(request, 'profile.html')
 
@@ -73,14 +99,15 @@ def update_account(request):
 
     if request.method == 'POST':
         print('update account post')
-        form = UpdateAccountForm(request.user, request.POST)
+        form = UpdateAccountForm(request.user, request.POST, request.FILES)
+        print(form.errors)
 
         if form.is_valid():
             print('update account valid')
             update_all = 'update_all_button' in request.POST
 
             if form.cleaned_data['profile_picture'] and ('profile_picture_button' in request.POST or update_all):
-                request.user.profile.ProfilePicture = form.cleaned_data['profile_picture'] 
+                request.user.profile.Portrait = form.cleaned_data['profile_picture']  
 
             if form.cleaned_data['first_name'] and ('first_name_button' in request.POST or update_all):
                 request.user.first_name = form.cleaned_data['first_name']
@@ -97,11 +124,12 @@ def update_account(request):
             if form.cleaned_data['description'] and ('description_button' in request.POST or update_all):
                 request.user.profile.Description = form.cleaned_data['description']
             
+            print(form.cleaned_data['pref_job_type'])
+            print('pref_job_type_button' in request.POST)
             if (form.cleaned_data['pref_job_type'] != '') and ('pref_job_type_button' in request.POST or update_all):
                 request.user.seeker.PrefType = form.cleaned_data['pref_job_type']
 
             if (form.cleaned_data['zip_code']) and ('zip_code_button' in request.POST or update_all):
-                print('update account zip code')
                 request.user.profile.ZipCode = form.cleaned_data['zip_code']
 
             if (form.cleaned_data['password'] and form.cleaned_data['password_confirmation']) and ('password_button' in request.POST or update_all):
@@ -111,15 +139,24 @@ def update_account(request):
             request.user.profile.save()
             request.user.seeker.save()
 
-            return render(request, 'updateAccount.html')
+            return render(request, 'updateAccount.html', {'form': form, 'user_info':request.user})
     else:
-        form = UpdateAccountForm()
+        form = UpdateAccountForm(request.user)
 
     return render(request, 'updateAccount.html', {'form': form, 'user_info':request.user})
 
 	#reset password
 def reset_password(request):
 	return render(request, 'reset_password.html')
+	
+def reset_instructions(request):
+	return render(request, 'reset_instructions.html')
+	
+def new_password(request):
+	return render(request, 'new_password.html')
+	
+def reset_success(request):
+	return render(request, 'reset_success.html')
 	
 #home pages
 def home_creator(request):
@@ -180,7 +217,7 @@ def create_job(request):
             zip_code = form.cleaned_data['zip_code']
 
             #create new job
-            post = Post.objects.create(Pay=pay, DateTime=date, Description=description, JobType=job_type, ZipCode=zip_code, userID=request.user.id)
+            post = Post.objects.create(Pay=pay, DateTime=date, Description=description, JobType=job_type, ZipCode=zip_code, userID=request.user.id, userName=request.user.username)
             request.user.creator.Posts.add(post)
 
             return redirect('/add_job/')
@@ -197,6 +234,8 @@ def list_job(request):
     if not request.user.is_authenticated:
         return redirect('/login/')
         
+    
+
     if request.method == "GET":
         print('list job get')
         form = ListJobsForm(request.GET)
@@ -223,6 +262,11 @@ def list_job(request):
     else:
         jobs = Post.objects.all()
         form = ListJobsForm()
+
+    #Exclude Users Own Jobs
+    for job in jobs:
+        if (job.userID == request.user.id):
+            jobs = jobs.exclude(id = job.id)
 
     #sort by distance, then pay, then date
     jobs = jobs.filter(Active=0)
@@ -265,6 +309,7 @@ def all_jobs_creator(request, job):
     expired = request.user.creator.Posts.filter(DateTime__lt=datetime.now())
     expired.update(Active=1)
 
+
     if not request.user.is_authenticated:
         return redirect('/login/')
         
@@ -286,7 +331,7 @@ def all_jobs_creator(request, job):
 
         typeOfJob = "accepted_jobs"
         job="accepted_jobs"
-        active = 1
+        active = 2
     elif(request.GET.get("pending_jobs")):
         print("pending_jobs button")
         
@@ -305,7 +350,7 @@ def all_jobs_creator(request, job):
 
         typeOfJob = "past_jobs"
         job="past_jobs"
-        active = 2
+        active = 1
     elif(request.GET.get("apply")):
         print("Apply")
         
@@ -313,11 +358,11 @@ def all_jobs_creator(request, job):
         if (job=="all_jobs"):
             active = -1
         elif (job=="accepted_jobs"):
-            active = 1
+            active = 2
         elif (job=="pending_jobs"):
             active = 0
         else:
-            active = 2
+            active = 1
     elif(request.GET.get("reset")):
         print("Reset")
 
@@ -337,72 +382,49 @@ def all_jobs_creator(request, job):
         active = -1
     
     if (typeOfJob == "all_jobs"):
-        if request.method == "GET":
-            form = ListJobsCreator(request.GET)
-            if form.is_valid():
-                zip_code = form.cleaned_data['zip_code']
-                job_type = form.cleaned_data['job_type']
-                min_wage = form.cleaned_data['min_wage']
-                max_wage = form.cleaned_data['max_wage']
-                search = form.cleaned_data['search']
+        jobs = request.user.creator.Posts.all()
+    elif (typeOfJob == "accepted_jobs"):
+        jobs = request.user.creator.Posts.filter(Active=2)
+    elif (typeOfJob == "pending_jobs"):
+        jobs = request.user.creator.Posts.filter(Active=0)
+    else:
+        jobs = request.user.creator.Posts.filter(Active=1)
+
+    print(jobs)
+
+    if request.method == "GET":
+        form = ListJobsCreator(request.GET)
+        if form.is_valid():
+            zip_code = form.cleaned_data['zip_code']
+            job_type = form.cleaned_data['job_type']
+            min_wage = form.cleaned_data['min_wage']
+            max_wage = form.cleaned_data['max_wage']
+            search = form.cleaned_data['search']
                 
 
-                if (job_type != '' and min_wage and max_wage): #all inputs filled in
-                    jobs = request.user.creator.Posts.filter(Description__icontains=search, JobType=job_type, Pay__range=[min_wage, max_wage])
-                elif (job_type == '' and not min_wage and not max_wage): #no inputs filled in
-                    jobs = request.user.creator.Posts.filter(Description__icontains=search)             
-                else: #mixed inputs filled in
-                    if min_wage and not max_wage:
-                        jobs = request.user.creator.Posts.filter(Q(Description__icontains=search), Q(JobType=job_type) | Q(Pay__gte=min_wage))
-                    elif not min_wage and max_wage:
-                        jobs = request.user.creator.Posts.filter(Q(Description__icontains=search),  Q(JobType=job_type) | Q(Pay__lte=max_wage))
-                    else:
-                        jobs = request.user.creator.Posts.filter(Q(Description__icontains=search),  Q(JobType=job_type) | Q(Pay__range=[min_wage, max_wage]))
+            if (job_type != '' and min_wage and max_wage): #all inputs filled in
+                jobs = jobs.filter(Description__icontains=search, JobType=job_type, Pay__range=[min_wage, max_wage])
+            elif (job_type == '' and not min_wage and not max_wage): #no inputs filled in
+                jobs = jobs.filter(Description__icontains=search)             
+            else: #mixed inputs filled in
+                if min_wage and not max_wage:
+                    jobs = jobs.filter(Q(Description__icontains=search), Q(JobType=job_type) | Q(Pay__gte=min_wage))
+                elif not min_wage and max_wage:
+                    jobs = jobs.filter(Q(Description__icontains=search),  Q(JobType=job_type) | Q(Pay__lte=max_wage))
+                else:
+                    jobs = jobs.Posts.filter(Q(Description__icontains=search),  Q(JobType=job_type) | Q(Pay__range=[min_wage, max_wage]))
             
-                if (zip_code): #ZipCode Exists
-                        for job in jobs:
-                            distance = distBetween(job.ZipCode, request.user.profile.ZipCode)
-                            if (distance > zip_code):
-                                jobs = jobs.exclude(id = job.id)
-            else:
-                jobs = request.user.creator.Posts.all()
+            if (zip_code): #ZipCode Exists
+                    for job in jobs:
+                        distance = distBetween(job.ZipCode, request.user.profile.ZipCode)
+                        if (distance > zip_code):
+                            jobs = jobs.exclude(id = job.id)
         else:
-            jobs = request.user.creator.Posts.all()
-            form = ListJobsCreator()
-    else: #get filter by other type of job
-        if request.method == "GET":
-            form = ListJobsCreator(request.GET)
-            if form.is_valid():
-                zip_code = form.cleaned_data['zip_code']
-                job_type = form.cleaned_data['job_type']
-                min_wage = form.cleaned_data['min_wage']
-                max_wage = form.cleaned_data['max_wage']
-                search = form.cleaned_data['search']
-
-                if (job_type != '' and min_wage and max_wage): #all inputs filled in
-                    jobs = request.user.creator.Posts.filter(Description__icontains=search, JobType=job_type, Pay__range=[min_wage, max_wage], Active=active)
-                elif (job_type == '' and not min_wage and not max_wage): #no inputs filled in
-                    jobs = request.user.creator.Posts.filter(Description__icontains=search, Active=active)
-                else: #mixed inputs filled in
-                    if min_wage and not max_wage:
-                        jobs = request.user.creator.Posts.filter(Q(Description__icontains=search), Q(JobType=job_type) | Q(Pay__gte=min_wage), Active=active)
-                    elif not min_wage and max_wage:
-                        jobs = request.user.creator.Posts.filter(Q(Description__icontains=search),  Q(JobType=job_type) | Q(Pay__lte=max_wage), Active=active)
-                    else:
-                        jobs = request.user.creator.Posts.filter(Q(Description__icontains=search),  Q(JobType=job_type) | Q(Pay__range=[min_wage, max_wage]), Active=active)
-
-                if (zip_code): #ZipCode Exists
-                        for job in jobs:
-                            distance = distBetween(job.ZipCode, request.user.profile.ZipCode)
-                            if (distance > zip_code):
-                                jobs = jobs.exclude(id = job.id)
-            else:
-                jobs = request.user.creator.Posts.filter(Active=active)
-        else:
-            jobs = request.user.creator.Posts.filter(Active=active)
-            form = ListJobsCreator()
+            jobs = jobs.all()
+    else:
+        jobs = jobs.all()
+        form = ListJobsCreator()
     
-    jobs = jobs.filter(Active=0) 
     jobs = jobs.order_by('Pay', 'DateTime')
 
     return render(request, 'Creator/allJobsCreator.html', {'form':form, 'jobs':jobs, 'typeOfJob':typeOfJob}, job)
@@ -472,8 +494,7 @@ def one_job_creator(request, job_id):
         return render(request, 'Jobs/oneJob.html')
 
     interested_seekers = post.Interested.all()
-
-    return render(request, 'Jobs/creatorOneJob.html', {'post_info':post, 'interested_seekers':interested_seekers})
+    return render(request, 'Jobs/creatorOneJob.html', {'post':post, 'interested_seekers':interested_seekers})
 
 def seeker_one_job(request):
     if not request.user.is_authenticated:
@@ -483,6 +504,9 @@ def seeker_one_job(request):
 
 #Jobs Seeker Pages
 def all_jobs_seeker(request, job):
+    expired = Post.objects.filter(DateTime__lt=datetime.now(),)
+    expired.update(Active=1)
+
     if not request.user.is_authenticated:
         return redirect('/login/')
         
@@ -504,7 +528,7 @@ def all_jobs_seeker(request, job):
 
         typeOfJob = "accepted_jobs"
         job="accepted_jobs"
-        active = 1
+        active = 2
     elif(request.GET.get("interested_jobs")):
         print("interested_jobs button")
         
@@ -523,7 +547,7 @@ def all_jobs_seeker(request, job):
 
         typeOfJob = "past_jobs"
         job="past_jobs"
-        active = 2
+        active = 1
     elif(request.GET.get("apply")):
         print("Apply")
         
@@ -531,11 +555,11 @@ def all_jobs_seeker(request, job):
         if (job=="all_jobs"):
             active = -1
         elif (job=="accepted_jobs"):
-            active = 1
+            active = 2
         elif (job=="interested_jobs"):
             active = 0
         else:
-            active = 2
+            active = 1
     elif(request.GET.get("reset")):
         print("Reset")
 
@@ -553,75 +577,55 @@ def all_jobs_seeker(request, job):
         typeOfJob = job
         job = "all_jobs"
         active = -1
+    #jobs.request.user
+    #.InterestedSeeker.a;
+    #jobs = request.user.interested_seekers
+    #jobs = Post.objects.filter(Interested=request.user)
+    #print("jobs", jobs)
     
     if (typeOfJob == "all_jobs"):
-        if request.method == "GET":
-            form = ListJobsCreator(request.GET)
-            if form.is_valid():
-                zip_code = form.cleaned_data['zip_code']
-                job_type = form.cleaned_data['job_type']
-                min_wage = form.cleaned_data['min_wage']
-                max_wage = form.cleaned_data['max_wage']
-                search = form.cleaned_data['search']
-                
-                if (job_type != '' and min_wage and max_wage): #all inputs filled in
-                    jobs = request.user.creator.Posts.filter(Description__icontains=search, JobType=job_type, Pay__range=[min_wage, max_wage])
-                elif (job_type == '' and not min_wage and not max_wage): #no inputs filled in
-                    jobs = request.user.creator.Posts.filter(Description__icontains=search)             
-                else: #mixed inputs filled in
-                    if min_wage and not max_wage:
-                        jobs = request.user.creator.Posts.filter(Q(Description__icontains=search), Q(JobType=job_type) | Q(Pay__gte=min_wage))
-                    elif not min_wage and max_wage:
-                        jobs = request.user.creator.Posts.filter(Q(Description__icontains=search),  Q(JobType=job_type) | Q(Pay__lte=max_wage))
-                    else:
-                        jobs = request.user.creator.Posts.filter(Q(Description__icontains=search),  Q(JobType=job_type) | Q(Pay__range=[min_wage, max_wage]))
-                
-                if (zip_code): #ZipCode Exists
-                        for job in jobs:
-                            distance = distBetween(job.ZipCode, request.user.profile.ZipCode)
-                            if (distance > zip_code):
-                                jobs = jobs.exclude(id = job.id)
+        jobs = request.user.interested_seekers
+    elif (typeOfJob == "accepted_jobs"):
+        jobs = request.user.interested_seekers.filter(Chosen=request.user, Active=2)
+    elif (typeOfJob == "interested_jobs"):
+        jobs = request.user.interested_seekers.filter(Active=0)
+    else:
+        jobs = request.user.interested_seekers.filter(Active=1)
+
+    if request.method == "GET":
+        form = ListJobsCreator(request.GET)
+        if form.is_valid():
+            zip_code = form.cleaned_data['zip_code']
+            job_type = form.cleaned_data['job_type']
+            min_wage = form.cleaned_data['min_wage']
+            max_wage = form.cleaned_data['max_wage']
+            search = form.cleaned_data['search']
             
-            else:
-                jobs = request.user.creator.Posts.all()
-        else:
-            jobs = request.user.creator.Posts.all()
-            form = ListJobsCreator()
-    else: #get filter by other type of job
-        if request.method == "GET":
-            form = ListJobsCreator(request.GET)
-            if form.is_valid():
-                zip_code = form.cleaned_data['zip_code']
-                job_type = form.cleaned_data['job_type']
-                min_wage = form.cleaned_data['min_wage']
-                max_wage = form.cleaned_data['max_wage']
-                search = form.cleaned_data['search']
-
-                if (job_type != '' and min_wage and max_wage): #all inputs filled in
-                    jobs = request.user.creator.Posts.filter(Description__icontains=search, JobType=job_type, Pay__range=[min_wage, max_wage], Active=active)
-                elif (job_type == '' and not min_wage and not max_wage): #no inputs filled in
-                    jobs = request.user.creator.Posts.filter(Description__icontains=search, Active=active)
-                else: #mixed inputs filled in
-                    if min_wage and not max_wage:
-                        jobs = request.user.creator.Posts.filter(Q(Description__icontains=search), Q(JobType=job_type) | Q(Pay__gte=min_wage), Active=active)
-                    elif not min_wage and max_wage:
-                        jobs = request.user.creator.Posts.filter(Q(Description__icontains=search),  Q(JobType=job_type) | Q(Pay__lte=max_wage), Active=active)
-                    else:
-                        jobs = request.user.creator.Posts.filter(Q(Description__icontains=search),  Q(JobType=job_type) | Q(Pay__range=[min_wage, max_wage]), Active=active)
+            if (job_type != '' and min_wage and max_wage): #all inputs filled in
+                jobs = jobs.filter(Description__icontains=search, JobType=job_type, Pay__range=[min_wage, max_wage])
+            elif (job_type == '' and not min_wage and not max_wage): #no inputs filled in
+                jobs = jobs.filter(Description__icontains=search)             
+            else: #mixed inputs filled in
+                if min_wage and not max_wage:
+                    jobs = jobs.filter(Q(Description__icontains=search), Q(JobType=job_type) | Q(Pay__gte=min_wage))
+                elif not min_wage and max_wage:
+                    jobs = jobs.filter(Q(Description__icontains=search),  Q(JobType=job_type) | Q(Pay__lte=max_wage))
+                else:
+                    jobs = jobs.filter(Q(Description__icontains=search),  Q(JobType=job_type) | Q(Pay__range=[min_wage, max_wage]))
                 
-                if (zip_code): #ZipCode Exists
-                        for job in jobs:
-                            distance = distBetween(job.ZipCode, request.user.profile.ZipCode)
-                            if (distance > zip_code):
-                                jobs = jobs.exclude(id = job.id)
-            else:
-                jobs = request.user.creator.Posts.filter(Active=active)
+            if (zip_code): #ZipCode Exists
+                    for job in jobs:
+                        distance = distBetween(job.ZipCode, request.user.profile.ZipCode)
+                        if (distance > zip_code):
+                            jobs = jobs.exclude(id = job.id)
+            
         else:
-            jobs = request.user.creator.Posts.filter(Active=active)
-            form = ListJobsCreator()
-    
-    jobs = jobs.order_by('Pay', 'DateTime')
+            jobs = jobs.all()
+    else:
+        jobs = jobs.all()
+        form = ListJobsCreator()
 
+    jobs = jobs.order_by('Pay', 'DateTime')
     return render(request, 'Seeker/allJobsSeeker.html', {'form':form, 'jobs':jobs, 'typeOfJob':typeOfJob}, job)
 
 def accepted_jobs_seeker(request):
@@ -728,12 +732,12 @@ def show_interest(request, jobID, seekerID):
     job.Interested.add(seeker)
     content = seeker.first_name + " is interested in this job: " + job.Description + ". Please visit BigBox to accept or decline this seeker."
     creator = User.objects.filter(id=job.userID).first()
-    print("seekerID:")
-    print(seekerID)
-    print(jobID)
-    print(creator)
+    #print("seekerID:")
+    #print(seekerID)
+    #print(jobID)
+    #print(creator)
     email = creator.email
-    print(email)
+    #print(email)
     val = sendEmail("Congrats, a seeker is interested in your job", content, email)
     return render(request, 'Jobs/showInterest.html')    
   
@@ -754,5 +758,23 @@ def distBetween(zip1, zip2):
         c = 2 * atan2(sqrt(a), sqrt(1 - a))
 
         return radius * c
-    except (KeyError, ValueError): #unknown zip codes and zip codes with non numeric characters
+    except (KeyError, ValueError, TypeError): #for bad zip codes
         return -1
+
+#in Post, set chosen id to id of seeker
+#in Post, set Active to some value im not sure
+#in Interested, delete record with job id and seeker(user) id
+#send email to seeker to notify them that they've been chosen
+def hire_seeker(request, jobID, seekerID, employerID):
+    seeker = User.objects.filter(id=seekerID).first()
+    seekerEmail = seeker.email
+    employer = User.objects.filter(id =employerID).first()
+    employerEmail = employer.email
+    job = Post.objects.filter(id = jobID).first()
+    job.Interested.remove(seeker)
+    job.Chosen = seeker;
+    job.Active = 2; 
+    job.save()
+    content = "You have been hired for this job: " + job.Description + ". Here is your employers contact information: \n" + employer.first_name + "\n" + employerEmail
+    val = sendEmail("Congrats, you have been hired!", content, seekerEmail)
+    return render(request, 'Jobs/hireSeeker.html') 

@@ -165,8 +165,10 @@
         
         <div class="row d-flex justify-content-center" style="padding-top: 0.5%;">
           <div class = "col-sm-12">
-          <a href="/view_one_job/{{post.id}}/">
+          <!--<a href="/one_job_seeker/{{post.id}}/">-->
             <div class="well" id="job" style="height: 95%; width: 100%;">
+              <div class="col-sm-11">
+              <a href="/one_job_seeker/{{post.id}}/">
               <div class="col-sm-2" style="padding-bottom: 3%;">
                 {% if post.JobType == 'LM' %}
                   <img src="{% static 'images/Work Icons/lawn_care.PNG' %}" style="max-height:100%;max-width:100%;">
@@ -214,8 +216,10 @@
               <div class="col-sm-2">
                 <p>{{ post.ZipCode }}</p>
               </div>
+            <!---</a>-->
+          </div>
               <div class="col-sm-1" style="">
-                  <p>{{ request.user.username }}</p>
+                  <a href="../../profile/?username={{post.userName}}"><p>{{ post.userName }}</p></a>
               </div>
           </div>
           </a>

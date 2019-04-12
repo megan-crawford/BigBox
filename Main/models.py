@@ -35,10 +35,11 @@ class Post(models.Model):
     ACTIVE_CHOICES = (
             (0, 'OPEN'),
             (1, 'CLOSED'),
-            (2, 'COMPLETED'),
+            (2, 'CHOSEN'),
     )
 
     userID = models.IntegerField(default=0)
+    userName = models.CharField(max_length=100, default="default")
     Pay = models.FloatField()
     ZipCode = models.IntegerField()
     DateTime = models.DateTimeField()
@@ -85,7 +86,7 @@ class Profile(models.Model):
     #LastName = models.CharField(max_length = 50)
     Description = models.TextField()
     Age = models.SmallIntegerField()
-    Portrait = models.ImageField(upload_to=get_image_path, blank=True, null=True)
+    Portrait = models.ImageField(upload_to='Main/static/images/profile_pictures/', blank=True, null=True)
     Contacts = models.ManyToManyField("self", blank=True)
     ZipCode = models.IntegerField(blank=True, null=True)
             
@@ -102,6 +103,12 @@ class Seeker(models.Model):     #Job Seeker, subclass to User
     PrefType = models.CharField(max_length=2, choices=Post.TYPE_CHOICES, blank=True, null=True)
     IntJob = models.ManyToManyField(Post, blank=True)
     Location = models.TextField(blank=True, null=True)
+
+    def get_pref_job_type(self):
+        if self.PrefType:
+            return dict(Post.TYPE_CHOICES)[self.PrefType]
+        else:
+            return None
 
 class Creator(models.Model):    #Job Creator
     User = models.OneToOneField(User, on_delete=models.CASCADE)

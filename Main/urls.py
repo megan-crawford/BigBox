@@ -15,6 +15,8 @@ Including another URLconf
 """
 from django.urls import path
 from . import views
+from django.conf.urls.static import static
+from django.conf import settings
 
 app_name='Main'
 
@@ -31,6 +33,9 @@ urlpatterns = [
     path('generate_report/', views.generate_report, name='generate_report'),
 	path('generate_review/<int:user_id>/<int:is_seeker>/', views.generate_review, name='generate_review'),
 	path('reset_password/', views.reset_password, name='reset_password'),
+	path('new_password/', views.new_password, name='new_password'),
+	path('reset_instructions/', views.reset_instructions, name='reset_instructions'),
+	path('reset_success/', views.reset_success, name='reset_success'),
 
     #creator
     path('home_creator/', views.home_creator, name='home_creator'),
@@ -43,6 +48,7 @@ urlpatterns = [
     path('pending_jobs_creator/', views.pending_jobs_creator, name='pending_jobs_creator'),
     path('past_jobs_creator/', views.past_jobs_creator, name='past_jobs_creator'),
     path('reopen_job/<post_id>', views.reopen_job, name='reopen_job'),
+    path('hire_seeker/<jobID>/<seekerID>/<employerID>', views.hire_seeker, name='hire_seeker'),
 
     #seeker
     path('home_seeker/', views.home_seeker, name='home_seeker'),

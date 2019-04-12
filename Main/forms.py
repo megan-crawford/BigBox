@@ -81,8 +81,12 @@ class UpdateAccountForm(forms.Form):
         self.user = user
         super(UpdateAccountForm, self).__init__(*args, **kwargs)
 
+    def clean_profile_picture(self):
+        profile_picture = self.cleaned_data['profile_picture']
+        print('form profile picture:', profile_picture)
+        return profile_picture
+
     def clean_email(self):
-        print('email')
         email = self.cleaned_data['email']
         if email: #skip validation if user didn't put anything
             if User.objects.filter(email=email).exists() and self.user.email != email:
@@ -94,6 +98,7 @@ class UpdateAccountForm(forms.Form):
         first_name = self.cleaned_data['first_name']
         if first_name:
             if search('^[A-Za-z]+$', first_name) is None:
+                print('error first name')
                 raise ValidationError(message=self.error_messages['invalid_name'], code='invalid_name')
         return first_name
 
@@ -101,6 +106,7 @@ class UpdateAccountForm(forms.Form):
         last_name = self.cleaned_data['last_name']
         if last_name:
             if search('^[A-Za-z]+$', last_name) is None:
+                print('error last name')
                 raise ValidationError(message=self.error_messages['invalid_name'], code='invalid_name')
         return last_name
 
@@ -109,22 +115,30 @@ class UpdateAccountForm(forms.Form):
         password_confirmation = self.cleaned_data['password_confirmation']
         if password and password_confirmation:
             if password != password_confirmation:
+                print('error password')
                 raise ValidationError(message=self.error_messages['passwords_not_match'], code='passwords_not_match')
         return password_confirmation
 
     def clean_zip_code(self):
         zip_code = self.cleaned_data['zip_code']
+		
+        if zip_code == None:
+            return zip_code
+
+        if zip_code == None:
+            print('zip code is None')
+            return zip_code
 
         try:
             locations.loc[int(zip_code)]
         except (KeyError, ValueError): #unknown zip codes and zip codes with non numeric characters
-            print('zip code error')
+            print('error zip code')
             raise ValidationError(message=self.error_messages['invalid_zip_code'], code='invalid_zip_code')
 
         return zip_code
         
 class CreateJobForm(forms.Form):
-    pay = forms.DecimalField(min_value=0, max_value=1000, decimal_places=2, required=True)
+    pay = forms.DecimalField(min_value=0, max_value=5000, decimal_places=2, required=True)
     date_time = forms.DateTimeField(required=True)
     description = forms.CharField(required=True)
     job_type = forms.ChoiceField(choices=Post.TYPE_CHOICES, required=True)
