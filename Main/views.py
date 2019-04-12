@@ -183,7 +183,7 @@ def create_job(request):
             zip_code = form.cleaned_data['zip_code']
 
             #create new job
-            post = Post.objects.create(Pay=pay, DateTime=date, Description=description, JobType=job_type, ZipCode=zip_code, userID=request.user.id)
+            post = Post.objects.create(Pay=pay, DateTime=date, Description=description, JobType=job_type, ZipCode=zip_code, userID=request.user.id, userName=request.user.username)
             request.user.creator.Posts.add(post)
 
             return redirect('/add_job/')
@@ -200,6 +200,8 @@ def list_job(request):
     if not request.user.is_authenticated:
         return redirect('/login/')
         
+    
+
     if request.method == "GET":
         print('list job get')
         form = ListJobsForm(request.GET)
@@ -226,6 +228,11 @@ def list_job(request):
     else:
         jobs = Post.objects.all()
         form = ListJobsForm()
+
+    #Exclude Users Own Jobs
+    for job in jobs:
+        if (job.userID == request.user.id):
+            jobs = jobs.exclude(id = job.id)
 
     #sort by distance, then pay, then date
     jobs = jobs.filter(Active=0)

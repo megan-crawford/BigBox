@@ -39,6 +39,7 @@ class Post(models.Model):
     )
 
     userID = models.IntegerField(default=0)
+    userName = models.CharField(max_length=100, default="default")
     Pay = models.FloatField()
     ZipCode = models.IntegerField()
     DateTime = models.DateTimeField()
