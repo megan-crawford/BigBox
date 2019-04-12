@@ -61,9 +61,35 @@ def profile(request):
     if request.GET.get('username'): #the .get() needs to be used to stop error if username is null
         username = request.GET['username']
         user = User.objects.filter(username=username).first() #assume there is only one object
+        
+        createReview = CreatorReview.objects.filter(User=user)
+        creatorScore = 0
+        counterCreator = 0
+        for review in createReview:
+            creatorScore += review.Rating
+            counterCreator += 1
+        if (counterCreator == 0):
+            creatorScore = -1
+        else:
+            creatorScore = creatorScore / counterCreator
+
+        seekReview = SeekerReview.objects.filter(User=user)
+        seekerScore = 0
+        counterSeeker = 0
+        for review in seekReview:
+            seekerScore += review.Rating
+            counterSeeker += 1
+        if (counterSeeker == 0):
+            seekerScore = -1
+        else:
+            seekerScore = seekerScore / counterSeeker
+        
+        #print("creatorScore:", creatorScore)
+        #print("seekerScore:", seekerScore)
+
         if user:
             num_reports = Report.objects.filter(User=user).count()
-            return render(request, 'profile.html', {'user_info':user, 'num_reports':num_reports})
+            return render(request, 'profile.html', {'user_info':user, 'num_reports':num_reports, 'creatorScore':creatorScore, 'seekerScore':seekerScore})
 
     return render(request, 'profile.html')
 
@@ -120,6 +146,9 @@ def update_account(request):
 	#reset password
 def reset_password(request):
 	return render(request, 'reset_password.html')
+	
+def new_password(request):
+	return render(request, 'new_password.html')
 	
 #home pages
 def home_creator(request):
