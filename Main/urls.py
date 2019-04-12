@@ -35,6 +35,7 @@ urlpatterns = [
 	path('reset_password/', views.reset_password, name='reset_password'),
 	path('new_password/', views.new_password, name='new_password'),
 	path('reset_instructions/', views.reset_instructions, name='reset_instructions'),
+	path('reset_success/', views.reset_success, name='reset_success'),
 
     #creator
     path('home_creator/', views.home_creator, name='home_creator'),

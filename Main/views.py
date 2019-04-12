@@ -155,6 +155,9 @@ def reset_instructions(request):
 def new_password(request):
 	return render(request, 'new_password.html')
 	
+def reset_success(request):
+	return render(request, 'reset_success.html')
+	
 #home pages
 def home_creator(request):
     if not request.user.is_authenticated:
