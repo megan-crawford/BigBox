@@ -1,5 +1,4 @@
 
-
 {% load staticfiles %}
 <!doctype html>
 <html lang="en">
@@ -15,7 +14,8 @@
   </head>
   <body>
     
-<form class="form-signin" action="/login/" method="POST">
+{% block content %}
+<form class="form-signin" method="POST">
   {% csrf_token %}
 
 	<div class="text-center">
@@ -23,18 +23,20 @@
 	</div>
 	
   <img class="mb-4" src="{{ site.baseurl }}/docs/{{ site.docs_version }}/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
-  <h1 class="h3 mb-3 font-weight-normal">Reset Password</h1>
-    <h1 class="h3 mb-3 font-weight-normal">Enter your email below.</h1>
+    <h1 class="h3 mb-3 font-weight-normal">Enter a new password below, in both fields below.</h1>
 
-  <label for="inputUsername" class="sr-only">Email</label>
-  <input type="email" name="email" id="inputEmail" class="form-control" placeholder="Email" required autofocus>
+  <label for="inputNewPassword" class="sr-only">New Password</label>
+  <input type="password" name="password" id="inputPassword" class="form-control" placeholder="New Password" required autofocus>
+  
+  <label for="inputNewPasswordConfirmation" class="sr-only">Confirm New Password</label>
+  <input type="password" name="passwordconf" id="inputPasswordConf" class="form-control" placeholder="New Password" required autofocus>
+  
   
   
 <div class="col">
 
-  <a href="/login">
-    <button type="button" class="btn btn-sm btn-secondary btn-block">Send Email</button>
-  </a>
+    <button type="button" class="btn btn-sm btn-secondary btn-block">Set New Password</button>
+  
 
 
 	</form>
@@ -48,3 +50,4 @@
 	  </body>
 	</html>
 </div>
+{% endblock %}
