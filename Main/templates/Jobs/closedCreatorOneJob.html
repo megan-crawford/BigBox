@@ -113,7 +113,7 @@ div.job{
               
           </div>
       </div>
-	  {% if post.Active == 0 %}
+	  {% if post.completed == 0 %}
       <div>
         {%for seeker in interested_seekers%}
         <div>
@@ -125,15 +125,19 @@ div.job{
         </div>
         {%endfor%}
       </div>
-	  
-	  {% endif %}
-	
-	  {% if post.Active == 2 %}
 	  <div>
-		<a class="button" href= '/generate_review/{{post.Chosen.id}}/1'>
+		<a class="button" href= '/generate_review/{{seeker.id}}/1'>
 			Review the seeker
         </a>
 	  </div>
+	  {% endif %}
+	  
+	  {% if post.completed == 1 %}
+	  <div>
+		<a class="button" href= '/generate_review/{{seeker.id}}/1'>
+			Review the seeker
+        </a>
+	  </div>	
 	  {% endif %}
 	  
               <p></p>
