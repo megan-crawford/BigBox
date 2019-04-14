@@ -1,0 +1,18 @@
+=== Weekly Individual Report (Team 1: <sturgeon++>) ===
+Name: Mark Mikhail
+
+Week 10 Continued to work on change password
+
+4/9	3	working on reset password
+4/12	3	finished working on reset password
+4/14	4	started working on school email verification		
+
+Week 11 Finish work on change password ans start work on automated email notifications
+
+4/15	3	Finish working on school email verification
+4/16 	3	Finish working on email notifications
+4/17	4	work on developing tests
+4/18	4	Finish developing tests
+
+Individual Goal: Finish email verifications and notifications and test development
+	
