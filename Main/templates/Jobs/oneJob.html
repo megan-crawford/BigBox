@@ -61,10 +61,11 @@ div.job{
           <div id="grid-container">
             <div id="content" style="job">
               {%for post in jobs%}
-                <a class="button" href = '/show_interest/{{post.id}}/{{request.user.id}}'>
-                  I am interested in this jobby job yeehaw
-                </a>
+                
         <div class="row d-flex justify-content-center">
+          <a  class="button" href = '/show_interest/{{post.id}}/{{request.user.id}}'>
+                  I am interested in this job
+                </a>
           <div class="well" id="job">
               <div class="col-sm-2" style="">
                 {% if post.JobType == 'LM' %}
@@ -121,11 +122,12 @@ div.job{
               </div>
               
           </div>
+          <p>
+          </p>
+          <button onclick="window.location.href = '/list_job';">Back to all jobs</button>
       </div>
               {%endfor%}
-              <p>
-              </p>
-              <button onclick="window.location.href = '/list_job';">Back to all jobby jobs</button>
+              
             </div> 
           </div>
             

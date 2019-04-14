@@ -36,37 +36,6 @@ div.job{
 }
 
 </style>
-  <script>
-    //JS to add a job div to page
-    function addJob (pay, description, type) { //, location, datetime, 
-    var jobDiv = document.createElement("div"); 
-    jobDiv.className="job";
-    var jobFeatures = document.createElement("li");
-    var jobPay = document.createTextNode(pay);
-    jobFeatures.appendChild(jobPay); 
-    //var jobLoc = document.createTextNode(location);
-    //var jobdate = document.createTextNode(datetime);
-    var description = document.createTextNode(description);
-    jobFeatures.appendChild(description);
-    var jobType = document.createTextNode(type);
-    jobFeatures.appendChild(jobType); 
-
-
-    //jobDiv.appendChild(datetime);
-    //jobDiv.appendChild(location);
-    var button = document.createElement("button");
-    button.onclick = viewOneJob;
-    //button.addEventListener('click' viewOneJob()); //??
-    button.innerHTML = "View this Job"
-    jobDiv.appendChild(jobFeatures);
-    jobDiv.appendChild(button);
-    var currentDiv = document.getElementById("myDiv");
-    document.body.insertBefore(jobDiv, currentDiv); 
-  }
-  function viewOneJob(){
-    window.location.replace("/one_job");
-  }
-</script>
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -107,19 +76,7 @@ div.job{
           <div class="padding" style="padding-top: 9%"></div>
           <div id="container">
             <div id="content">
-              <!--<div class="grid-container" style="background-color:lightblue; height:1000px;width:700px; align-content: center"> -->
-              <!-- MMM no
-              {% for job in jobs %}
-                <script>
-                  var pay = '{{job.Pay}}';
-                  //var location = '{{job.Location}}';
-                  //var datetime = '{{job.DateTime.}}';
-                  var description = '{{job.Description}}';
-                  var type = '{{job.JobType}}';
-                  addJob(pay, description, type);
-                </script>
-              {% endfor %}
-              -->
+
               {% for post in jobs%}
 
       <a href="/one_job_seeker/{{post.id}}/"> 
@@ -185,6 +142,7 @@ div.job{
 
               {% endfor %}
               <!-- </div> -->
+              <!-- add recommended button to this-->
             </div>
             <div id="navbar">
              Filters
