@@ -1,0 +1,22 @@
+=== Weekly Individual Report (Team 2: sturgeons++) ===
+Name: Thomas Bower
+
+Week 10 (Summary)
+4/9	  1 hr  3d3f5ce Added profile picture button
+4/9   2 hrs N/A     Fixed misc bugs
+4/12	2 hrs	N/A	Get frontend profile picture uploading working
+4/12	2 hrs	3a00aa1 Added new password page
+4/12  1 hr  3642e11 Fixed misc bugs
+4/12  1 hr  6f70153 Added instructions page
+4/12  1 hr  c5b91f7 Added reset success page
+4/14  3 hr  N/A     Fixed misc bugs
+
+Week 11 (Plan)
+
+
+4/16  3 hrs Fix Email Verification
+4/17  3 hrs Finish & polish onejob page
+4/18  3 hrs Work on presentation
+4/19  1 hr  Present project
+
+Individual goal: Finish everything .
