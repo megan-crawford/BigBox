@@ -174,7 +174,8 @@ class GenerateReportForm(forms.Form):
     
 class ListJobsForm(forms.Form):
     #TODO: addd max_distance
-    job_type = forms.ChoiceField(choices= BLANK_CHOICE_DASH + list(Post.TYPE_CHOICES), required=False)
+    recommended = [("FF", "Recommended")]
+    job_type = forms.ChoiceField(choices= BLANK_CHOICE_DASH + list(Post.TYPE_CHOICES) + recommended, required=False)
     min_wage = forms.DecimalField(min_value=0, max_value=1000, decimal_places=2, required=False)
     max_wage = forms.DecimalField(min_value=0, max_value=1000, decimal_places=2, required=False)
 
