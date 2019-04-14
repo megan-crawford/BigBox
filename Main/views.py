@@ -712,6 +712,40 @@ def past_jobs_seeker(request):
 
     return render(request, 'Seeker/pastJobsSeeker.html')
 
+
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(data=request.POST, user=request.user)
+
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, form.user)
+            return redirect(reverse('accounts:view_profile'))
+        else:
+            return redirect(reverse('accounts:change_password'))
+    else:
+        form = PasswordChangeForm(user=request.user)
+
+        args = {'form': form}
+        return render(request, 'accounts/change_password.html', args)
+
+
+#this takes the email as a param and uses it to look for the right user to see if the email is regisetered. 
+#if it is not registered then it will return -1
+#otherwise it will send an email with a link to where to change the password
+def change_passwordBackend(email):
+    try:
+        obj = User.objects.get(email = email)
+
+    except:
+        return -1
+
+    link = ""
+    message = "To reset your password go to this link: "
+    message += link #add link
+    sendEmail("change email", "",email)
+
+
 def sendEmail(subject, message, emailTo):
     try:
         email = EmailMessage(subject, message, to=[emailTo])
