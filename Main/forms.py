@@ -215,7 +215,7 @@ class ListJobsCreator(forms.Form):
         print("search", search)
         return search
      
-class ListJobsSeeker(forms.Form):
+class ListJobsSeekers(forms.Form):
     zip_code = forms.IntegerField(min_value=0, required=False)
     job_type = forms.ChoiceField(choices= BLANK_CHOICE_DASH + list(Post.TYPE_CHOICES), required=False)
 	
