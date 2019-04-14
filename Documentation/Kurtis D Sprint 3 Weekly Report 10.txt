@@ -1,0 +1,18 @@
+=== Weekly Individual reports (Team 1: BigBox) ===
+Name: Kurtis Dressel
+
+Week 10 (Summary)
+4/9	1 hr	6ad985f	fixed errors
+4/9	2 hr	e94ea8c	fixed profile picture
+4/12	1 hr	20ccac5 fixed preferered job type
+4/12	1 hr	0c774ae updated create job page
+4/12	0.5 hr	8a7b9b9 fixed list job test case
+4/15	3 hr	2ee612d fixed errors
+
+Week 11 (Plan)
+4/16	3 hr	finish fixing test cases
+4/17	3 hr	help with anything as needed
+4/18	3 hr	create and document test cases for the sprint review
+4/19	2 hr	make sure the project is good
+
+Weekly Goal: Make sure everything is working properly
