@@ -578,10 +578,20 @@ def all_jobs_seeker(request, job):
     
     if (typeOfJob == "all_jobs"):
         jobs = request.user.interested_seekers
-        request.user.profile.isNotified = False
+        #print("here", request.user.profile.isNotified)
+        print("Before", request.user.profile.isNotified)
+        profile = request.user.profile
+        profile.isNotified = False
+        profile.save()
+        #t.save(['value'])
+
+        #User.objects.get(id=request.user.id).profile.isNotified = True
+        print("After", request.user.profile.isNotified)
     elif (typeOfJob == "accepted_jobs"):
         jobs = request.user.interested_seekers.filter(Chosen=request.user, Active=2)
-        request.user.profile.isNotified = False
+        profile = request.user.profile
+        profile.isNotified = False
+        profile.save()
     elif (typeOfJob == "interested_jobs"):
         jobs = request.user.interested_seekers.filter(Active=0)
     else:
@@ -761,9 +771,13 @@ def distBetween(zip1, zip2):
 #in Interested, delete record with job id and seeker(user) id
 def hire_seeker(request, jobID, seekerID):
     seeker = User.objects.filter(id=seekerID).first()
+    profile = User.objects.filter(id=seekerID).first().profile
+    profile.isNotified = True
+    profile.save()
+    print("seeker isNotified", seeker.username, seeker.profile.isNotified)
     job = Post.objects.filter(id = jobID).first()
     job.Interested.remove(seeker)
-    job.Chosen = seeker;
-    job.Active = 2; 
+    job.Chosen = seeker
+    job.Active = 2
     job.save()
     return render(request, 'Jobs/hireSeeker.html') 
