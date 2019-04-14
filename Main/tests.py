@@ -7,6 +7,7 @@ from .views import sendEmail, distBetween
 from django.core import mail
 from django.conf import settings
 from django.db.models.fields import BLANK_CHOICE_DASH
+from base64 import b64encode
 
 import os
 
@@ -499,3 +500,11 @@ class OneJobCreator(TestCase):
     def test_view_valid(self):
         response = self.client.post(f'/one_job_creator/{self.post.id}/')
         self.assertEqual(response.context['interested_seekers'].count(), 2)
+
+class TestCryptoSecureRNG(TestCase):
+    def test1(self):
+        a = os.urandom(35)
+        b = b64encode(a).decode('utf-8')
+        b = b[0:len(b)-2]
+        print(b)
+        print(b.replace('/','1'))
