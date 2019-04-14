@@ -71,13 +71,14 @@
 				<div class="name" style="font-size:36px">
 					<p>{{user_info.first_name}} {{user_info.last_name}} </p>
 				</div>
-				<div class="username" style="font-size:14px">
-					<p>Username: {{user_info.username}}</p>
-				</div>
+				<p><strong>Username: </strong> {{user_info.username}} </p>
 				<p><strong>Description: </strong> {{user_info.profile.Description}} </p>
 				<p><strong>Preferred Jobs:</strong>
-					<span class="tags">Lawncare</span> 
-					<span class="tags">Petsitting</span>
+					{% if user_info.seeker.PrefType %}
+						<span class="tags">{{user_info.seeker.get_pref_job_type}}</span>
+					{% else %}
+						<span class="tags">No Preference</span>
+					{% endif %}
 				</p>
 				<p><strong>Age:</strong> {{user_info.profile.Age}} </p>
 				<p>  </p>

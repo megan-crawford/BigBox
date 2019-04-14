@@ -2,39 +2,17 @@
 <!doctype html>
 <html lang="en">
 <style>
-#content {
-  float: right ;
-  width: 80% ;
-}
-#navbar {
-  float: left;
-  width: 20%;
-  background-color:#a1fb8d;
-  border:5px solid #07680D;
-}
-.grid-container {
-  display: grid;
-  grid-template-columns: auto;
-  grid-template-rows: 300px 300px 300px;
-  grid-gap: 10px;
-  background-color: lightblue;
-  padding: 10px;
-}
-.grid-container > div {
-  background-color: rgba(255, 255, 255, 0.8);
-  text-align: center;
-  padding: 20px 0;
-  font-size: 40px;
-}
 div.job{
   background-color:#21CE2D;
-  height:150px;
-  width:200px;
+  height:2000px;
+  width:2000px;
   border:5px solid #07680D;
   float:left;
   margin:10px;
 }
+.button{
 
+}
 </style>
 <head>
     <!-- Required meta tags -->
@@ -42,11 +20,10 @@ div.job{
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
 
-    <title>Big Box      Seeker</title>
+    <title>Big Box      Creator</title>
 
 </head>
 <body>
@@ -59,12 +36,12 @@ div.job{
                       <a class="nav-link" style="font-size: 200%; padding-left: 20%" href="../home_seeker/">Home<span class="sr-only">(current)</span></a> 
                     </li>
                     <li class="nav-item active">
-                      <a class="nav-link" style="font-size: 200%; padding-left: 310%" href="#">Seeker<span class="sr-only">(current)</span></a> 
+                      <a class="nav-link" style="font-size: 200%; padding-left: 310%" href="#">Creator<span class="sr-only">(current)</span></a> 
                     </li>
                   </ul>
                   <div class="dropdown">
                       <button class="btn btn-secondary dropdown-toggle" style="max-height:200%;max-width:200; font-size:16px" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        {{ request.user.username }} 
+                        {{ request.user.username }}
                       </button> 
                       <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="font-size:16px">
                         <a class="dropdown-item" href="/profile/?username={{ request.user.username }}">Account</a>
@@ -75,12 +52,10 @@ div.job{
           </nav>
           <div class="padding" style="padding-top: 9%"></div>
           <div id="container">
-            <div id="content">
-
-              {% for post in jobs%}
-
-      <a href="/one_job_seeker/{{post.id}}/"> 
-        <div class="row d-flex justify-content-center">
+            <div id="content" style="job">
+              <!--<div class="grid-container" style="background-color:lightblue; height:1000px;width:700px; align-content: center"> -->
+              <div class="main_text">You are at this page because you clicked on your job.</div></div>
+              <div class="row d-flex justify-content-center">
           <div class="well" id="job">
               <div class="col-sm-2" style="">
                 {% if post.JobType == 'LM' %}
@@ -138,38 +113,39 @@ div.job{
               
           </div>
       </div>
-    </a>
-
-              {% endfor %}
-              <!-- </div> -->
-              <!-- add recommended button to this-->
-            </div>
-            <div id="navbar">
-             Filters
-             <br><br>
-             <form method="GET" action="/list_job/">
-              Search
-              <input type="string" name="search" min="1" max="10000">
-              <br><br>
-             <form method="GET" action="/list_job/">
-              Maximum Distance (mi)
-              <input type="number" name="max_distance" min="1" max="10000">
-              <br><br>
-              Job Type
-              {{form.job_type}}
-              <br><br>
-              Minimum Wage
-              <input type="number" name="min_wage" min="1" max="10000">
-              <br><br>
-              Maximum Wage
-              <input type="number" name="max_wage" min="1" max="10000">
-              <br><br>
-              <button type="submit" value="Submit">Apply</button>
-              <button type="reset" value="Reset">Reset</button>
-             </form>   
-            </div>
-          </div>
+	  {% if post.completed == 0 %}
+      <div>
+        {%for seeker in interested_seekers%}
+        <div>
+        <a class="button" href= '/hire_seeker/{{post.id}}/{{seeker.id}}/{{request.user.id}}'>
+          Hire this seeker:
+        </a>
+        {{seeker.first_name}}
+        {{seeker.last_name}}
         </div>
+        {%endfor%}
+      </div>
+	  <div>
+		<a class="button" href= '/generate_review/{{seeker.id}}/1'>
+			Review the seeker
+        </a>
+	  </div>
+	  {% endif %}
+	  
+	  {% if post.completed == 1 %}
+	  <div>
+		<a class="button" href= '/generate_review/{{seeker.id}}/1'>
+			Review the seeker
+        </a>
+	  </div>	
+	  {% endif %}
+	  
+              <p></p>
+              <a href='/all_jobs_creator/all_jobs/'>Back to all jobs</a>
+              
+              <!-- </div> -->
+            </div>
+            
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>

@@ -100,6 +100,7 @@ def update_account(request):
     if request.method == 'POST':
         print('update account post')
         form = UpdateAccountForm(request.user, request.POST, request.FILES)
+        print(form.errors)
 
         if form.is_valid():
             print('update account valid')
@@ -123,11 +124,12 @@ def update_account(request):
             if form.cleaned_data['description'] and ('description_button' in request.POST or update_all):
                 request.user.profile.Description = form.cleaned_data['description']
             
+            print(form.cleaned_data['pref_job_type'])
+            print('pref_job_type_button' in request.POST)
             if (form.cleaned_data['pref_job_type'] != '') and ('pref_job_type_button' in request.POST or update_all):
                 request.user.seeker.PrefType = form.cleaned_data['pref_job_type']
 
             if (form.cleaned_data['zip_code']) and ('zip_code_button' in request.POST or update_all):
-                print('update account zip code')
                 request.user.profile.ZipCode = form.cleaned_data['zip_code']
 
             if (form.cleaned_data['password'] and form.cleaned_data['password_confirmation']) and ('password_button' in request.POST or update_all):
@@ -147,8 +149,14 @@ def update_account(request):
 def reset_password(request):
 	return render(request, 'reset_password.html')
 	
+def reset_instructions(request):
+	return render(request, 'reset_instructions.html')
+	
 def new_password(request):
 	return render(request, 'new_password.html')
+	
+def reset_success(request):
+	return render(request, 'reset_success.html')
 	
 #home pages
 def home_creator(request):
@@ -196,11 +204,13 @@ def create_job(request):
         return redirect('/login/')
 
     if request.method == 'POST':
-        #print('create job post')
+        print('create job post')
         form = CreateJobForm(request.POST)
 
+        print(form.errors)
+
         if form.is_valid():
-            #print('create job valid')
+            print('create job valid')
 
             #get form fields
             pay = form.cleaned_data['pay']
@@ -220,14 +230,14 @@ def create_job(request):
     return render(request, 'Jobs/bigBoxJob.html', {'form':form})
 
 def list_job(request):
+    print('list job')
 
     expired = Post.objects.filter(DateTime__lt=datetime.now(),)
     expired.update(Active=1)
 
     if not request.user.is_authenticated:
+        print('list job not authenticated')
         return redirect('/login/')
-        
-    
 
     if request.method == "GET":
         print('list job get')
@@ -238,18 +248,25 @@ def list_job(request):
             job_type = form.cleaned_data['job_type']
             min_wage = form.cleaned_data['min_wage']
             max_wage = form.cleaned_data['max_wage']
-
-            if (job_type != '' and min_wage and max_wage): #all inputs filled in
-                jobs = Post.objects.filter(JobType=job_type, Pay__range=[min_wage, max_wage])
-            elif (job_type == '' and not min_wage and not max_wage): #no inputs filled in
-                jobs = Post.objects.all()
-            else: #mixed inputs filled in
-                if min_wage and not max_wage:
-                    jobs = Post.objects.filter(Q(JobType=job_type) | Q(Pay__gte=min_wage))
-                elif not min_wage and max_wage:
-                    jobs = Post.objects.filter(Q(JobType=job_type) | Q(Pay__lte=max_wage))
-                else:
-                    jobs = Post.objects.filter(Q(JobType=job_type) | Q(Pay__range=[min_wage, max_wage]))
+            if (job_type != 'FF'):
+                if (job_type != '' and min_wage and max_wage): #all inputs filled in
+                    print('all inputs')
+                    jobs = Post.objects.filter(JobType=job_type, Pay__range=[min_wage, max_wage])
+                elif (job_type == '' and not min_wage and not max_wage): #no inputs filled in
+                    print('no inputs')
+                    jobs = Post.objects.all()
+                else: #mixed inputs filled in
+                    print('mixed inputs')
+                    if min_wage and not max_wage:
+                        jobs = Post.objects.filter(Q(JobType=job_type) | Q(Pay__gte=min_wage))
+                    elif not min_wage and max_wage:
+                        jobs = Post.objects.filter(Q(JobType=job_type) | Q(Pay__lte=max_wage))
+                    else:
+                        jobs = Post.objects.filter(Q(JobType=job_type) | Q(Pay__range=[min_wage, max_wage]))
+            else: 
+                job_pref = request.user.seeker.PrefType
+                print(job_pref)
+                jobs = Post.objects.filter(Q(JobType=job_pref))
         else:
             jobs = Post.objects.all()
     else:
@@ -298,10 +315,8 @@ def reopen_job(request, post_id):
     return redirect('/past_jobs_creator/')
 
 def all_jobs_creator(request, job):
-
     expired = request.user.creator.Posts.filter(DateTime__lt=datetime.now())
     expired.update(Active=1)
-
 
     if not request.user.is_authenticated:
         return redirect('/login/')
@@ -388,13 +403,11 @@ def all_jobs_creator(request, job):
     if request.method == "GET":
         form = ListJobsCreator(request.GET)
         if form.is_valid():
-            zip_code = form.cleaned_data['zip_code']
             job_type = form.cleaned_data['job_type']
             min_wage = form.cleaned_data['min_wage']
             max_wage = form.cleaned_data['max_wage']
             search = form.cleaned_data['search']
                 
-
             if (job_type != '' and min_wage and max_wage): #all inputs filled in
                 jobs = jobs.filter(Description__icontains=search, JobType=job_type, Pay__range=[min_wage, max_wage])
             elif (job_type == '' and not min_wage and not max_wage): #no inputs filled in
@@ -405,13 +418,9 @@ def all_jobs_creator(request, job):
                 elif not min_wage and max_wage:
                     jobs = jobs.filter(Q(Description__icontains=search),  Q(JobType=job_type) | Q(Pay__lte=max_wage))
                 else:
-                    jobs = jobs.Posts.filter(Q(Description__icontains=search),  Q(JobType=job_type) | Q(Pay__range=[min_wage, max_wage]))
-            
-            if (zip_code): #ZipCode Exists
-                    for job in jobs:
-                        distance = distBetween(job.ZipCode, request.user.profile.ZipCode)
-                        if (distance > zip_code):
-                            jobs = jobs.exclude(id = job.id)
+                    jobs = jobs.filter(Q(Description__icontains=search),  Q(JobType=job_type) | Q(Pay__range=[min_wage, max_wage]))
+
+            print(jobs)
         else:
             jobs = jobs.all()
     else:
@@ -505,7 +514,7 @@ def all_jobs_seeker(request, job):
         
     if(request.GET.get('all_jobs')):
         print("all_jobs button")
-        form = ListJobsCreator(request.GET)
+        form = ListJobsSeeker(request.GET)
 
         if (job != "all_jobs"):
             return redirect('/all_jobs_seeker/all_jobs/?all_jobs=all_jobs&max_distance=&job_type=&min_wage=&max_wage=&search=&')
@@ -598,7 +607,7 @@ def all_jobs_seeker(request, job):
         jobs = request.user.interested_seekers.filter(Active=1)
 
     if request.method == "GET":
-        form = ListJobsCreator(request.GET)
+        form = ListJobsSeeker(request.GET)
         if form.is_valid():
             zip_code = form.cleaned_data['zip_code']
             job_type = form.cleaned_data['job_type']
@@ -628,7 +637,7 @@ def all_jobs_seeker(request, job):
             jobs = jobs.all()
     else:
         jobs = jobs.all()
-        form = ListJobsCreator()
+        form = ListJobsSeeker()
 
     jobs = jobs.order_by('Pay', 'DateTime')
     return render(request, 'Seeker/allJobsSeeker.html', {'form':form, 'jobs':jobs, 'typeOfJob':typeOfJob}, job)
@@ -677,17 +686,20 @@ def generate_report(request):
     return render(request, 'generate_report.html', {'form':form, 'user_info':user})
 
 def generate_review(request, user_id, is_seeker):
-    #if is_seeker is false the user is being reviewed as a creator
+    #if is_seeker is 0 the user is being reviewed as a creator
+    #if is_seeker is 1 the user is being reviewed as a seeker
 
     if not request.user.is_authenticated:
+        print('not logged in')
         return redirect('/login/')
 
     if request.method == "POST":
-        #print('generate review post')
+        print('generate review post')
         form = GenerateReviewForm(request.POST)
 
         #process params
         user = User.objects.filter(id=user_id).first()
+
         if user == None or is_seeker == None:
             form.add_error(None, 'url information is incorrect')
             return render(request, 'generate_review.html', {'form':form})
@@ -695,7 +707,7 @@ def generate_review(request, user_id, is_seeker):
         is_seeker = False if is_seeker == 0 else True
 
         if form.is_valid():
-            #print('generate review valid')
+            print('generate review valid')
             rating = form.cleaned_data['rating']
 
             if is_seeker:
@@ -703,7 +715,7 @@ def generate_review(request, user_id, is_seeker):
             else:
                 CreatorReview.objects.create(Rating=rating, User=user)
 
-            redirect('/one_job/')
+            return redirect('/home_seeker/')
         else:
             print(form.errors)
     else:
@@ -716,6 +728,40 @@ def past_jobs_seeker(request):
         return redirect('/login/')
 
     return render(request, 'Seeker/pastJobsSeeker.html')
+
+
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(data=request.POST, user=request.user)
+
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, form.user)
+            return redirect(reverse('accounts:view_profile'))
+        else:
+            return redirect(reverse('accounts:change_password'))
+    else:
+        form = PasswordChangeForm(user=request.user)
+
+        args = {'form': form}
+        return render(request, 'accounts/change_password.html', args)
+
+
+#this takes the email as a param and uses it to look for the right user to see if the email is regisetered. 
+#if it is not registered then it will return -1
+#otherwise it will send an email with a link to where to change the password
+def change_passwordBackend(email):
+    try:
+        obj = User.objects.get(email = email)
+
+    except:
+        return -1
+
+    link = ""
+    message = "To reset your password go to this link: "
+    message += link #add link
+    sendEmail("change email", "",email)
+
 
 def sendEmail(subject, message, emailTo):
     try:
@@ -737,12 +783,12 @@ def show_interest(request, jobID, seekerID):
     job.Interested.add(seeker)
     content = seeker.first_name + " is interested in this job: " + job.Description + ". Please visit BigBox to accept or decline this seeker."
     creator = User.objects.filter(id=job.userID).first()
-    print("seekerID:")
-    print(seekerID)
-    print(jobID)
-    print(creator)
+    #print("seekerID:")
+    #print(seekerID)
+    #print(jobID)
+    #print(creator)
     email = creator.email
-    print(email)
+    #print(email)
     val = sendEmail("Congrats, a seeker is interested in your job", content, email)
     return render(request, 'Jobs/showInterest.html')    
   
@@ -763,21 +809,27 @@ def distBetween(zip1, zip2):
         c = 2 * atan2(sqrt(a), sqrt(1 - a))
 
         return radius * c
-    except (KeyError, ValueError): #unknown zip codes and zip codes with non numeric characters
+    except (KeyError, ValueError, TypeError): #for bad zip codes
         return -1
 
 #in Post, set chosen id to id of seeker
 #in Post, set Active to some value im not sure
 #in Interested, delete record with job id and seeker(user) id
-def hire_seeker(request, jobID, seekerID):
+#send email to seeker to notify them that they've been chosen
+def hire_seeker(request, jobID, seekerID, employerID):
     seeker = User.objects.filter(id=seekerID).first()
     profile = User.objects.filter(id=seekerID).first().profile
     profile.isNotified = True
     profile.save()
     print("seeker isNotified", seeker.username, seeker.profile.isNotified)
+    seekerEmail = seeker.email
+    employer = User.objects.filter(id =employerID).first()
+    employerEmail = employer.email
     job = Post.objects.filter(id = jobID).first()
     job.Interested.remove(seeker)
     job.Chosen = seeker
     job.Active = 2
     job.save()
+    content = "You have been hired for this job: " + job.Description + ". Here is your employers contact information: \n" + employer.first_name + "\n" + employerEmail
+    val = sendEmail("Congrats, you have been hired!", content, seekerEmail)
     return render(request, 'Jobs/hireSeeker.html') 

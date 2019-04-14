@@ -1,4 +1,5 @@
 {% load staticfiles %}
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -14,6 +15,10 @@
   </head>
   <body>
   
+  
+  {% if form %}
+  {{ form.errors }}
+  {% endif %}
   <!-- Navigation -->
   <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" content="width=device-width" style="height:8vw;">
                 <img src="{% static 'images/logo2.PNG' %}" style="max-height:100%;max-width:100%;">
@@ -55,7 +60,7 @@
             <div class="form-group col-xs-6">
 				<div class="form-group">
 				<label for="sel1">Select list:</label>
-				<select class="form-control" id="sel1">
+				<select name="rating" class="form-control" id="sel1">
 				<option>1</option>
 				<option>2</option>
 				<option>3</option>
@@ -82,7 +87,7 @@
 
       <div class="buttons center_div">
         <div class="btn1">
-		<a href="/one_job/">
+		<a href="/home_seeker/">
                       <button type="button" class="btn btn-secondary" id="createAccountButton">Cancel</button>
 		</a>
         </div>
