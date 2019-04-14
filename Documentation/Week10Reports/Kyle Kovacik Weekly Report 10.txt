@@ -1,0 +1,19 @@
+=== Weekly Individual Report (Team 01: sturgeons++) ===
+Name: Kyle Kovacik
+
+Week 10 (Summary)
+4/9/19		2	ce87423 	Fixed Job Status Sorting
+4/9/19		2	NA		Add Rating fields to profile (Both seeker and creator)
+4/12/19		3	d4fc3f7		Added Profile Review Funcionality
+4/12/19		1	NA		Add notify element in navbar
+4/14/19		3	3e10292		Added notify element in navbar functionality
+
+...
+
+Week 11 (Plan)
+4/16/19		2	NA		Test notify functionality
+4/17/19		3	NA		Test and fix bugs on Frontend
+4/18/19		3	NA		Reviewing and preparing for sprint review
+
+
+Goal: Fix last minute issues and prepare for sprint review
