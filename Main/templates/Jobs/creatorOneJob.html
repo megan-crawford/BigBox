@@ -23,6 +23,7 @@ div.job{
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
 
+
     <title>Big Box      Creator</title>
 
 </head>
@@ -33,14 +34,14 @@ div.job{
                 <div class="collapse navbar-collapse" id="navbarsExampleDefault">
                   <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                      <a class="nav-link" style="font-size: 200%; padding-left: 20%" href="../home_seeker/">Home<span class="sr-only">(current)</span></a> 
+                      <a class="nav-link" style="font-size: 200%; padding-left: 20%" href="/home_seeker/">Home<span class="sr-only">(current)</span></a> 
                     </li>
                     <li class="nav-item active">
                       <a class="nav-link" style="font-size: 200%; padding-left: 310%" href="#">Creator<span class="sr-only">(current)</span></a> 
                     </li>
                   </ul>
                   <div class="dropdown">
-                      <button class="btn btn-secondary dropdown-toggle" style="max-height:200%;max-width:200; font-size:16px" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <button class="btn btn-secondary dropdown-toggle" style="max-height:200%;max-width:200%; font-size:16px" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         {{ request.user.username }}
                       </button> 
                       <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="font-size:16px">
@@ -52,9 +53,26 @@ div.job{
           </nav>
           <div class="padding" style="padding-top: 9%"></div>
           <div id="container">
-            <div id="content" style="job">
-              <!--<div class="grid-container" style="background-color:lightblue; height:1000px;width:700px; align-content: center"> -->
-              <div class="main_text">You are at this page because you clicked on your job.</div></div>
+
+        <div class="col-sm-3" style="">
+        {%for seeker in interested_seekers%}
+        <div>
+        <a class="button" href= '/profile?username={{seeker.username}}'>
+          Visit Profile Page
+        </a>
+        <p></p>
+        <a class="button" href= '/hire_seeker/{{post.id}}/{{seeker.id}}/{{request.user.id}}'>
+          Hire this seeker:
+        </a>
+        {{seeker.first_name}}
+        {{seeker.last_name}}
+        </div>
+        {%endfor%}
+              <p></p>
+              <a href='/all_jobs_creator/all_jobs/'>Back to all jobs</a>
+              
+              <!-- </div> -->
+            </div>
               <div class="row d-flex justify-content-center">
           <div class="well" id="job">
               <div class="col-sm-2" style="">
@@ -113,6 +131,7 @@ div.job{
               
           </div>
       </div>
+	  {% if post.Active == 0 %}
       <div>
         {%for seeker in interested_seekers%}
         <div>
@@ -124,11 +143,23 @@ div.job{
         </div>
         {%endfor%}
       </div>
+	  
+	  {% endif %}
+	
+	  {% if post.Active == 2 %}
+	  <div>
+		<a class="button" href= '/generate_review/{{post.Chosen.id}}/1'>
+			Review the seeker
+        </a>
+	  </div>
+	  {% endif %}
+	  
               <p></p>
               <a href='/all_jobs_creator/all_jobs/'>Back to all jobs</a>
               
               <!-- </div> -->
             </div>
+
             
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
