@@ -415,7 +415,6 @@ def all_jobs_creator(request, job):
                 if min_wage and not max_wage:
                     jobs = jobs.filter(Q(Description__icontains=search), Q(JobType=job_type) | Q(Pay__gte=min_wage))
                 elif not min_wage and max_wage:
-                    #jobs = jobs.filter(Q(JobType=job_type) | Q(Pay__lte=max_wage))
                     jobs = jobs.filter(Q(Description__icontains=search),  Q(JobType=job_type) | Q(Pay__lte=max_wage))
                 else:
                     jobs = jobs.filter(Q(Description__icontains=search),  Q(JobType=job_type) | Q(Pay__range=[min_wage, max_wage]))
@@ -678,14 +677,16 @@ def generate_review(request, user_id, is_seeker):
     #if is_seeker is 1 the user is being reviewed as a seeker
 
     if not request.user.is_authenticated:
+        print('not logged in')
         return redirect('/login/')
 
     if request.method == "POST":
-        #print('generate review post')
+        print('generate review post')
         form = GenerateReviewForm(request.POST)
 
         #process params
         user = User.objects.filter(id=user_id).first()
+
         if user == None or is_seeker == None:
             form.add_error(None, 'url information is incorrect')
             return render(request, 'generate_review.html', {'form':form})
@@ -693,7 +694,7 @@ def generate_review(request, user_id, is_seeker):
         is_seeker = False if is_seeker == 0 else True
 
         if form.is_valid():
-            #print('generate review valid')
+            print('generate review valid')
             rating = form.cleaned_data['rating']
 
             if is_seeker:
@@ -701,7 +702,7 @@ def generate_review(request, user_id, is_seeker):
             else:
                 CreatorReview.objects.create(Rating=rating, User=user)
 
-            redirect('/one_job/')
+            return redirect('/home_seeker/')
         else:
             print(form.errors)
     else:

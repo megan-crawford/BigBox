@@ -26,7 +26,8 @@ class DatabaseClassCreation(TestCase):
         seeker = Seeker.objects.create(User=user, Location="Delaware")
         seeker.save()
         seeker.IntJob.add(post)
-        seeker.Reviews.add(review1, review2)
+        user.seeker_reviews.add(review1)
+        user.creator_reviews.add(review2)
 
 
     def test_report(self):
@@ -38,7 +39,7 @@ class DatabaseClassCreation(TestCase):
     def test_post(self):
         post = Post.objects.get(Description="I love Winky")
         self.assertNotEqual(post, None)
-        self.assertEqual(post.Zipcode, 12345)
+        self.assertEqual(post.ZipCode, 12345)
         self.assertNotEqual(post.DateTime, "Wrongo")
 
     def test_user(self):
@@ -56,9 +57,9 @@ class DatabaseClassCreation(TestCase):
         user = User.objects.get(username="Winky")
         seeker = Seeker.objects.get(User=user)
         self.assertNotEqual(seeker, None)
-        self.assertTrue(seeker.Reviews.filter(Rating = 5)[0].Rating, 5)
-        self.assertTrue(seeker.Reviews.filter(Rating = 1)[0].Rating, 1)
-        self.assertTrue(seeker.Reviews.filter(Rating = 2).count, 0)
+        self.assertTrue(user.seeker_reviews.filter(Rating = 5)[0].Rating, 5)
+        self.assertTrue(user.creator_reviews.filter(Rating = 1)[0].Rating, 1)
+        self.assertTrue(user.seeker_reviews.filter(Rating = 2).count, 0)
     
 class UpdateProfile(TestCase):
     def setUp(self):
@@ -260,9 +261,9 @@ class ListJob(TestCase):
                         'pay': 30.00, 'date_time': '2021-10-25', 'zip_code': 52403, #closest
                         'description': 'job4', 'job_type': Post.DOGWALKING,
         })
-        self.client.post(Post.objects.create(Pay=998, DateTime="2000-10-10", Description="job5", JobType="Snow Shoveling", ZipCode=12345))
+        #self.client.post(Post.objects.create(Pay=998, DateTime="2000-10-10", Description="job5", JobType="Snow Shoveling", ZipCode=12345))
 
-        
+        print(Post.objects.filter(Description='job5'))        
 
     def test_form_valid(self):
         form = ListJobsForm({'max_distance': 100, 'job_type': Post.DOGWALKING,
@@ -281,7 +282,7 @@ class ListJob(TestCase):
         self.assertEqual(len(response.context['jobs']), 3)
 
     def test_view_correct_jobs_status_closed(self):
-        response = self.client.get('/list_job/', {'min_wage': 500.00})
+        response = self.client.get('/list_job/', {'min_wage': 500.00}) #get job5
         self.assertEqual(response.context['jobs'][0].Active, 1)
 
     def test_view_correct_jobs_max_wage(self):
@@ -289,6 +290,7 @@ class ListJob(TestCase):
         self.assertEqual(len(response.context['jobs']), 2)
 
     def test_view_correct_jobs_min_wage(self):
+        self.client = Client()
         response = self.client.get('/list_job/', {'min_wage': 20.00})
         self.assertEqual(len(response.context['jobs']), 3)
 
@@ -328,11 +330,11 @@ class AllJobsCreator(TestCase):
 
     def test_view_correct_jobs_max_wage(self):
         response = self.client.get('/all_jobs_creator/', {'max_wage': 13.00})
-        self.assertEqual(response.context['jobs'].count(), 2)
+        self.assertEqual(response.context['job'].count(), 2)
 
     def test_view_correct_jobs_min_wage(self):
         response = self.client.get('/all_jobs_creator/', {'min_wage': 30.00})
-        self.assertEqual(response.context['jobs'].count(), 1)
+        self.assertEqual(response.context['job'].count(), 1)
 
     def test_view_correct_jobs_wage(self):
         response = self.client.get('/all_jobs_creator/', {'min_wage': 4.00, 'max_wage': 25.00})
