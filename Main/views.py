@@ -161,6 +161,7 @@ def home_seeker(request):
     if not request.user.is_authenticated:
         return redirect('/login/')
         
+    print("isNotified", request.user.profile.isNotified)
     return render(request, 'home_seeker.html')
 
 def login_request(request):
@@ -577,8 +578,10 @@ def all_jobs_seeker(request, job):
     
     if (typeOfJob == "all_jobs"):
         jobs = request.user.interested_seekers
+        request.user.profile.isNotified = False
     elif (typeOfJob == "accepted_jobs"):
         jobs = request.user.interested_seekers.filter(Chosen=request.user, Active=2)
+        request.user.profile.isNotified = False
     elif (typeOfJob == "interested_jobs"):
         jobs = request.user.interested_seekers.filter(Active=0)
     else:
