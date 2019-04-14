@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout
 from django.contrib.auth import authenticate
 from django.http import HttpResponse
-from . forms import CreateAccountForm, UpdateAccountForm, CreateJobForm, ListJobsForm, GenerateReportForm, ListJobsCreator, GenerateReviewForm
+from . forms import CreateAccountForm, UpdateAccountForm, CreateJobForm, ListJobsForm, GenerateReportForm, ListJobsCreator, ListJobsSeekers, GenerateReviewForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from . models import Profile, Post, Seeker, Creator, Report, SeekerReview, CreatorReview
@@ -514,7 +514,7 @@ def all_jobs_seeker(request, job):
         
     if(request.GET.get('all_jobs')):
         print("all_jobs button")
-        form = ListJobsSeeker(request.GET)
+        form = ListJobsSeekers(request.GET)
 
         if (job != "all_jobs"):
             return redirect('/all_jobs_seeker/all_jobs/?all_jobs=all_jobs&max_distance=&job_type=&min_wage=&max_wage=&search=&')
@@ -607,7 +607,7 @@ def all_jobs_seeker(request, job):
         jobs = request.user.interested_seekers.filter(Active=1)
 
     if request.method == "GET":
-        form = ListJobsSeeker(request.GET)
+        form = ListJobsSeekers(request.GET)
         if form.is_valid():
             zip_code = form.cleaned_data['zip_code']
             job_type = form.cleaned_data['job_type']
@@ -637,7 +637,7 @@ def all_jobs_seeker(request, job):
             jobs = jobs.all()
     else:
         jobs = jobs.all()
-        form = ListJobsSeeker()
+        form = ListJobsSeekers()
 
     jobs = jobs.order_by('Pay', 'DateTime')
     return render(request, 'Seeker/allJobsSeeker.html', {'form':form, 'jobs':jobs, 'typeOfJob':typeOfJob}, job)
