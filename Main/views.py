@@ -203,11 +203,13 @@ def create_job(request):
         return redirect('/login/')
 
     if request.method == 'POST':
-        #print('create job post')
+        print('create job post')
         form = CreateJobForm(request.POST)
 
+        print(form.errors)
+
         if form.is_valid():
-            #print('create job valid')
+            print('create job valid')
 
             #get form fields
             pay = form.cleaned_data['pay']
@@ -227,14 +229,14 @@ def create_job(request):
     return render(request, 'Jobs/bigBoxJob.html', {'form':form})
 
 def list_job(request):
+    print('list job')
 
     expired = Post.objects.filter(DateTime__lt=datetime.now(),)
     expired.update(Active=1)
 
     if not request.user.is_authenticated:
+        print('list job not authenticated')
         return redirect('/login/')
-        
-    
 
     if request.method == "GET":
         print('list job get')
@@ -247,16 +249,20 @@ def list_job(request):
             max_wage = form.cleaned_data['max_wage']
 
             if (job_type != '' and min_wage and max_wage): #all inputs filled in
+                print('all inputs')
                 jobs = Post.objects.filter(JobType=job_type, Pay__range=[min_wage, max_wage])
             elif (job_type == '' and not min_wage and not max_wage): #no inputs filled in
+                print('no inputs')
                 jobs = Post.objects.all()
             else: #mixed inputs filled in
+                print('mixed inputs')
                 if min_wage and not max_wage:
                     jobs = Post.objects.filter(Q(JobType=job_type) | Q(Pay__gte=min_wage))
                 elif not min_wage and max_wage:
                     jobs = Post.objects.filter(Q(JobType=job_type) | Q(Pay__lte=max_wage))
                 else:
                     jobs = Post.objects.filter(Q(JobType=job_type) | Q(Pay__range=[min_wage, max_wage]))
+
         else:
             jobs = Post.objects.all()
     else:
@@ -305,10 +311,8 @@ def reopen_job(request, post_id):
     return redirect('/past_jobs_creator/')
 
 def all_jobs_creator(request, job):
-
     expired = request.user.creator.Posts.filter(DateTime__lt=datetime.now())
     expired.update(Active=1)
-
 
     if not request.user.is_authenticated:
         return redirect('/login/')
@@ -395,13 +399,11 @@ def all_jobs_creator(request, job):
     if request.method == "GET":
         form = ListJobsCreator(request.GET)
         if form.is_valid():
-            zip_code = form.cleaned_data['zip_code']
             job_type = form.cleaned_data['job_type']
             min_wage = form.cleaned_data['min_wage']
             max_wage = form.cleaned_data['max_wage']
             search = form.cleaned_data['search']
                 
-
             if (job_type != '' and min_wage and max_wage): #all inputs filled in
                 jobs = jobs.filter(Description__icontains=search, JobType=job_type, Pay__range=[min_wage, max_wage])
             elif (job_type == '' and not min_wage and not max_wage): #no inputs filled in
@@ -410,15 +412,12 @@ def all_jobs_creator(request, job):
                 if min_wage and not max_wage:
                     jobs = jobs.filter(Q(Description__icontains=search), Q(JobType=job_type) | Q(Pay__gte=min_wage))
                 elif not min_wage and max_wage:
+                    #jobs = jobs.filter(Q(JobType=job_type) | Q(Pay__lte=max_wage))
                     jobs = jobs.filter(Q(Description__icontains=search),  Q(JobType=job_type) | Q(Pay__lte=max_wage))
                 else:
-                    jobs = jobs.Posts.filter(Q(Description__icontains=search),  Q(JobType=job_type) | Q(Pay__range=[min_wage, max_wage]))
-            
-            if (zip_code): #ZipCode Exists
-                    for job in jobs:
-                        distance = distBetween(job.ZipCode, request.user.profile.ZipCode)
-                        if (distance > zip_code):
-                            jobs = jobs.exclude(id = job.id)
+                    jobs = jobs.filter(Q(Description__icontains=search),  Q(JobType=job_type) | Q(Pay__range=[min_wage, max_wage]))
+
+            print(jobs)
         else:
             jobs = jobs.all()
     else:
@@ -672,7 +671,8 @@ def generate_report(request):
     return render(request, 'generate_report.html', {'form':form, 'user_info':user})
 
 def generate_review(request, user_id, is_seeker):
-    #if is_seeker is false the user is being reviewed as a creator
+    #if is_seeker is 0 the user is being reviewed as a creator
+    #if is_seeker is 1 the user is being reviewed as a seeker
 
     if not request.user.is_authenticated:
         return redirect('/login/')
@@ -711,6 +711,40 @@ def past_jobs_seeker(request):
         return redirect('/login/')
 
     return render(request, 'Seeker/pastJobsSeeker.html')
+
+
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(data=request.POST, user=request.user)
+
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, form.user)
+            return redirect(reverse('accounts:view_profile'))
+        else:
+            return redirect(reverse('accounts:change_password'))
+    else:
+        form = PasswordChangeForm(user=request.user)
+
+        args = {'form': form}
+        return render(request, 'accounts/change_password.html', args)
+
+
+#this takes the email as a param and uses it to look for the right user to see if the email is regisetered. 
+#if it is not registered then it will return -1
+#otherwise it will send an email with a link to where to change the password
+def change_passwordBackend(email):
+    try:
+        obj = User.objects.get(email = email)
+
+    except:
+        return -1
+
+    link = ""
+    message = "To reset your password go to this link: "
+    message += link #add link
+    sendEmail("change email", "",email)
+
 
 def sendEmail(subject, message, emailTo):
     try:
