@@ -316,32 +316,32 @@ class AllJobsCreator(TestCase):
         })
 
         self.client.post('/create_job/', {
-                        'pay': 4.00, 'date_time': '2020-5-20',
+                        'pay': 4.00, 'date_time': '2020-5-20', 'zip_code': 12345,
                         'description': 'work involves ...', 'job_type': Post.DOGWALKING,
         })
         self.client.post('/create_job/', {
-                        'pay': 50.00, 'date_time': '2021-10-13',
+                        'pay': 50.00, 'date_time': '2021-10-13', 'zip_code': 12345,
                         'description': 'work involves ...', 'job_type': Post.BABYSITTING,
         })
         self.client.post('/create_job/', {
-                        'pay': 13.00, 'date_time': '2020-10-26',
+                        'pay': 13.00, 'date_time': '2020-10-26', 'zip_code': 12345,
                         'description': 'work involves ...', 'job_type': Post.SNOWSHOVELING,
         })
 
     def test_view_correct_jobs_max_wage(self):
-        response = self.client.get('/all_jobs_creator/', {'max_wage': 13.00})
-        self.assertEqual(response.context['job'].count(), 2)
+        response = self.client.get('/all_jobs_creator/all_jobs/', {'max_wage': 13.00})
+        self.assertEqual(response.context['jobs'].count(), 2)
 
     def test_view_correct_jobs_min_wage(self):
-        response = self.client.get('/all_jobs_creator/', {'min_wage': 30.00})
-        self.assertEqual(response.context['job'].count(), 1)
+        response = self.client.get('/all_jobs_creator/all_jobs/', {'min_wage': 30.00})
+        self.assertEqual(response.context['jobs'].count(), 1)
 
     def test_view_correct_jobs_wage(self):
-        response = self.client.get('/all_jobs_creator/', {'min_wage': 4.00, 'max_wage': 25.00})
+        response = self.client.get('/all_jobs_creator/all_jobs/', {'min_wage': 4.00, 'max_wage': 25.00})
         self.assertEqual(response.context['jobs'].count(), 2)
 
     def test_view_correct_jobs_type(self):
-        response = self.client.get('/list_job/', {'job_type': Post.DOGWALKING})
+        response = self.client.get('/all_jobs_creator/all_jobs/', {'job_type': Post.DOGWALKING})
         self.assertEqual(response.context['jobs'].count(), 1)
 
 class TestSendEmail(TestCase):
