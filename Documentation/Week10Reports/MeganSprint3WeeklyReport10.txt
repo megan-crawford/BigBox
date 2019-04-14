@@ -1,1 +1,14 @@
-weeble weeble wobble wobble 
+=== Weekly Individual Report (Team 1: sturgeons++) ===
+Name: Megan Crawford
+
+Week 10 (Summary)
+4/9  142c2fa 3 hr show seekers on oneJob, can hire seekers, made one job page look a little better
+4/12  4e8f21f 3 hr email to seeker with creator contact info when hired
+4/14  0691254 2 hr recommended job type option 
+
+Week 11 (Plan)
+4/16    3 hr  work on testing doc
+4/17	   3 hr plan for presentation
+4/18    3 hr  keep planning / testing
+
+Individual Goal: testing doc / preparing for presentation / finding and fixing bugs
