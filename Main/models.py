@@ -89,7 +89,8 @@ class Profile(models.Model):
     Portrait = models.ImageField(upload_to='Main/static/images/profile_pictures/', blank=True, null=True)
     Contacts = models.ManyToManyField("self", blank=True)
     ZipCode = models.IntegerField(blank=True, null=True)
-            
+    isNotified = models.BooleanField(default=False)
+
 class SeekerReview(models.Model):
     Rating = models.SmallIntegerField() #Precision undecided
     User = models.ForeignKey(User, on_delete=models.CASCADE, related_name='seeker_reviews')

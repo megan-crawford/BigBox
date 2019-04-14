@@ -169,6 +169,7 @@ def home_seeker(request):
     if not request.user.is_authenticated:
         return redirect('/login/')
         
+    print("isNotified", request.user.profile.isNotified)
     return render(request, 'home_seeker.html')
 
 def login_request(request):
@@ -415,7 +416,6 @@ def all_jobs_creator(request, job):
                 if min_wage and not max_wage:
                     jobs = jobs.filter(Q(Description__icontains=search), Q(JobType=job_type) | Q(Pay__gte=min_wage))
                 elif not min_wage and max_wage:
-                    #jobs = jobs.filter(Q(JobType=job_type) | Q(Pay__lte=max_wage))
                     jobs = jobs.filter(Q(Description__icontains=search),  Q(JobType=job_type) | Q(Pay__lte=max_wage))
                 else:
                     jobs = jobs.filter(Q(Description__icontains=search),  Q(JobType=job_type) | Q(Pay__range=[min_wage, max_wage]))
@@ -514,7 +514,7 @@ def all_jobs_seeker(request, job):
         
     if(request.GET.get('all_jobs')):
         print("all_jobs button")
-        form = ListJobsCreator(request.GET)
+        form = ListJobsSeeker(request.GET)
 
         if (job != "all_jobs"):
             return redirect('/all_jobs_seeker/all_jobs/?all_jobs=all_jobs&max_distance=&job_type=&min_wage=&max_wage=&search=&')
@@ -587,15 +587,27 @@ def all_jobs_seeker(request, job):
     
     if (typeOfJob == "all_jobs"):
         jobs = request.user.interested_seekers
+        #print("here", request.user.profile.isNotified)
+        print("Before", request.user.profile.isNotified)
+        profile = request.user.profile
+        profile.isNotified = False
+        profile.save()
+        #t.save(['value'])
+
+        #User.objects.get(id=request.user.id).profile.isNotified = True
+        print("After", request.user.profile.isNotified)
     elif (typeOfJob == "accepted_jobs"):
         jobs = request.user.interested_seekers.filter(Chosen=request.user, Active=2)
+        profile = request.user.profile
+        profile.isNotified = False
+        profile.save()
     elif (typeOfJob == "interested_jobs"):
         jobs = request.user.interested_seekers.filter(Active=0)
     else:
         jobs = request.user.interested_seekers.filter(Active=1)
 
     if request.method == "GET":
-        form = ListJobsCreator(request.GET)
+        form = ListJobsSeeker(request.GET)
         if form.is_valid():
             zip_code = form.cleaned_data['zip_code']
             job_type = form.cleaned_data['job_type']
@@ -625,7 +637,7 @@ def all_jobs_seeker(request, job):
             jobs = jobs.all()
     else:
         jobs = jobs.all()
-        form = ListJobsCreator()
+        form = ListJobsSeeker()
 
     jobs = jobs.order_by('Pay', 'DateTime')
     return render(request, 'Seeker/allJobsSeeker.html', {'form':form, 'jobs':jobs, 'typeOfJob':typeOfJob}, job)
@@ -678,14 +690,16 @@ def generate_review(request, user_id, is_seeker):
     #if is_seeker is 1 the user is being reviewed as a seeker
 
     if not request.user.is_authenticated:
+        print('not logged in')
         return redirect('/login/')
 
     if request.method == "POST":
-        #print('generate review post')
+        print('generate review post')
         form = GenerateReviewForm(request.POST)
 
         #process params
         user = User.objects.filter(id=user_id).first()
+
         if user == None or is_seeker == None:
             form.add_error(None, 'url information is incorrect')
             return render(request, 'generate_review.html', {'form':form})
@@ -693,7 +707,7 @@ def generate_review(request, user_id, is_seeker):
         is_seeker = False if is_seeker == 0 else True
 
         if form.is_valid():
-            #print('generate review valid')
+            print('generate review valid')
             rating = form.cleaned_data['rating']
 
             if is_seeker:
@@ -701,7 +715,7 @@ def generate_review(request, user_id, is_seeker):
             else:
                 CreatorReview.objects.create(Rating=rating, User=user)
 
-            redirect('/one_job/')
+            return redirect('/home_seeker/')
         else:
             print(form.errors)
     else:
@@ -804,13 +818,17 @@ def distBetween(zip1, zip2):
 #send email to seeker to notify them that they've been chosen
 def hire_seeker(request, jobID, seekerID, employerID):
     seeker = User.objects.filter(id=seekerID).first()
+    profile = User.objects.filter(id=seekerID).first().profile
+    profile.isNotified = True
+    profile.save()
+    print("seeker isNotified", seeker.username, seeker.profile.isNotified)
     seekerEmail = seeker.email
     employer = User.objects.filter(id =employerID).first()
     employerEmail = employer.email
     job = Post.objects.filter(id = jobID).first()
     job.Interested.remove(seeker)
-    job.Chosen = seeker;
-    job.Active = 2; 
+    job.Chosen = seeker
+    job.Active = 2
     job.save()
     content = "You have been hired for this job: " + job.Description + ". Here is your employers contact information: \n" + employer.first_name + "\n" + employerEmail
     val = sendEmail("Congrats, you have been hired!", content, seekerEmail)

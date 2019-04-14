@@ -263,7 +263,7 @@ class ListJob(TestCase):
         })
         #self.client.post(Post.objects.create(Pay=998, DateTime="2000-10-10", Description="job5", JobType="Snow Shoveling", ZipCode=12345))
 
-        
+        print(Post.objects.filter(Description='job5'))        
 
     def test_form_valid(self):
         form = ListJobsForm({'max_distance': 100, 'job_type': Post.DOGWALKING,
@@ -282,7 +282,7 @@ class ListJob(TestCase):
         self.assertEqual(len(response.context['jobs']), 3)
 
     def test_view_correct_jobs_status_closed(self):
-        response = self.client.get('/list_job/', {'min_wage': 500.00})
+        response = self.client.get('/list_job/', {'min_wage': 500.00}) #get job5
         self.assertEqual(response.context['jobs'][0].Active, 1)
 
     def test_view_correct_jobs_max_wage(self):
