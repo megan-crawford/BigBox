@@ -21,8 +21,8 @@ class DatabaseClassCreation(TestCase):
         Profile.objects.create(User=user, Age="23")
         post = Post.objects.create(Pay=12.50, ZipCode=12345, DateTime="2018-11-20T15:58:44.767594-06:00", Description="I love Winky", JobType="Snow Shoveling")
         Report.objects.create(User=user, Classification="No show", Details="Winky was here")
-        review1 = SeekerReview.objects.create(Rating = 5)
-        review2 = CreatorReview.objects.create(Rating = 1)
+        review1 = SeekerReview.objects.create(Rating = 5, User = user)
+        review2 = CreatorReview.objects.create(Rating = 1, User = user)
         seeker = Seeker.objects.create(User=user, Location="Delaware")
         seeker.save()
         seeker.IntJob.add(post)
@@ -238,10 +238,11 @@ class GenerateReport(TestCase):
 class ListJob(TestCase):
     def setUp(self):
         self.client = Client()
-        self.client.post('/create_account/', {
+        self.client.post('/create_account/', { #user requered to be logged in to create jobs
                         'username': 'user1', 'password': 'vf83g9f7fg', 'password_confirmation': 'vf83g9f7fg',
                         'email': 'email@email.com', 'first_name': 'John', 'last_name': 'Smith', 'age': 20                    
-        }) 
+        })
+        self.client.post('/update_account/', {'zip_code': 52403, 'zip_code_button': ''}) 
 
         self.client.post('/create_job/', {
                         'pay': 15.00, 'date_time': '2020-10-25', 'zip_code': 94803, #far
@@ -262,12 +263,6 @@ class ListJob(TestCase):
         self.client.post(Post.objects.create(Pay=998, DateTime="2000-10-10", Description="job5", JobType="Snow Shoveling", ZipCode=12345))
 
         
-
-        self.client.post('/create_account/', { #user requered to be logged in to create jobs
-                        'username': 'user2', 'password': 'vf83g9f7fg', 'password_confirmation': 'vf83g9f7fg',
-                        'email': 'email2@email.com', 'first_name': 'John', 'last_name': 'Doe', 'age': 30                    
-        })
-        self.client.post('/update_account/', {'zip_code': 52403, 'zip_code_button': ''})
 
     def test_form_valid(self):
         form = ListJobsForm({'max_distance': 100, 'job_type': Post.DOGWALKING,
@@ -319,37 +314,36 @@ class AllJobsCreator(TestCase):
         })
 
         self.client.post('/create_job/', {
-                        'pay': 4.00, 'date_time': '2020-5-20', 'zip_code': 27014,
+                        'pay': 4.00, 'date_time': '2020-5-20',
                         'description': 'work involves ...', 'job_type': Post.DOGWALKING,
         })
         self.client.post('/create_job/', {
-                        'pay': 50.00, 'date_time': '2021-10-13', 'zip_code': 27014,
+                        'pay': 50.00, 'date_time': '2021-10-13',
                         'description': 'work involves ...', 'job_type': Post.BABYSITTING,
         })
         self.client.post('/create_job/', {
-                        'pay': 13.00, 'date_time': '2020-10-26', 'zip_code': 27014,
+                        'pay': 13.00, 'date_time': '2020-10-26',
                         'description': 'work involves ...', 'job_type': Post.SNOWSHOVELING,
         })
 
     def test_view_correct_jobs_max_wage(self):
-        #if .../all_jobs/ isn't there, does not call all_jobs_creator()
-        response = self.client.get('/all_jobs_creator/all_jobs/', {'max_wage': 13.00})
+        response = self.client.get('/all_jobs_creator/', {'max_wage': 13.00})
         self.assertEqual(response.context['jobs'].count(), 2)
 
     def test_view_correct_jobs_min_wage(self):
-        response = self.client.get('/all_jobs_creator/all_jobs/', {'min_wage': 30.00})
+        response = self.client.get('/all_jobs_creator/', {'min_wage': 30.00})
         self.assertEqual(response.context['jobs'].count(), 1)
 
     def test_view_correct_jobs_wage(self):
-        response = self.client.get('/all_jobs_creator/all_jobs/', {'min_wage': 4.00, 'max_wage': 25.00})
+        response = self.client.get('/all_jobs_creator/', {'min_wage': 4.00, 'max_wage': 25.00})
         self.assertEqual(response.context['jobs'].count(), 2)
 
     def test_view_correct_jobs_type(self):
-        response = self.client.get('/all_jobs_creator/all_jobs/', {'job_type': Post.DOGWALKING})
+        response = self.client.get('/list_job/', {'job_type': Post.DOGWALKING})
         self.assertEqual(response.context['jobs'].count(), 1)
 
 class TestSendEmail(TestCase):
-    def est1(self):
+    def test1(self):
         with self.settings(
             EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend',
             EMAIL_HOST = 'smtp.gmail.com',
@@ -361,7 +355,7 @@ class TestSendEmail(TestCase):
         ):
             sendEmail("test_subject1", "test_message1", 'mkm1899@gmail.com')
 
-    def est2(self):    
+    def test2(self):    
         with self.settings(
             EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend',
             EMAIL_HOST = 'smtp.gmail.com',
@@ -373,7 +367,7 @@ class TestSendEmail(TestCase):
         ):
             sendEmail("test_subject2", "test_message2", 'pattnewbie@gmail.com')
 
-    def est3(self):
+    def test3(self):
         email = input("Enter your email: ")
         with self.settings(
             EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend',
@@ -386,7 +380,7 @@ class TestSendEmail(TestCase):
         ):
             sendEmail("test_subject3", "test_message3", email)
 
-    def est4(self):
+    def test4(self):
         subject = input("Enter the subject: ")
         message = input("Enter the message: ")
         email = input("Enter your email: ")
