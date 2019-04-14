@@ -259,9 +259,9 @@ class ListJob(TestCase):
                         'pay': 30.00, 'date_time': '2021-10-25', 'zip_code': 52403, #closest
                         'description': 'job4', 'job_type': Post.DOGWALKING,
         })
-        self.client.post(Post.objects.create(Pay=998, DateTime="2000-10-10", Description="job5", JobType="Snow Shoveling", ZipCode=12345))
+        self.client.post(Post.objects.create(Pay=998, DateTime="2000-10-10", Description="job5", JobType=Post.SNOWSHOVELING, ZipCode=12345))
 
-        
+        print(Post.objects.filter(Description='job5'))        
 
         self.client.post('/create_account/', { #user requered to be logged in to create jobs
                         'username': 'user2', 'password': 'vf83g9f7fg', 'password_confirmation': 'vf83g9f7fg',
@@ -286,7 +286,7 @@ class ListJob(TestCase):
         self.assertEqual(len(response.context['jobs']), 3)
 
     def test_view_correct_jobs_status_closed(self):
-        response = self.client.get('/list_job/', {'min_wage': 500.00})
+        response = self.client.get('/list_job/', {'min_wage': 500.00}) #get job5
         self.assertEqual(response.context['jobs'][0].Active, 1)
 
     def test_view_correct_jobs_max_wage(self):
