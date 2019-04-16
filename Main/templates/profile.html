@@ -101,7 +101,7 @@
 		<img src="{% static 'images/ratebad.png' %}" title="User has many reports..." width="20" height="20">
 
 	{% endif %}
-	{% if request.user.profile.isVerified %}
+	{% if user_info.profile.isVerified %}
 		<img src="{% static 'images/schoolverified.png' %}" title="User has a verified school email!" width="20" height="20">
 	{% endif %}
 
