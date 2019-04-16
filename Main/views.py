@@ -316,11 +316,14 @@ def list_job(request):
                         jobs = Post.objects.filter(Q(Description__icontains=search), Q(JobType=job_type) | Q(Pay__lte=max_wage))
                     else:
                         jobs = Post.objects.filter(Q(Description__icontains=search), Q(JobType=job_type) | Q(Pay__range=[min_wage, max_wage]))
-            else: 
+            else:
+                print('recommened')
                 job_pref = request.user.seeker.PrefType
                 print(job_pref)
+                print(job_type)
                 jobs = Post.objects.filter(Q(JobType=job_pref))
         else:
+            print(form.errors)
             jobs = Post.objects.all()
     else:
         jobs = Post.objects.all()
@@ -336,18 +339,11 @@ def list_job(request):
     print('jobs2', jobs)
 
     #sort by distance, then pay, then date
-    jobs = jobs.filter(Active=0)
-
-    print('jobs3', jobs)    
+    jobs = jobs.filter(Active=0) 
 
     jobs = jobs.order_by('Pay', 'DateTime')
-
-    print('jobs4', jobs)
-
     if (request.user.profile.ZipCode != None):
         jobs = sorted(jobs, key = lambda job : distBetween(job.ZipCode, request.user.profile.ZipCode))
-
-    print('jobs5', jobs)
 
     return render(request, 'Jobs/listJobs.html', {'form':form, 'jobs':jobs})
 

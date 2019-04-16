@@ -250,7 +250,7 @@ class ListJob(TestCase):
         self.client.post('/create_account/', { #user requered to be logged in to create jobs
                         'username': 'user1', 'password': 'vf83g9f7fg', 'password_confirmation': 'vf83g9f7fg',
                         'email': 'email@email.com', 'first_name': 'John', 'last_name': 'Smith', 'age': 20                    
-        })
+        }) 
         self.user1 = User.objects.all().first() #get only user
 
         self.client.post('/create_job/', {
@@ -275,7 +275,8 @@ class ListJob(TestCase):
                         'username': 'user2', 'password': 'vf83g9f7fg', 'password_confirmation': 'vf83g9f7fg',
                         'email': 'email2@email.com', 'first_name': 'John', 'last_name': 'Jackson', 'age': 30                  
         })
-        self.client.post('/update_account/', {'zip_code': 52403, 'zip_code_button': ''}) 
+        self.client.post('/update_account/', {'zip_code': 52403, 'zip_code_button': ''})
+        self.client.post('/update_account/', {'pref_job_type': Post.SNOWSHOVELING, 'pref_job_type_button': ''})
        
         #print(Post.objects.filter(Description='job5'))        
 
@@ -319,6 +320,16 @@ class ListJob(TestCase):
         response = self.client.get('/list_job/', {'job_type': BLANK_CHOICE_DASH})
         self.assertEqual(response.context['jobs'][0].Description, 'job4')
         self.assertEqual(response.context['jobs'][1].Description, 'job3')
+
+    def test_view_recommended(self):
+        response = self.client.get('/list_job/', {'job_type': 'FF'}) #(FF, Recommended)
+        self.assertEqual(len(response.context['jobs']), 1)
+        self.assertEqual(response.context['jobs'][0].JobType, Post.SNOWSHOVELING)
+
+    def test_view_search(self):
+        response = self.client.get('/list_job/', {'search': 'job4'})
+        self.assertEqual(len(response.context['jobs']), 1)
+        self.assertEqual(response.context['jobs'][0].Description, 'job4')
 
 class AllJobsCreator(TestCase):
     def setUp(self):

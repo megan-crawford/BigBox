@@ -65,7 +65,6 @@ class UpdateAccountForm(forms.Form):
     pref_job_type = forms.ChoiceField(label='Update Perferred Job Type', choices=BLANK_CHOICE_DASH+list(Post.TYPE_CHOICES), required=False)
     zip_code = forms.IntegerField(label='Update Zip Code', required=False)
 
-    #TODO: add password strength checks
     password = forms.CharField(label='Update Password', max_length=128, required=False, widget=forms.PasswordInput)
     password_confirmation = forms.CharField(label='Confirm new Password', max_length=128, required=False, widget=forms.PasswordInput)
 
