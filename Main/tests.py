@@ -499,24 +499,3 @@ class OneJobCreator(TestCase):
         response = self.client.post(f'/one_job_creator/{self.post.id}/')
         self.assertEqual(response.context['interested_seekers'].count(), 2)
 
-class TestCryptoSecureRNG(TestCase):
-    def test1(self):
-        a = os.urandom(35)
-        b = urlsafe_base64_encode(a).decode('utf-8')
-        print(b)
-    
-    def test2(self):
-        for i in range(10):
-            self.test1()
-
-
-class TestRegex(TestCase):
-    def test1(self):
-
-        pattern = re.compile("^.*.edu$")
-        a = pattern.match("abcd@purdue.edu")
-        b = pattern.match("DJANGO@gmail.com")
-        print("START")
-        print(a)
-        print(b == None)
-        print("END")
