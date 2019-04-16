@@ -20,10 +20,9 @@ div.job{
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-
-
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <title>Big Box      Creator</title>
 
 </head>
@@ -57,13 +56,8 @@ div.job{
           <div class="padding" style="padding-top: 9%"></div>
           <div id="container">
 
-        <div class="col-sm-3" style="">
-        
-              
-              <!-- </div> -->
-            </div>
-              <div class="row d-flex justify-content-center">
-          <div class="well" id="job">
+          <div class="col-sm-12">
+          <div class="well row" id="job">
               <div class="col-sm-2" style="">
                 {% if post.JobType == 'LM' %}
                   <img src="{% static 'images/Work Icons/lawn_care.PNG' %}" style="max-height:100%;max-width:100%;">
@@ -85,50 +79,47 @@ div.job{
               </div>
               <div class="col-sm-2" style="">
               {% if post.JobType == 'LM' %}
-                <p>Lawn-Mowing</p>  
+                <p style="font-size: 20px; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif">Lawn-Mowing</p>  
               {% elif post.JobType == 'SS' %}
-                <p>Snow-Shoveling</p>  
+                <p style="font-size: 20px; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif">Snow-Shoveling</p>  
               {% elif post.JobType == 'DW' %}
-                <p>Dog-Walking</p>  
+                <p style="font-size: 20px; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif">Dog-Walking</p>  
               {% elif post.JobType == 'PS' %}
-                <p>Pet-Sitting</p>  
+                <p style="font-size: 20px; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif">Pet-Sitting</p>  
               {% elif post.JobType == 'BS' %}
-                <p>Baby-Sitting</p>  
+                <p style="font-size: 20px; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif">Baby-Sitting</p>  
               {% elif post.JobType == 'C' %}
-                <p>Cleaning</p>  
+                <p style="font-size: 20px; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif">Cleaning</p>  
               {% elif post.JobType == 'M' %}
-                <p>Moving</p>  
+                <p style="font-size: 20px; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif">Moving</p>  
               {% elif post.JobType == 'O' %}
-                <p>Other</p>  
+                <p style="font-size: 20px; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif">Other</p>  
               {% endif %}
               </div>
               <div class="col-sm-4" style="">
-                  <p>{{ post.Description }}</p>
+                  <p style="font-size: 20px; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif">{{ post.Description }}</p>
               </div>              
               <div class="col-sm-1" style="">
-                  <p>Pay: {{ post.Pay }}</p>
+                  <p style="font-size: 20px; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif">Pay: {{ post.Pay }}</p>
+              </div>
+              <div class="col-sm-2" style="">
+                <p style="font-size: 20px; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif"> {{post.id}}</p>  
               </div>
               <div class="col-sm-1" style="">
-                  <!--<p>Date: {{ post.Date }}</p>-->
+                  <a href="../../profile/?username={{post.userName}}"><p style="font-size: 20px; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif">{{ post.userName }}</p></a>
               </div>
-              <div class="col-sm-2" style="">
-                  <!--<p>{{ request.user.username }} </p> -->
-              </div>
-              <div class="col-sm-2" style="">
-                <p> {{post.id}}</p>  
-              </div>
-              
-          </div>
+        </div>
+      </div>
       </div>
 	  {% if post.Active == 0 %}
-      <div>
+      <div style="padding-left:2%">
         {%for seeker in interested_seekers%}
-        <div>
-		<a class="button" href= '/profile?username={{seeker.username}}'>
+        <div >
+		<a type="button"  class="btn btn-primary" style="height: 10%; width: 10%;" href= '/profile?username={{seeker.username}}'>
           Visit Profile Page
         </a>
-		<p></p>
-        <a class="button" href= '/hire_seeker/{{post.id}}/{{seeker.id}}/{{request.user.id}}'>
+    <p></p>
+        <a type="button" class="btn btn-primary" style="height: 10%; width: 10%;" href= '/hire_seeker/{{post.id}}/{{seeker.id}}/{{request.user.id}}'>
           Hire this seeker:
         </a>
         {{seeker.first_name}}
@@ -140,15 +131,16 @@ div.job{
 	  {% endif %}
 	
 	  {% if post.Active == 2 %}
-	  <div>
-		<a class="button" href= '/generate_review/{{post.Chosen.id}}/1'>
+	  <div style="padding-left:2%">
+		<a type="button" class="btn btn-primary" style="height: 100%; width: 100%;" href= '/generate_review/{{post.Chosen.id}}/1'>
 			Review the seeker
         </a>
 	  </div>
 	  {% endif %}
 	  
               <p></p>
-              <a href='/all_jobs_creator/all_jobs/'>Back to all jobs</a>
+              <div style="padding-left:2%"> 
+              <a type="button" class="btn btn-primary" style="height: 100%; width: 100%;" href='/all_jobs_creator/all_jobs/'>Back to all jobs</a>
               
               <!-- </div> -->
             </div>
