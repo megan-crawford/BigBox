@@ -89,6 +89,8 @@ class Profile(models.Model):
     Portrait = models.ImageField(upload_to='Main/static/images/profile_pictures/', blank=True, null=True)
     Contacts = models.ManyToManyField("self", blank=True)
     ZipCode = models.IntegerField(blank=True, null=True)
+    #Token = models.CharField(max_length=80, blank=True, null=True)
+    isVerified = models.BooleanField(default=False)
             
 class SeekerReview(models.Model):
     Rating = models.SmallIntegerField() #Precision undecided
