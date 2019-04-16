@@ -66,9 +66,13 @@ div.job{
               {%for post in jobs%}
                 
         <div class="row d-flex justify-content-center">
-          <a  class="button" href = '/show_interest/{{post.id}}/{{request.user.id}}'>
-                  I am interested in this job
-                </a>
+		
+		{% if post.Active == 0 %}
+        <a  class="button" href = '/show_interest/{{post.id}}/{{request.user.id}}'>
+			I am interested in this job
+        </a>
+	  {% endif %}
+          
           <div class="well" id="job">
               <div class="col-sm-2" style="">
                 {% if post.JobType == 'LM' %}
@@ -127,12 +131,25 @@ div.job{
           </div>
           <p>
           </p>
+		  
           <button onclick="window.location.href = '/list_job';">Back to all jobs</button>
+		  
       </div>
-              {%endfor%}
-              
+	   {% if post.Active == 2 %}
+	  <div>
+		<a class="button" href= '/generate_review/{{post.userID}}/0'>
+			Review the Creator
+        </a>
+	  </div>
+	  {% endif %}
+            {%endfor%}
+			 
+			
+             
             </div> 
+			
           </div>
+
             
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

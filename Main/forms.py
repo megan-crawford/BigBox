@@ -178,6 +178,7 @@ class ListJobsForm(forms.Form):
     job_type = forms.ChoiceField(choices= BLANK_CHOICE_DASH + list(Post.TYPE_CHOICES) + recommended, required=False)
     min_wage = forms.DecimalField(min_value=0, max_value=1000, decimal_places=2, required=False)
     max_wage = forms.DecimalField(min_value=0, max_value=1000, decimal_places=2, required=False)
+    search = forms.CharField(label='search', max_length=50, required=False)
 
     error_messages = {
         'invalid_wage' : 'Max wage cannot be less than min wage'
@@ -190,6 +191,11 @@ class ListJobsForm(forms.Form):
 
         if min_wage and max_wage and max_wage < min_wage:
             raise ValidationError(message=self.error_messages['invalid_wage'], code='invalid_wage')
+    def clean_search(self):
+        search = self.cleaned_data['search']
+        print("search", search)
+        return search
+
 
 class ListJobsCreator(forms.Form):
     job_type = forms.ChoiceField(choices= BLANK_CHOICE_DASH + list(Post.TYPE_CHOICES), required=False)
