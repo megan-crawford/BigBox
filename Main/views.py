@@ -329,16 +329,28 @@ def list_job(request):
         jobs = Post.objects.all()
         form = ListJobsForm()
 
+    print('jobs1', jobs)
+
     #Exclude Users Own Jobs
     for job in jobs:
         if (job.userID == request.user.id):
             jobs = jobs.exclude(id = job.id)
 
+    print('jobs2', jobs)
+
     #sort by distance, then pay, then date
     jobs = jobs.filter(Active=0)
+
+    print('jobs3', jobs)    
+
     jobs = jobs.order_by('Pay', 'DateTime')
+
+    print('jobs4', jobs)
+
     if (request.user.profile.ZipCode != None):
         jobs = sorted(jobs, key = lambda job : distBetween(job.ZipCode, request.user.profile.ZipCode))
+
+    print('jobs5', jobs)
 
     return render(request, 'Jobs/listJobs.html', {'form':form, 'jobs':jobs})
 

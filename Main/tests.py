@@ -181,7 +181,7 @@ class CreateJob(TestCase):
 
     def test_view_empty_fields(self):
         response = self.client.post('/create_job/', {
-                                    'pay': None, 'date_time': '',
+                                    'pay': None, 'date_time': '', 'zip_code': '99811',
                                     'description': 'will be moving ...', 'job_type': Post.MOVING,
         })
         self.assertFalse(response.context['form'].is_valid())
@@ -189,15 +189,15 @@ class CreateJob(TestCase):
 
     def test_view_invalid_date(self):
         response = self.client.post('/create_job/', {
-                                    'pay': 20.00, 'date_time': '2000-10-25', #date was a long time ago
-                                    'description': 'work is ...', 'job_type': Post.SNOWSHOVELING,
+                                    'pay': 20.00, 'date_time': '2000-10-25', #date was a long time ago, 
+                                    'description': 'work is ...', 'job_type': Post.SNOWSHOVELING, 'zip_code': '99811',
         })
         self.assertFalse(response.context['form'].is_valid())
         self.assertEqual(Post.objects.all().count(), 0)
 
     def test_view_invalid_pay(self):
         response = self.client.post('/create_job/', {
-                                    'pay': -20.00, 'date_time': '2020-10-25',
+                                    'pay': -20.00, 'date_time': '2020-10-25', 'zip_code': '99811',
                                     'description': 'work will be ...', 'job_type': Post.DOGWALKING,
         })
         self.assertFalse(response.context['form'].is_valid())
@@ -245,7 +245,7 @@ class ListJob(TestCase):
                         'username': 'user1', 'password': 'vf83g9f7fg', 'password_confirmation': 'vf83g9f7fg',
                         'email': 'email@email.com', 'first_name': 'John', 'last_name': 'Smith', 'age': 20                    
         })
-        self.client.post('/update_account/', {'zip_code': 52403, 'zip_code_button': ''}) 
+        self.user1 = User.objects.all().first() #get only user
 
         self.client.post('/create_job/', {
                         'pay': 15.00, 'date_time': '2020-10-25', 'zip_code': 94803, #far
@@ -263,9 +263,15 @@ class ListJob(TestCase):
                         'pay': 30.00, 'date_time': '2021-10-25', 'zip_code': 52403, #closest
                         'description': 'job4', 'job_type': Post.DOGWALKING,
         })
-        #self.client.post(Post.objects.create(Pay=998, DateTime="2000-10-10", Description="job5", JobType="Snow Shoveling", ZipCode=12345))
+        #Post.objects.create(Pay=998, DateTime="2000-10-10", Description="job5", JobType="Snow Shoveling", ZipCode=12345, userID=self.user1.id, userName=self.user1.username)
 
-        print(Post.objects.filter(Description='job5'))        
+        self.client.post('/create_account/', {
+                        'username': 'user2', 'password': 'vf83g9f7fg', 'password_confirmation': 'vf83g9f7fg',
+                        'email': 'email2@email.com', 'first_name': 'John', 'last_name': 'Jackson', 'age': 30                  
+        })
+        self.client.post('/update_account/', {'zip_code': 52403, 'zip_code_button': ''}) 
+       
+        #print(Post.objects.filter(Description='job5'))        
 
     def test_form_valid(self):
         form = ListJobsForm({'max_distance': 100, 'job_type': Post.DOGWALKING,
@@ -283,16 +289,15 @@ class ListJob(TestCase):
         response = self.client.get('/list_job/', {'min_wage': 15.00, 'max_wage': 25.00})
         self.assertEqual(len(response.context['jobs']), 3)
 
-    def test_view_correct_jobs_status_closed(self):
-        response = self.client.get('/list_job/', {'min_wage': 500.00}) #get job5
-        self.assertEqual(response.context['jobs'][0].Active, 1)
+    # def test_view_correct_jobs_status_closed(self):
+    #     response = self.client.get('/list_job/', {'min_wage': 500.00}) #get job5
+    #     self.assertEqual(response.context['jobs'][0].Active, 1)
 
     def test_view_correct_jobs_max_wage(self):
         response = self.client.get('/list_job/', {'max_wage': 20.00})
         self.assertEqual(len(response.context['jobs']), 2)
 
     def test_view_correct_jobs_min_wage(self):
-        self.client = Client()
         response = self.client.get('/list_job/', {'min_wage': 20.00})
         self.assertEqual(len(response.context['jobs']), 3)
 
@@ -412,16 +417,19 @@ class ReopenJob(TestCase):
                         'username': 'user', 'password': 'vf83g9f7fg', 'password_confirmation': 'vf83g9f7fg',
                         'email': 'email@email.com', 'first_name': 'John', 'last_name': 'Smith', 'age': 24                   
         })
-
         self.client.post('/create_job/', {
-            'pay': 45.00, 'date_time': '2020-09-25', 'zip_code': '12345',
+                        'pay': 45.00, 'date_time': '2020-09-25', 'zip_code': '12345',
                         'description': 'work involves ...', 'job_type': Post.DOGWALKING,
+        })
+
+        self.client.post('/create_account/', {
+                        'username': 'user2', 'password': 'vf83g9f7fg', 'password_confirmation': 'vf83g9f7fg',
+                        'email': 'email2@email.com', 'first_name': 'John', 'last_name': 'Jackson', 'age': 30                  
         })
 
         #TODO: add more actions for having a seeker accept the job and closing the job
 
     def test_view(self):
-        #post = Post.objects.get(Pay=45.00)
         post = self.client.get('/list_job/', {'min_wage': 15.00, 'max_wage': 50.00})
         postid = post.context['jobs'][0].id
         self.client.post("/reopen_job/%d"%(postid))
