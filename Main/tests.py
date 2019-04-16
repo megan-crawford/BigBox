@@ -8,7 +8,9 @@ from django.core import mail
 from django.conf import settings
 from django.db.models.fields import BLANK_CHOICE_DASH
 from base64 import b64encode
+from django.utils.http import urlsafe_base64_encode
 
+import re
 import os
 
 # Create your tests here.
@@ -315,7 +317,7 @@ class AllJobsCreator(TestCase):
                         'email': 'email3@email.com', 'first_name': 'Jack', 'last_name': 'Smith', 'age': 24                   
         })
         self.client.post('/create_job/', {
-            'pay': 4.00, 'date_time': '2020-5-20', 'zip_code': 12345,
+                        'pay': 4.00, 'date_time': '2020-5-20', 'zip_code': 12345,
                         'description': 'work involves ...', 'job_type': Post.DOGWALKING,
         })
         self.client.post('/create_job/', {
@@ -328,19 +330,19 @@ class AllJobsCreator(TestCase):
         })
 
     def test_view_correct_jobs_max_wage(self):
-        response = self.client.get('/all_jobs_creator/', {'max_wage': 13.00})
+        response = self.client.get('/all_jobs_creator/all_jobs/', {'max_wage': 13.00})
         self.assertEqual(response.context['jobs'].count(), 2)
 
     def test_view_correct_jobs_min_wage(self):
-        response = self.client.get('/all_jobs_creator/', {'min_wage': 30.00})
+        response = self.client.get('/all_jobs_creator/all_jobs/', {'min_wage': 30.00})
         self.assertEqual(response.context['jobs'].count(), 1)
 
     def test_view_correct_jobs_wage(self):
-        response = self.client.get('/all_jobs_creator/', {'min_wage': 4.00, 'max_wage': 25.00})
+        response = self.client.get('/all_jobs_creator/all_jobs/', {'min_wage': 4.00, 'max_wage': 25.00})
         self.assertEqual(response.context['jobs'].count(), 2)
 
     def test_view_correct_jobs_type(self):
-        response = self.client.get('/list_job/', {'job_type': Post.DOGWALKING})
+        response = self.client.get('/all_jobs_creator/all_jobs/', {'job_type': Post.DOGWALKING})
         self.assertEqual(response.context['jobs'].count(), 1)
 
 class TestSendEmail(TestCase):
@@ -500,7 +502,21 @@ class OneJobCreator(TestCase):
 class TestCryptoSecureRNG(TestCase):
     def test1(self):
         a = os.urandom(35)
-        b = b64encode(a).decode('utf-8')
-        b = b[0:len(b)-2]
+        b = urlsafe_base64_encode(a).decode('utf-8')
         print(b)
-        print(b.replace('/','1'))
+    
+    def test2(self):
+        for i in range(10):
+            self.test1()
+
+
+class TestRegex(TestCase):
+    def test1(self):
+
+        pattern = re.compile("^.*.edu$")
+        a = pattern.match("abcd@purdue.edu")
+        b = pattern.match("DJANGO@gmail.com")
+        print("START")
+        print(a)
+        print(b == None)
+        print("END")

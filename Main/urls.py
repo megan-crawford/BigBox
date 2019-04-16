@@ -63,6 +63,8 @@ urlpatterns = [
     path('show_interest/<jobID>/<seekerID>/', views.show_interest, name='show_interest'),
     #path('view_one_job/', views.view_one_job, name='view_one_job'),
 
+     url(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
+        views.activate, name='activate'),
 
     url(r'^', include('django.contrib.auth.urls')),
 
