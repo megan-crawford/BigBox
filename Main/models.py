@@ -91,6 +91,9 @@ class Profile(models.Model):
     ZipCode = models.IntegerField(blank=True, null=True)
     isNotified = models.BooleanField(default=False)
 
+    #Token = models.CharField(max_length=80, blank=True, null=True)
+    isVerified = models.BooleanField(default=False)
+            
 class SeekerReview(models.Model):
     Rating = models.SmallIntegerField() #Precision undecided
     User = models.ForeignKey(User, on_delete=models.CASCADE, related_name='seeker_reviews')

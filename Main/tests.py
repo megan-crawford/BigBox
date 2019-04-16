@@ -8,7 +8,9 @@ from django.core import mail
 from django.conf import settings
 from django.db.models.fields import BLANK_CHOICE_DASH
 from base64 import b64encode
+from django.utils.http import urlsafe_base64_encode
 
+import re
 import os
 
 # Create your tests here.
@@ -500,7 +502,21 @@ class OneJobCreator(TestCase):
 class TestCryptoSecureRNG(TestCase):
     def test1(self):
         a = os.urandom(35)
-        b = b64encode(a).decode('utf-8')
-        b = b[0:len(b)-2]
+        b = urlsafe_base64_encode(a).decode('utf-8')
         print(b)
-        print(b.replace('/','1'))
+    
+    def test2(self):
+        for i in range(10):
+            self.test1()
+
+
+class TestRegex(TestCase):
+    def test1(self):
+
+        pattern = re.compile("^.*.edu$")
+        a = pattern.match("abcd@purdue.edu")
+        b = pattern.match("DJANGO@gmail.com")
+        print("START")
+        print(a)
+        print(b == None)
+        print("END")
