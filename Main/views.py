@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout
 from django.contrib.auth import authenticate
 from django.http import HttpResponse
-from . forms import CreateAccountForm, UpdateAccountForm, CreateJobForm, ListJobsForm, GenerateReportForm, ListJobsCreator, GenerateReviewForm
+from . forms import CreateAccountForm, UpdateAccountForm, CreateJobForm, ListJobsForm, GenerateReportForm, ListJobsCreator, ListJobsSeekers, GenerateReviewForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from . models import Profile, Post, Seeker, Creator, Report, SeekerReview, CreatorReview
@@ -169,6 +169,7 @@ def home_seeker(request):
     if not request.user.is_authenticated:
         return redirect('/login/')
         
+    print("isNotified", request.user.profile.isNotified)
     return render(request, 'home_seeker.html')
 
 def login_request(request):
@@ -513,7 +514,7 @@ def all_jobs_seeker(request, job):
         
     if(request.GET.get('all_jobs')):
         print("all_jobs button")
-        form = ListJobsCreator(request.GET)
+        form = ListJobsSeekers(request.GET)
 
         if (job != "all_jobs"):
             return redirect('/all_jobs_seeker/all_jobs/?all_jobs=all_jobs&max_distance=&job_type=&min_wage=&max_wage=&search=&')
@@ -586,15 +587,27 @@ def all_jobs_seeker(request, job):
     
     if (typeOfJob == "all_jobs"):
         jobs = request.user.interested_seekers
+        #print("here", request.user.profile.isNotified)
+        print("Before", request.user.profile.isNotified)
+        profile = request.user.profile
+        profile.isNotified = False
+        profile.save()
+        #t.save(['value'])
+
+        #User.objects.get(id=request.user.id).profile.isNotified = True
+        print("After", request.user.profile.isNotified)
     elif (typeOfJob == "accepted_jobs"):
         jobs = request.user.interested_seekers.filter(Chosen=request.user, Active=2)
+        profile = request.user.profile
+        profile.isNotified = False
+        profile.save()
     elif (typeOfJob == "interested_jobs"):
         jobs = request.user.interested_seekers.filter(Active=0)
     else:
         jobs = request.user.interested_seekers.filter(Active=1)
 
     if request.method == "GET":
-        form = ListJobsCreator(request.GET)
+        form = ListJobsSeekers(request.GET)
         if form.is_valid():
             zip_code = form.cleaned_data['zip_code']
             job_type = form.cleaned_data['job_type']
@@ -624,7 +637,7 @@ def all_jobs_seeker(request, job):
             jobs = jobs.all()
     else:
         jobs = jobs.all()
-        form = ListJobsCreator()
+        form = ListJobsSeekers()
 
     jobs = jobs.order_by('Pay', 'DateTime')
     return render(request, 'Seeker/allJobsSeeker.html', {'form':form, 'jobs':jobs, 'typeOfJob':typeOfJob}, job)
@@ -805,13 +818,17 @@ def distBetween(zip1, zip2):
 #send email to seeker to notify them that they've been chosen
 def hire_seeker(request, jobID, seekerID, employerID):
     seeker = User.objects.filter(id=seekerID).first()
+    profile = User.objects.filter(id=seekerID).first().profile
+    profile.isNotified = True
+    profile.save()
+    print("seeker isNotified", seeker.username, seeker.profile.isNotified)
     seekerEmail = seeker.email
     employer = User.objects.filter(id =employerID).first()
     employerEmail = employer.email
     job = Post.objects.filter(id = jobID).first()
     job.Interested.remove(seeker)
-    job.Chosen = seeker;
-    job.Active = 2; 
+    job.Chosen = seeker
+    job.Active = 2
     job.save()
     content = "You have been hired for this job: " + job.Description + ". Here is your employers contact information: \n" + employer.first_name + "\n" + employerEmail
     val = sendEmail("Congrats, you have been hired!", content, seekerEmail)

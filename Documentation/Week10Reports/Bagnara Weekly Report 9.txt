@@ -1,0 +1,15 @@
+=== Weekly Team Report (Team 1: sturgeons++) ===
+Name: Jason Bagnara
+
+Week 10
+4/9	3 hr	N/A	Create test cases for active status
+4/12	3 hr	N/A	Create test cases for other view functions
+4/14	2 hr	N/A	Fixed broken test
+
+Week 11 (plan)
+4/16	3 hr	N/A	Finish fixing broken test cases
+4/17	3 hr	N/A	Add final functions for job pages
+4/18	3 hr	N/A	Touch up for final presentation
+4/19	2 hr	N/A	Present Final Project
+
+Goal:	Fix those test cases!

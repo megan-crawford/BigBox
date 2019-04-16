@@ -314,7 +314,6 @@ class AllJobsCreator(TestCase):
                         'username': 'user', 'password': 'vf83g9f7fg', 'password_confirmation': 'vf83g9f7fg',
                         'email': 'email3@email.com', 'first_name': 'Jack', 'last_name': 'Smith', 'age': 24                   
         })
-
         self.client.post('/create_job/', {
                         'pay': 4.00, 'date_time': '2020-5-20', 'zip_code': 12345,
                         'description': 'work involves ...', 'job_type': Post.DOGWALKING,
