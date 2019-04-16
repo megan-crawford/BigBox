@@ -507,3 +507,40 @@ class OneJobCreator(TestCase):
         response = self.client.post(f'/one_job_creator/{self.post.id}/')
         self.assertEqual(response.context['interested_seekers'].count(), 2)
 
+class InterestedSeeker(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.client.post('/create_account/', {
+                        'username': 'user1', 'password': '83c9bqo87n', 'password_confirmation': '83c9bqo87n',
+                        'email': 'user1@email.com', 'first_name': 'Jackson', 'last_name': 'Doe', 'age': 28
+        })
+        self.user1 = User.objects.filter(username='user1').first()
+
+        self.client.post('/create_job/', { #user1 creates job
+                        'pay': 13.00, 'date_time': '2020-10-26', 'zip_code': 12345,
+                        'description': 'job', 'job_type': Post.BABYSITTING,
+        })
+        self.job = Post.objects.filter(Description='job').first()
+
+        self.client.post('/create_account/', {
+                        'username': 'user2', 'password': '83c9bqo87n', 'password_confirmation': '83c9bqo87n',
+                        'email': 'user2@email.com', 'first_name': 'Jackson', 'last_name': 'Doe', 'age': 28
+        })
+        self.user2 = User.objects.filter(username='user2').first()
+
+        self.client.post(f'/show_interest/{self.job.id}/{self.user2.id}/') #user2 shows interest in user1's job
+
+        self.client.post('/login/', {'username': 'user1', 'password': '83c9bqo87n'})
+
+    def test_accept(self):
+        self.client.post(f'/hire_seeker/{self.job.id}/{self.user2.id}/{self.user1.id}') #user1 hires user2
+        self.job = Post.objects.filter(Description='job').first() #update job
+        self.assertEquals(self.job.Active, 2) #job is chosen
+        self.assertEquals(self.job.Chosen.id, self.user2.id)
+
+    def test_ignore(self):
+        self.job = Post.objects.filter(Description='job').first() #update job
+        self.assertEquals(self.job.Active, 0) #job is open
+        self.assertEquals(self.job.Chosen, None)
+
+

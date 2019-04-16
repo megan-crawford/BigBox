@@ -882,7 +882,7 @@ def distBetween(zip1, zip2):
 #send email to seeker to notify them that they've been chosen
 def hire_seeker(request, jobID, seekerID, employerID):
     seeker = User.objects.filter(id=seekerID).first()
-    profile = User.objects.filter(id=seekerID).first().profile
+    profile = User.objects.filter(id=seekerID).first().profile #TODO: edit this
     profile.isNotified = True
     profile.save()
 
@@ -893,9 +893,11 @@ def hire_seeker(request, jobID, seekerID, employerID):
     employer = User.objects.filter(id =employerID).first()
     employerEmail = employer.email
     job = Post.objects.filter(id = jobID).first()
+
     job.Chosen = seeker
     job.Active = 2
     job.save()
+
     content = "You have been hired for this job: " + job.Description + ". Here is your employers contact information: \n" + employer.first_name + "\n" + employerEmail
     val = sendEmail("Congrats, you have been hired!", content, seekerEmail)
     return render(request, 'Jobs/hireSeeker.html') 
