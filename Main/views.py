@@ -207,6 +207,9 @@ def reset_password(request):
 	
 def reset_instructions(request):
 	return render(request, 'reset_instructions.html')
+
+def school_verify_done(request):
+	return render(request, 'school_verify_done.html')
 	
 def new_password(request):
 	return render(request, 'new_password.html')

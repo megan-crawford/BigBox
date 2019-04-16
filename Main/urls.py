@@ -38,6 +38,7 @@ urlpatterns = [
 	path('new_password/', views.new_password, name='new_password'),
 	path('reset_instructions/', views.reset_instructions, name='reset_instructions'),
 	path('reset_success/', views.reset_success, name='reset_success'),
+	path('school_verify_done/', views.school_verify_done, name='school_verify_done'),
 
     #creator
     path('home_creator/', views.home_creator, name='home_creator'),
