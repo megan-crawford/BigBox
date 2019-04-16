@@ -44,8 +44,6 @@
                       <a class="nav-link" style="font-size: 200%; padding-left: 20%" href="/home_seeker">Home<span class="sr-only">(current)</span></a>
                     </li>
                   </ul>
-                  <p>{{ request.user.profile.isNotified }}</p>
-                  <p>{{ request.user.username }}</p>
                   {% if request.user.profile.isNotified %}
                   <a href="/all_jobs_seeker/accepted_jobs/" style=" width:8%;"><img src="{% static 'images/noteRed.png' %}" style="height:50%;width:50%;"></a>
                   {% endif %}

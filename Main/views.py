@@ -821,12 +821,14 @@ def hire_seeker(request, jobID, seekerID, employerID):
     profile = User.objects.filter(id=seekerID).first().profile
     profile.isNotified = True
     profile.save()
-    print("seeker isNotified", seeker.username, seeker.profile.isNotified)
+
+    #Mark send an email (though, it looks like that is done below)
+
+    #print("seeker isNotified", seeker.username, seeker.profile.isNotified)
     seekerEmail = seeker.email
     employer = User.objects.filter(id =employerID).first()
     employerEmail = employer.email
     job = Post.objects.filter(id = jobID).first()
-    job.Interested.remove(seeker)
     job.Chosen = seeker
     job.Active = 2
     job.save()

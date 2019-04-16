@@ -46,6 +46,9 @@ div.job{
                       <a class="nav-link" style="font-size: 200%; padding-left: 310%" href="#">Seeker<span class="sr-only">(current)</span></a> 
                     </li>
                   </ul>
+                  {% if request.user.profile.isNotified %}
+                      <a href="/all_jobs_seeker/accepted_jobs/" style=" width:8%;"><img src="{% static 'images/noteRed.png' %}" style="height:50%;width:50%;"></a>
+                    {% endif %}
                   <div class="dropdown">
                       <button class="btn btn-secondary dropdown-toggle" style="max-height:200%;max-width:200; font-size:16px" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         {{ request.user.username }}
