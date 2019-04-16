@@ -77,19 +77,25 @@ class UpdateProfile(TestCase):
 
     def test_view_valid_age(self):
         #age_button to show that the update age button was pressed
-        self.client.post('/update_account/', {'zip_code': '12345', 'age': 30, 'age_button': ''})
+        self.client.post('/update_account/', {'age': 30, 'age_button': ''})
 
         user1 = User.objects.get(username='user1')
         self.assertEqual(user1.profile.Age, 30)
 
     def test_view_valid_email(self):
-        self.client.post('/update_account/', {'zip_code': '12345', 'email': 'new@email.com', 'email_button': ''}) 
+        self.client.post('/update_account/', {'email': 'new@email.com', 'email_button': ''}) 
 
         user1 = User.objects.get(username='user1')
         self.assertEqual(user1.email, 'new@email.com')
 
+    def test_view_valid_pref_type(self):
+        self.client.post('/update_account/', {'pref_job_type': Post.BABYSITTING, 'pref_job_type_button': ''}) 
+
+        user1 = User.objects.get(username='user1')
+        self.assertEqual(user1.seeker.PrefType, Post.BABYSITTING)
+
     def test_view_valid_pref_job_type(self):
-        self.client.post('/update_account/', {'zip_code': '12345', 'pref_job_type': Post.BABYSITTING, 'pref_job_type_button': ''}) 
+        self.client.post('/update_account/', {'pref_job_type': Post.BABYSITTING, 'pref_job_type_button': ''}) 
 
         user1 = User.objects.get(username='user1')
         self.assertEqual(user1.seeker.PrefType, Post.BABYSITTING)
@@ -107,15 +113,15 @@ class UpdateProfile(TestCase):
 
     def test_view_invalid_email(self):
         #email already exists
-        response = self.client.post('/update_account/', {'zip_code': '12345', 'email': 'email2@email.com', 'email_button': ''}) 
+        response = self.client.post('/update_account/', {'email': 'email2@email.com', 'email_button': ''}) 
         self.assertFalse(response.context['form'].is_valid())
 
     def test_view_invalid_first_name(self):
-        response = self.client.post('/update_account/', {'zip_code': '12345', 'first_name': 'jack5', 'first_name_button': ''}) 
+        response = self.client.post('/update_account/', {'first_name': 'jack5', 'first_name_button': ''}) 
         self.assertFalse(response.context['form'].is_valid())
 
     def test_view_invalid_password_confirmation(self):
-        response = self.client.post('/update_account/', {'zip_code': '12345', 'password': 'aaaaaaaa', 'password_confirmation': 'bbbbbbbb', 'password_button': ''}) 
+        response = self.client.post('/update_account/', {'password': 'aaaaaaaa', 'password_confirmation': 'bbbbbbbb', 'password_button': ''}) 
         self.assertFalse(response.context['form'].is_valid())
 
 class CreateProfile(TestCase):

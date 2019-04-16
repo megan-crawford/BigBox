@@ -883,7 +883,7 @@ def distBetween(zip1, zip2):
 #send email to seeker to notify them that they've been chosen
 def hire_seeker(request, jobID, seekerID, employerID):
     seeker = User.objects.filter(id=seekerID).first()
-    profile = User.objects.filter(id=seekerID).first().profile #TODO: edit this
+    profile = seeker.profile
     profile.isNotified = True
     profile.save()
 
