@@ -594,4 +594,33 @@ class InterestedSeeker(TestCase):
         self.assertEquals(self.job.Active, 0) #job is open
         self.assertEquals(self.job.Chosen, None)
 
+class DeleteJob(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.client.post('/create_account/', {
+                        'username': 'user', 'password': '83c9bqo87n', 'password_confirmation': '83c9bqo87n',
+                        'email': 'user@email.com', 'first_name': 'Jackson', 'last_name': 'Smith', 'age': 16
+        })
 
+        self.client.post('/create_job/', { #user1 creates job1
+                        'pay': 20.00, 'date_time': '2021-10-26', 'zip_code': 12345,
+                        'description': 'job1', 'job_type': Post.CLEANING,
+        })
+        self.client.post('/create_job/', { #user1 creates job2
+                        'pay': 30.00, 'date_time': '2020-10-26', 'zip_code': 12345,
+                        'description': 'job2', 'job_type': Post.DOGWALKING,
+        })
+        self.job1 = Post.objects.get(Description='job2')
+    
+    def test_correct(self):
+        self.assertEqual(Post.objects.count(), 2)
+        self.client.get(f'/delete_job/{self.job1.id}/')
+        self.assertEqual(Post.objects.count(), 1)
+
+def ResetPassword(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.client.post('/create_account/', {
+                        'username': 'user', 'password': '83c9bqo87n', 'password_confirmation': '83c9bqo87n',
+                        'email': 'user@email.com', 'first_name': 'John', 'last_name': 'Smith', 'age': 43
+        })

@@ -790,7 +790,6 @@ def past_jobs_seeker(request):
 
     return render(request, 'Seeker/pastJobsSeeker.html')
 
-
 def change_password(request):
     if request.method == 'POST':
         form = PasswordChangeForm(data=request.POST, user=request.user)
