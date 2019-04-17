@@ -610,12 +610,15 @@ class DeleteJob(TestCase):
                         'pay': 30.00, 'date_time': '2020-10-26', 'zip_code': 12345,
                         'description': 'job2', 'job_type': Post.DOGWALKING,
         })
-        self.job1 = Post.objects.get(Description='job2')
+        self.job1 = Post.objects.get(Description='job1')
+        self.job2 = Post.objects.get(Description='job2')
     
     def test_correct(self):
         self.assertEqual(Post.objects.count(), 2)
         self.client.get(f'/delete_job/{self.job1.id}/')
         self.assertEqual(Post.objects.count(), 1)
+        response = self.client.post('/all_jobs_creator/all_jobs/')
+        self.assertEqual(response.context['jobs'][0].id, self.job2.id)
 
 def ResetPassword(TestCase):
     def setUp(self):
