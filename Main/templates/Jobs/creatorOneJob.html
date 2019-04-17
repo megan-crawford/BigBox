@@ -111,19 +111,26 @@ div.job{
         </div>
       </div>
       </div>
-	  {% if post.Active == 0 %}
-      <div style="padding-left:2%">
+    {% if post.Active == 0 %}
+        <p style="padding-left: 1%; font-size: 20px; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif">Interested Seekers:</p>
+      
+      <div class="row" style="padding-left:2%">
         {%for seeker in interested_seekers%}
-        <div >
-		<a type="button"  class="btn btn-primary" style="height: 10%; width: 10%;" href= '/profile?username={{seeker.username}}'>
+        <div class=col-sm-1>
+            <p style="font-size: 15px; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif">
+            {{seeker.first_name}}
+            {{seeker.last_name}}
+            </p>
+            </div>
+        <div class="col-sm-2">
+		<a style="width:100%" type="button"  class="btn btn-primary" href= '/profile?username={{seeker.username}}'>
           Visit Profile Page
         </a>
-    <p></p>
-        <a type="button" class="btn btn-primary" style="height: 10%; width: 10%;" href= '/hire_seeker/{{post.id}}/{{seeker.id}}/{{request.user.id}}'>
-          Hire this seeker:
+      </div>
+      <div class="col-sm-2">
+        <a style="width:100%;" type="button" class="btn btn-primary"  href= '/hire_seeker/{{post.id}}/{{seeker.id}}/{{request.user.id}}'>
+          Hire this seeker
         </a>
-        {{seeker.first_name}}
-        {{seeker.last_name}}
         </div>
         {%endfor%}
       </div>
@@ -131,19 +138,34 @@ div.job{
 	  {% endif %}
 	
 	  {% if post.Active == 2 %}
-	  <div style="padding-left:2%">
-		<a type="button" class="btn btn-primary" style="height: 100%; width: 100%;" href= '/generate_review/{{post.Chosen.id}}/1'>
-			Review the seeker
-        </a>
-	  </div>
-	  {% endif %}
-	  
-              <p></p>
+	  <div class="row" style="padding-left:2%">
+        <div class=col-sm-1>
+            <p style="font-size: 15px; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif">
+            {{post.Chosen.first_name}}
+            {{post.Chosen.last_name}}
+            </p>
+            </div>
+        <div class="col-sm-2">
+          <a type="button" class="btn btn-primary" style="height: 80%; width: 100%;" href= '/generate_review/{{post.Chosen.id}}/1'>
+			      Review the seeker
+          </a>
+      </div>
+      <p></p>
               <div style="padding-left:2%"> 
-              <a type="button" class="btn btn-primary" style="height: 100%; width: 100%;" href='/all_jobs_creator/all_jobs/'>Back to all jobs</a>
+              <a type="button" class="btn btn-primary" style="height:80%; width: 100%;" href='/all_jobs_creator/all_jobs/'>Back to all jobs</a>
               
               <!-- </div> -->
             </div>
+    {% else %}
+    <p></p>
+    <div style="padding-top:2%; padding-left:1%;"> 
+    <a type="button" class="btn btn-primary" style="height:100%; width: 15%;" href='/all_jobs_creator/all_jobs/'>Back to all jobs</a>
+    
+    <!-- </div> -->
+  </div>
+	  {% endif %}
+	  
+              
 
             
     <!-- Optional JavaScript -->

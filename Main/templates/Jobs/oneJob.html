@@ -125,7 +125,11 @@ div.job{
       </div>
     </div>
     <div class="col-sm-2" style="height:100%; width:100%">
+        {% if post.Active == 0 %}
           <a type="button" class="btn btn-primary" style="height:100%; width:100%;" href="/list_job">Back to all jobs</a>
+        {% else %}
+        <a type="button" class="btn btn-primary" style="height:100%; width:100%;" href="/all_jobs_seeker/all_jobs">Back to Jobs</a>
+        {% endif %}
           <!---<button onclick="window.location.href = '/list_job';">Back to all jobs</button>-->
     </div>
     <div class="col-sm-2">
