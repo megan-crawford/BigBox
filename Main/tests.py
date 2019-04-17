@@ -9,6 +9,8 @@ from django.conf import settings
 from django.db.models.fields import BLANK_CHOICE_DASH
 from base64 import b64encode
 from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes, force_text
+from .tokens import account_activation_token
 
 import re
 import os
@@ -163,6 +165,20 @@ class CreateProfile(TestCase):
         })
         self.assertFalse(response.context['form'].is_valid())
         self.assertFalse(User.objects.filter(username='user2').exists())
+
+    def test_view_verified_email(self):
+        self.client.post('/create_account/', {
+                        'username': 'user', 'password': '83nc0924nc20', 'password_confirmation': '83nc0924nc20',
+                        'email': 'user@school.edu', 'first_name': 'Sam', 'last_name': 'Jackson', 'age': 42
+        })
+
+        user = User.objects.get(username='user')
+        uid = urlsafe_base64_encode(force_bytes(user.pk)).decode()
+        token = account_activation_token.make_token(user)
+        self.client.get(f'/activate/{uid}/{token}/')
+
+        user = User.objects.get(username='user')
+        self.assertEqual(user.profile.isVerified, True)
 
 class CreateJob(TestCase):
     def setUp(self):
@@ -465,11 +481,11 @@ class ZipCodeDist(TestCase):
 class GenerateReview(TestCase):
     def setUp(self):
         self.client = Client()
-        self.client.post('/create_account/', {
+        self.client.post('/create_account/', { #user1 is being reviewed
                         'username': 'user', 'password': '83c9bqo87n', 'password_confirmation': '83c9bqo87n',
                         'email': 'jack@email.com', 'first_name': 'John', 'last_name': 'Doe', 'age': 27
         })
-        self.client.post('/create_account/', {
+        self.client.post('/create_account/', { #user2 does the reviewing
                         'username': 'user2', 'password': '83c9bqo87n', 'password_confirmation': '83c9bqo87n',
                         'email': 'jack2@email.com', 'first_name': 'John', 'last_name': 'Doe', 'age': 37
         })
@@ -492,6 +508,24 @@ class GenerateReview(TestCase):
 
         rating = self.user.creator_reviews.first().Rating
         self.assertEqual(rating, 3)
+
+    def test_profile_seeker(self):
+        self.client.post(f'/generate_review/{self.user.id}/1/', {'rating': 5})
+        self.client.post(f'/generate_review/{self.user.id}/1/', {'rating': 4})
+        self.client.post(f'/generate_review/{self.user.id}/1/', {'rating': 5})
+
+        response = self.client.get(f'/profile/?username={self.user.username}')
+        self.assertAlmostEqual(response.context['seekerScore'], 4.6667, places=4)
+        self.assertEqual(response.context['creatorScore'], -1)
+
+    def test_profile_creator(self):
+        self.client.post(f'/generate_review/{self.user.id}/0/', {'rating': 3})
+        self.client.post(f'/generate_review/{self.user.id}/0/', {'rating': 5})
+        self.client.post(f'/generate_review/{self.user.id}/0/', {'rating': 2})
+
+        response = self.client.get(f'/profile/?username={self.user.username}')
+        self.assertAlmostEqual(response.context['creatorScore'], 3.3333, places=4)
+        self.assertEqual(response.context['seekerScore'], -1)
 
 class OneJobCreator(TestCase):
     def setUp(self):
