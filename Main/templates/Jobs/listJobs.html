@@ -130,16 +130,13 @@ div.job{
               <div class="col-sm-1" style="">
                   <p>Pay: {{ post.Pay }}</p>
               </div>
-              <div class="col-sm-1" style="">
-                  <!--<p>Date: {{ post.Date }}</p>-->
-              </div>
-              <div class="col-sm-2" style="">
-                  <!--<p>{{ request.user.username }} </p> -->
-              </div>
-              <div class="col-sm-2" style="">
-                <p> {{post.id}}</p>  
-              </div>
               
+              <div class="col-sm-2" style="">
+                  <p>Zip: {{ post.ZipCode }}</p>
+              </div>
+              <div class="col-sm-1" style="">
+                <a href="../../profile/?username={{post.userName}}"><p>{{ post.userName }}</p></a>
+            </div>
           </div>
       </div>
     </a>
