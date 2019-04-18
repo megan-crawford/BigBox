@@ -36,7 +36,7 @@ def activate(request, uidb64, token):
             prof = Profile.objects.get(User = user)
             prof.isVerified = True
             prof.save()
-            login(request, user)
+            #login(request, user)
             return redirect('school_verify_done')
     else:
         return HttpResponse('Activation link is invalid')
