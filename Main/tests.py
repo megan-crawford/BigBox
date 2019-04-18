@@ -9,6 +9,8 @@ from django.conf import settings
 from django.db.models.fields import BLANK_CHOICE_DASH
 from base64 import b64encode
 from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes, force_text
+from .tokens import account_activation_token
 
 import re
 import os
@@ -164,6 +166,20 @@ class CreateProfile(TestCase):
         self.assertFalse(response.context['form'].is_valid())
         self.assertFalse(User.objects.filter(username='user2').exists())
 
+    def test_view_verified_email(self):
+        self.client.post('/create_account/', {
+                        'username': 'user', 'password': '83nc0924nc20', 'password_confirmation': '83nc0924nc20',
+                        'email': 'user@school.edu', 'first_name': 'Sam', 'last_name': 'Jackson', 'age': 42
+        })
+
+        user = User.objects.get(username='user')
+        uid = urlsafe_base64_encode(force_bytes(user.pk)).decode()
+        token = account_activation_token.make_token(user)
+        self.client.get(f'/activate/{uid}/{token}/')
+
+        user = User.objects.get(username='user')
+        self.assertEqual(user.profile.isVerified, True)
+
 class CreateJob(TestCase):
     def setUp(self):
         self.client = Client()
@@ -250,7 +266,7 @@ class ListJob(TestCase):
         self.client.post('/create_account/', { #user requered to be logged in to create jobs
                         'username': 'user1', 'password': 'vf83g9f7fg', 'password_confirmation': 'vf83g9f7fg',
                         'email': 'email@email.com', 'first_name': 'John', 'last_name': 'Smith', 'age': 20                    
-        })
+        }) 
         self.user1 = User.objects.all().first() #get only user
 
         self.client.post('/create_job/', {
@@ -275,7 +291,8 @@ class ListJob(TestCase):
                         'username': 'user2', 'password': 'vf83g9f7fg', 'password_confirmation': 'vf83g9f7fg',
                         'email': 'email2@email.com', 'first_name': 'John', 'last_name': 'Jackson', 'age': 30                  
         })
-        self.client.post('/update_account/', {'zip_code': 52403, 'zip_code_button': ''}) 
+        self.client.post('/update_account/', {'zip_code': 52403, 'zip_code_button': ''})
+        self.client.post('/update_account/', {'pref_job_type': Post.SNOWSHOVELING, 'pref_job_type_button': ''})
        
         #print(Post.objects.filter(Description='job5'))        
 
@@ -319,6 +336,16 @@ class ListJob(TestCase):
         response = self.client.get('/list_job/', {'job_type': BLANK_CHOICE_DASH})
         self.assertEqual(response.context['jobs'][0].Description, 'job4')
         self.assertEqual(response.context['jobs'][1].Description, 'job3')
+
+    def test_view_recommended(self):
+        response = self.client.get('/list_job/', {'job_type': 'FF'}) #(FF, Recommended)
+        self.assertEqual(len(response.context['jobs']), 1)
+        self.assertEqual(response.context['jobs'][0].JobType, Post.SNOWSHOVELING)
+
+    def test_view_search(self):
+        response = self.client.get('/list_job/', {'search': 'job4'})
+        self.assertEqual(len(response.context['jobs']), 1)
+        self.assertEqual(response.context['jobs'][0].Description, 'job4')
 
 class AllJobsCreator(TestCase):
     def setUp(self):
@@ -454,11 +481,11 @@ class ZipCodeDist(TestCase):
 class GenerateReview(TestCase):
     def setUp(self):
         self.client = Client()
-        self.client.post('/create_account/', {
+        self.client.post('/create_account/', { #user1 is being reviewed
                         'username': 'user', 'password': '83c9bqo87n', 'password_confirmation': '83c9bqo87n',
                         'email': 'jack@email.com', 'first_name': 'John', 'last_name': 'Doe', 'age': 27
         })
-        self.client.post('/create_account/', {
+        self.client.post('/create_account/', { #user2 does the reviewing
                         'username': 'user2', 'password': '83c9bqo87n', 'password_confirmation': '83c9bqo87n',
                         'email': 'jack2@email.com', 'first_name': 'John', 'last_name': 'Doe', 'age': 37
         })
@@ -481,6 +508,24 @@ class GenerateReview(TestCase):
 
         rating = self.user.creator_reviews.first().Rating
         self.assertEqual(rating, 3)
+
+    def test_profile_seeker(self):
+        self.client.post(f'/generate_review/{self.user.id}/1/', {'rating': 5})
+        self.client.post(f'/generate_review/{self.user.id}/1/', {'rating': 4})
+        self.client.post(f'/generate_review/{self.user.id}/1/', {'rating': 5})
+
+        response = self.client.get(f'/profile/?username={self.user.username}')
+        self.assertAlmostEqual(response.context['seekerScore'], 4.6667, places=4)
+        self.assertEqual(response.context['creatorScore'], -1)
+
+    def test_profile_creator(self):
+        self.client.post(f'/generate_review/{self.user.id}/0/', {'rating': 3})
+        self.client.post(f'/generate_review/{self.user.id}/0/', {'rating': 5})
+        self.client.post(f'/generate_review/{self.user.id}/0/', {'rating': 2})
+
+        response = self.client.get(f'/profile/?username={self.user.username}')
+        self.assertAlmostEqual(response.context['creatorScore'], 3.3333, places=4)
+        self.assertEqual(response.context['seekerScore'], -1)
 
 class OneJobCreator(TestCase):
     def setUp(self):
@@ -549,4 +594,36 @@ class InterestedSeeker(TestCase):
         self.assertEquals(self.job.Active, 0) #job is open
         self.assertEquals(self.job.Chosen, None)
 
+class DeleteJob(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.client.post('/create_account/', {
+                        'username': 'user', 'password': '83c9bqo87n', 'password_confirmation': '83c9bqo87n',
+                        'email': 'user@email.com', 'first_name': 'Jackson', 'last_name': 'Smith', 'age': 16
+        })
 
+        self.client.post('/create_job/', { #user1 creates job1
+                        'pay': 20.00, 'date_time': '2021-10-26', 'zip_code': 12345,
+                        'description': 'job1', 'job_type': Post.CLEANING,
+        })
+        self.client.post('/create_job/', { #user1 creates job2
+                        'pay': 30.00, 'date_time': '2020-10-26', 'zip_code': 12345,
+                        'description': 'job2', 'job_type': Post.DOGWALKING,
+        })
+        self.job1 = Post.objects.get(Description='job1')
+        self.job2 = Post.objects.get(Description='job2')
+    
+    def test_correct(self):
+        self.assertEqual(Post.objects.count(), 2)
+        self.client.get(f'/delete_job/{self.job1.id}/')
+        self.assertEqual(Post.objects.count(), 1)
+        response = self.client.post('/all_jobs_creator/all_jobs/')
+        self.assertEqual(response.context['jobs'][0].id, self.job2.id)
+
+def ResetPassword(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.client.post('/create_account/', {
+                        'username': 'user', 'password': '83c9bqo87n', 'password_confirmation': '83c9bqo87n',
+                        'email': 'user@email.com', 'first_name': 'John', 'last_name': 'Smith', 'age': 43
+        })

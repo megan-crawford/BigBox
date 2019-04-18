@@ -36,8 +36,8 @@ def activate(request, uidb64, token):
             prof = Profile.objects.get(User = user)
             prof.isVerified = True
             prof.save()
-            login(request, user)
-            return redirect('home_seeker')
+            #login(request, user)
+            return redirect('school_verify_done')
     else:
         return HttpResponse('Activation link is invalid')
 
@@ -301,6 +301,8 @@ def list_job(request):
             min_wage = form.cleaned_data['min_wage']
             max_wage = form.cleaned_data['max_wage']
             search = form.cleaned_data['search']
+            zip_code = form.cleaned_data['zip_code']
+
             if (job_type != 'FF'):
                 if (job_type != '' and min_wage and max_wage): #all inputs filled in
                     print('all inputs')
@@ -316,12 +318,22 @@ def list_job(request):
                         jobs = Post.objects.filter(Q(Description__icontains=search), Q(JobType=job_type) | Q(Pay__lte=max_wage))
                     else:
                         jobs = Post.objects.filter(Q(Description__icontains=search), Q(JobType=job_type) | Q(Pay__range=[min_wage, max_wage]))
-            else: 
+            else:
+                print('recommened')
                 job_pref = request.user.seeker.PrefType
                 print(job_pref)
+                print(job_type)
                 jobs = Post.objects.filter(Q(JobType=job_pref))
+
+            if (zip_code != None): #ZipCode Exists
+                    for job in jobs:
+                        distance = distBetween(job.ZipCode, request.user.profile.ZipCode)
+                        if (distance > zip_code):
+                            jobs = jobs.exclude(id = job.id)
         else:
+            print(form.errors)
             jobs = Post.objects.all()
+
     else:
         jobs = Post.objects.all()
         form = ListJobsForm()
@@ -336,18 +348,11 @@ def list_job(request):
     print('jobs2', jobs)
 
     #sort by distance, then pay, then date
-    jobs = jobs.filter(Active=0)
-
-    print('jobs3', jobs)    
+    jobs = jobs.filter(Active=0) 
 
     jobs = jobs.order_by('Pay', 'DateTime')
-
-    print('jobs4', jobs)
-
     if (request.user.profile.ZipCode != None):
         jobs = sorted(jobs, key = lambda job : distBetween(job.ZipCode, request.user.profile.ZipCode))
-
-    print('jobs5', jobs)
 
     return render(request, 'Jobs/listJobs.html', {'form':form, 'jobs':jobs})
 
@@ -692,7 +697,7 @@ def all_jobs_seeker(request, job):
                 else:
                     jobs = jobs.filter(Q(Description__icontains=search),  Q(JobType=job_type) | Q(Pay__range=[min_wage, max_wage]))
                 
-            if (zip_code): #ZipCode Exists
+            if (zip_code != None): #ZipCode Exists
                     for job in jobs:
                         distance = distBetween(job.ZipCode, request.user.profile.ZipCode)
                         if (distance > zip_code):
@@ -793,7 +798,6 @@ def past_jobs_seeker(request):
         return redirect('/login/')
 
     return render(request, 'Seeker/pastJobsSeeker.html')
-
 
 def change_password(request):
     if request.method == 'POST':
