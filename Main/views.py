@@ -301,6 +301,8 @@ def list_job(request):
             min_wage = form.cleaned_data['min_wage']
             max_wage = form.cleaned_data['max_wage']
             search = form.cleaned_data['search']
+            zip_code = form.cleaned_data['zip_code']
+
             if (job_type != 'FF'):
                 if (job_type != '' and min_wage and max_wage): #all inputs filled in
                     print('all inputs')
@@ -322,9 +324,16 @@ def list_job(request):
                 print(job_pref)
                 print(job_type)
                 jobs = Post.objects.filter(Q(JobType=job_pref))
+
+            if (zip_code != None): #ZipCode Exists
+                    for job in jobs:
+                        distance = distBetween(job.ZipCode, request.user.profile.ZipCode)
+                        if (distance > zip_code):
+                            jobs = jobs.exclude(id = job.id)
         else:
             print(form.errors)
             jobs = Post.objects.all()
+
     else:
         jobs = Post.objects.all()
         form = ListJobsForm()
@@ -688,7 +697,7 @@ def all_jobs_seeker(request, job):
                 else:
                     jobs = jobs.filter(Q(Description__icontains=search),  Q(JobType=job_type) | Q(Pay__range=[min_wage, max_wage]))
                 
-            if (zip_code): #ZipCode Exists
+            if (zip_code != None): #ZipCode Exists
                     for job in jobs:
                         distance = distBetween(job.ZipCode, request.user.profile.ZipCode)
                         if (distance > zip_code):

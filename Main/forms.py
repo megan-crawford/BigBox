@@ -174,13 +174,15 @@ class GenerateReportForm(forms.Form):
 class ListJobsForm(forms.Form):
     #TODO: addd max_distance
     recommended = [("FF", "Recommended")]
+    zip_code = forms.IntegerField(min_value=0, required=False)
     job_type = forms.ChoiceField(choices= BLANK_CHOICE_DASH + list(Post.TYPE_CHOICES) + recommended, required=False)
     min_wage = forms.DecimalField(min_value=0, max_value=1000, decimal_places=2, required=False)
     max_wage = forms.DecimalField(min_value=0, max_value=1000, decimal_places=2, required=False)
     search = forms.CharField(label='search', max_length=50, required=False)
 
     error_messages = {
-        'invalid_wage' : 'Max wage cannot be less than min wage'
+        'invalid_wage' : 'Max wage cannot be less than min wage',
+        'invalid_zip_code' : 'That zip code does not exist',
     }
 
     def clean(self):
