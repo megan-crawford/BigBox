@@ -1,0 +1,14 @@
+=== Weekly Individual Report (Team 2: sturgeons++) ===
+Name: Thomas Bower
+
+
+Week 11 (Summary)
+
+
+4/16  3 hrs 20d4919 Fixed Email Verification
+
+4/16  2 hrs b365c15 Fixed Misc Bugs
+
+4/17  1 hr  N/A     Misc bug fixes
+
+4/21  3 hrs N/A     Worked on presentation
