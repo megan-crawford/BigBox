@@ -1,0 +1,10 @@
+=== Weekly Individual Report (Team 01: sturgeons++) ===
+Name: Kyle Kovacik
+
+Week 11 (Plan)
+4/16/19		3	af04fd5		Test and fix notify functionality
+4/17/19		2	800987d		Test and fix bugs on Frontend
+4/17/19		2	800987d		Added Minor Visual Changes
+4/18/19		1	b28542a		Removed pointless Visual Form
+4/18/19		2	NA		Prepared Demo for Sprint Review
+
