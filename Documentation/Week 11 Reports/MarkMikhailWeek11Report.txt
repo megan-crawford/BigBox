@@ -1,4 +1,5 @@
-=== Weekly Individual Report (Team 1: <sturgeon++>) ===
+=== Weekly Individual Report (Team 1: <sturgeon++>) ===
+
 Name: Mark Mikhail
 
 Week 11 Finished work on change password and finished work on automated email notifications
@@ -6,6 +7,4 @@ Week 11 Finished work on change password and finished work on automated email no
 4/15	3	Finish working on school email verification
 4/16 	4	Finish working on email notifications
 4/17	4	Finish developing tests
-
-Individual Goal: Finish email verifications and notifications and test development
 	
